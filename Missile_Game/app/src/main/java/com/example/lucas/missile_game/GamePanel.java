@@ -52,10 +52,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
+
         return super.onTouchEvent(event);
     }
 
     public void update(){
+
         background.update();
     }
 
