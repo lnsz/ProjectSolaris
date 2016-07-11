@@ -3,6 +3,8 @@ package com.example.lucas.missile_game;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -13,6 +15,8 @@ import android.view.SurfaceView;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
+    private int x, vx;
+    private int y ,vy;
     public GamePanel(Context context){
         super(context);
 
@@ -44,6 +48,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+        x=y=0;
+        vx=vy=1;
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.space));
 
         thread.setRunning(true);
@@ -63,7 +69,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void draw(Canvas canvas){
+        super.draw(canvas);
+        x+=vx;
+        y+=vy;
         background.draw(canvas);
+        canvas.drawColor(Color.WHITE);
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(x,y,100, paint);
 
     }
 }
