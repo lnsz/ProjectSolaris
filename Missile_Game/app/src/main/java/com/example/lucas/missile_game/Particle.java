@@ -12,9 +12,9 @@ public class Particle extends Entity{
     Paint paint;
     Random generator;
     float life, radius;
-    public Particle(float locx, float locy, float rad){
+    public Particle(float locx, float locy, float rad, Random generator_){
         super(locx, locy);
-        generator = new Random();
+        generator = generator_;
         radius = rad;
         life = 255;
         paint = new Paint();
@@ -29,8 +29,8 @@ public class Particle extends Entity{
     }
 
     public void run(Canvas canvas){
-        life -= 0.05f;
-        if(!alive || life < 30){
+        life -= 15f;
+        if(life < 30){
             alive=false;
             return;
         }
