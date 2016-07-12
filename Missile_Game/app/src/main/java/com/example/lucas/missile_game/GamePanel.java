@@ -15,8 +15,6 @@ import android.view.SurfaceView;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
-    private int x, vx;
-    private int y ,vy;
     public GamePanel(Context context){
         super(context);
 
@@ -46,11 +44,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
 
+    Particle p;
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-        x=y=0;
-        vx=vy=1;
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.space));
+        p = new Particle(500, 500, 20);
 
         thread.setRunning(true);
         thread.start();
@@ -63,20 +61,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update(){
-
         background.update();
+        if(p.alive == false){
+            p.alive = true;
+            p.life = 255;
+        }
     }
 
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
-        x+=vx;
-        y+=vy;
         background.draw(canvas);
-        canvas.drawColor(Color.WHITE);
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(x,y,100, paint);
+        p.run(canvas);
 
     }
 }
