@@ -44,12 +44,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
 
-    ParticleSystem p;
+    EntitySystem entities;
     @Override
     public void surfaceCreated(SurfaceHolder holder){
        // background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.space));
-        p = new ParticleSystem();
-        p.addParticle(500,500,20);
+        entities = new EntitySystem();
 
         thread.setRunning(true);
         thread.start();
@@ -61,16 +60,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         return super.onTouchEvent(event);
     }
 
-    public void update(){
-        p.addParticle(500,500,20);
 
-    }
 
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
+
         canvas.drawColor(0);
-        p.run(canvas);
+        entities.addParticle(500,500,20);
+        entities.run(canvas);
 
     }
 }

@@ -23,19 +23,34 @@ public class Particle extends Entity{
 
     }
 
+    public Particle(float locx, float locy, float velx, float vely, float rad, Random generator_){
+        super(locx, locy);
+        velocity.x = velx;
+        velocity.y = vely;
+
+        generator = generator_;
+        radius = rad;
+        life = 255;
+        paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setARGB(255,255,255,255);
+
+    }
+
     public void display(Canvas canvas){
         paint.setAlpha((int)life);
         canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);
     }
 
+    @Override
     public void run(Canvas canvas){
         life -= 15f;
         if(life < 30){
             alive=false;
             return;
         }
-        acceleration.x = (float)generator.nextGaussian();
-        acceleration.y = (float)generator.nextGaussian();
+        acceleration.x += 5*(float)generator.nextGaussian();
+        acceleration.y += 5*(float)generator.nextGaussian();
         update();
         display(canvas);
     }

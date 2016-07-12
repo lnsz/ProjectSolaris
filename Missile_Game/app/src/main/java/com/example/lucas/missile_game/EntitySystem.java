@@ -9,24 +9,25 @@ import java.util.Random;
 /**
  * Created by Kiko on 11/07/2016.
  */
-public class ParticleSystem {
-    private ArrayList<Particle> particles;
+public class EntitySystem {
+    private ArrayList<Entity> entities;
     private Random generator;
-    public ParticleSystem(){
-        particles = new ArrayList<Particle>();
+    public EntitySystem(){
+        entities = new ArrayList<Entity>();
         generator = new Random();
     }
 
     public void addParticle(float x, float y, float radius){
-        particles.add(new Particle(x,y, radius, generator));
+        entities.add(new Particle(x,y, radius, generator));
+    }
+    public void addParticle(float x, float y, float vx, float vy, float radius){
+        entities.add(new Particle(x,y, vx, vy, radius, generator));
     }
 
     void run(Canvas canvas) {
-        Iterator<Particle> it = particles.iterator();
+        Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
-            Particle p = (Particle)it.next();
-            p.acceleration.x = 0.1f *(float)generator.nextGaussian();
-            p.acceleration.y = 0.1f *(float)generator.nextGaussian();
+            Entity p = it.next();
             p.run(canvas);
             if (!p.alive) {
                 it.remove();

@@ -1,5 +1,7 @@
 package com.example.lucas.missile_game;
 
+import android.graphics.Canvas;
+
 /**
  * Created by lucas on 7/11/2016.
  */
@@ -18,5 +20,9 @@ public class Entity {
         velocity.add(acceleration);
         location.add(velocity);
         acceleration.mult(0);
+    }
+
+    public void run(Canvas canvas){
+        update();
     }
 }
