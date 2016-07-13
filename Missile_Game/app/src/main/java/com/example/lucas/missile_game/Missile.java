@@ -13,7 +13,7 @@ public class Missile extends Entity{
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
 
-        // Set initial acceleraion of missile
+        // Set initial velocity of missile
         velocity = new Vector(tarX, tarY);
         velocity.sub(location);
         velocity.normalize();
