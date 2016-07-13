@@ -23,9 +23,11 @@ public class Obstacle extends Entity{
 
     public void gravity (Entity other){
         Vector newAcceleration =  new Vector(this.location.x - other.location.x, this.location.y - other.location.y);
+        float distanceSq = newAcceleration.magSq();
         newAcceleration.normalize();
-        newAcceleration.mult((float)(1E-6 * this.mass));
+        newAcceleration.mult((float)(1E-4 * this.mass / distanceSq));
         other.acceleration.add(newAcceleration);
+        System.out.println(newAcceleration);
     }
 
 
