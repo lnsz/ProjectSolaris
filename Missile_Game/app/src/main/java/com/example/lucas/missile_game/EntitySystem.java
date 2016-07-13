@@ -53,7 +53,7 @@ public class EntitySystem {
         while (it.hasNext()) {
             Entity ent = it.next();
             if (ent instanceof Obstacle){
-                ent.gravity(missile);
+                ((Obstacle)ent).gravity(missile);
             }
         }
     }
