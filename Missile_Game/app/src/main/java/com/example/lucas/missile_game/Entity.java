@@ -20,6 +20,10 @@ public class Entity {
         velocity.add(acceleration);
         location.add(velocity);
         acceleration.mult(0);
+
+        if(location.x < 0 || location.x > GamePanel.width || location.y > GamePanel.height || location.y < 0){
+            alive = false;
+        }
     }
 
     public void run(Canvas canvas){
