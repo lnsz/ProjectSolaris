@@ -48,6 +48,16 @@ public class EntitySystem {
         return false;
     }
 
+    public void gravity(Entity missile){
+        Iterator<Entity> it = solidEntities.iterator();
+        while (it.hasNext()) {
+            Entity ent = it.next();
+            if (ent instanceof Obstacle){
+                ent.gravity(missile);
+            }
+        }
+    }
+
     void run(Canvas canvas) {
         solidEntities.addAll(solidBuffer);
         solidBuffer.clear();
