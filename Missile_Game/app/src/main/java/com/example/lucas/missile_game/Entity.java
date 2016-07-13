@@ -9,7 +9,7 @@ import android.graphics.Paint;
 public class Entity {
     Vector location, velocity, acceleration;
     Paint paint;
-    float radius;
+    float radius, mass;
     boolean alive;
 
     public Entity (float locX, float locY){
@@ -17,6 +17,7 @@ public class Entity {
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.radius = 20;
+        this.mass =1;
         this.alive = true;
         this.paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -41,5 +42,10 @@ public class Entity {
     public void run(Canvas canvas){
         display(canvas);
         update();
+    }
+
+    public static boolean collision(Entity ent1, Entity ent2){
+
+        return false;
     }
 }

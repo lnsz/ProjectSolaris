@@ -3,6 +3,7 @@ package com.example.lucas.missile_game;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.speech.tts.TextToSpeech;
 
 /**
  * Created by Kiko on 11/07/2016.
@@ -50,5 +51,16 @@ public class Missile extends Entity{
         p.radius = 15;
         entities.addEntity(p, false);
     }
+
+    @Override
+    public void run(Canvas canvas){
+        if(entities.collision(this)){
+            //explode!
+        }
+        display(canvas);
+        update();
+    }
+
+
 
 }

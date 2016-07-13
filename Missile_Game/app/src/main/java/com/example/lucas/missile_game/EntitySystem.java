@@ -15,7 +15,6 @@ public class EntitySystem {
 
     private ArrayList<Entity> solidBuffer;
     private ArrayList<Entity> ghostBuffer;
-    private Iterator<Entity> it;
     public Random generator;
 
     public EntitySystem() {
@@ -38,6 +37,17 @@ public class EntitySystem {
         }
     }
 
+    public boolean collision(Entity entity){
+        Iterator<Entity> it = solidEntities.iterator();
+        while (it.hasNext()) {
+            Entity ent = it.next();
+            if(Entity.collision(entity, ent)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     void run(Canvas canvas) {
         solidEntities.addAll(solidBuffer);
         solidBuffer.clear();
@@ -45,7 +55,7 @@ public class EntitySystem {
         ghostEntities.addAll(ghostBuffer);
         ghostBuffer.clear();
 
-        it = solidEntities.iterator();
+        Iterator<Entity> it = solidEntities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
             p.run(canvas);
