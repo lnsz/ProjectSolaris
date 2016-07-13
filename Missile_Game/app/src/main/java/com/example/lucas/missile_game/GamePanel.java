@@ -82,10 +82,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void strMeter(Canvas canvas){
-        if (System.currentTimeMillis() - lastDown > 5000){ // Max str is 50, after that it resets
+        if (System.currentTimeMillis() - lastDown > 3000){ // Max str is 30, after that it resets
             lastDown = System.currentTimeMillis();
         }
-        double timeRatio = (System.currentTimeMillis() - lastDown) / 5000.0;
+        double timeRatio = (System.currentTimeMillis() - lastDown) / 3000.0;
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawCircle(width / 2, height- 100, (float)(500 * timeRatio), this.paint);
 
