@@ -75,7 +75,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             lastDuration = System.currentTimeMillis() - lastDown;
             entities.addEntity(new Missile(width / 2, height- 100, event.getX(), event.getY(),
-                    (lastDuration > 500)?(lastDuration / 50) : 10, entities)); // Min str is 10
+                    (lastDuration > 500)?(lastDuration / 50) : 10, entities), true); // Min str is 10
             isPressed = false;
         }
         return true;
