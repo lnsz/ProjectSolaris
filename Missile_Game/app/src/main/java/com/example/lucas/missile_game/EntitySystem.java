@@ -11,18 +11,13 @@ import java.util.Random;
  */
 public class EntitySystem {
     private ArrayList<Entity> entities;
-    private Random generator;
+    public Random generator;
     public EntitySystem(){
         entities = new ArrayList<Entity>();
         generator = new Random();
     }
 
-    public void addParticle(float x, float y, float radius){
-        entities.add(new Particle(x,y, radius, generator));
-    }
-    public void addParticle(float x, float y, float vx, float vy, float radius){
-        entities.add(new Particle(x,y, vx, vy, radius, generator));
-    }
+
     public void addEntity(Entity entity){
         entities.add(entity);
     }
