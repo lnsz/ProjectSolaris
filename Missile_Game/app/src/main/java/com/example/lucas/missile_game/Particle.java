@@ -16,6 +16,7 @@ public class Particle extends Entity{
         generator = generator_;
         radius = rad;
         life = 255;
+        mass = 0;
 
     }
 
