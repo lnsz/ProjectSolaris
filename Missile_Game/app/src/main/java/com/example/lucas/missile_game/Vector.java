@@ -85,4 +85,7 @@ public class Vector {
         vec.y = (float)(yy* Math.cos(angle) + xx * Math.sin(angle));
     }
 
+    public String toString(){
+        return("(" + this.x + ", " + this.y + ")");
+    }
 }

@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.os.Handler;
+import android.util.Log;
 
 /**
  * Created by lucas on 7/11/2016.
@@ -15,6 +17,9 @@ import android.view.SurfaceView;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
+    float height;
+    float width;
+
     public GamePanel(Context context){
         super(context);
 
@@ -50,17 +55,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
        // background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.space));
         entities = new EntitySystem();
 
+        width = getResources().getDisplayMetrics().widthPixels;
+        height = getResources().getDisplayMetrics().heightPixels;
+
         thread.setRunning(true);
         thread.start();
     }
 
+    long lastDown;
+    long lastDuration;
     @Override
     public boolean onTouchEvent(MotionEvent event){
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            lastDown = System.currentTimeMillis();
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            lastDuration = System.currentTimeMillis() - lastDown;
+            entities.addEntity(new Missile(width / 2, height - 100, event.getX(), event.getY(),
+                    (lastDuration > 50)?(lastDuration / 50) : 1));
+        }
+        System.out.println(lastDown);
+        System.out.println(lastDuration);
 
-        return super.onTouchEvent(event);
+
+
+        return true;
     }
-
-
 
     @Override
     public void draw(Canvas canvas){
@@ -71,4 +90,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         entities.run(canvas);
 
     }
+
+
 }

@@ -9,8 +9,8 @@ public class Entity {
     Vector location, velocity, acceleration;
     boolean alive;
 
-    public Entity (float locx, float locy){
-        this.location = new Vector(locx, locy);
+    public Entity (float locX, float locY){
+        this.location = new Vector(locX, locY);
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.alive = true;

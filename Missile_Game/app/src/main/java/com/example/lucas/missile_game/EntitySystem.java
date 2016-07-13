@@ -23,6 +23,9 @@ public class EntitySystem {
     public void addParticle(float x, float y, float vx, float vy, float radius){
         entities.add(new Particle(x,y, vx, vy, radius, generator));
     }
+    public void addEntity(Entity entity){
+        entities.add(entity);
+    }
 
     void run(Canvas canvas) {
         Iterator<Entity> it = entities.iterator();
