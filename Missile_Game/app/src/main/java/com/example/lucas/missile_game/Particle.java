@@ -49,8 +49,8 @@ public class Particle extends Entity{
             alive=false;
             return;
         }
-        acceleration.x += 5*(float)generator.nextGaussian();
-        acceleration.y += 5*(float)generator.nextGaussian();
+        acceleration.x += 1f*(float)generator.nextGaussian();
+        acceleration.y += 1f*(float)generator.nextGaussian();
         update();
         display(canvas);
     }
