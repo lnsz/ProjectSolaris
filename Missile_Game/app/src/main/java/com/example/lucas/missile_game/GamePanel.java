@@ -70,11 +70,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             lastDown = System.currentTimeMillis();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             lastDuration = System.currentTimeMillis() - lastDown;
-            entities.addEntity(new Missile(width / 2, height - 100, event.getX(), event.getY(),
-                    (lastDuration > 50)?(lastDuration / 50) : 1));
+            entities.addEntity(new Missile(width / 2, height- 100, event.getX(), event.getY(),
+                    (lastDuration > 50)?(lastDuration / 50) : 1, entities));
         }
-        System.out.println(lastDown);
-        System.out.println(lastDuration);
+        //System.out.println(lastDown);
+        //System.out.println(lastDuration);
 
 
 
@@ -86,7 +86,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         super.draw(canvas);
 
         canvas.drawColor(0);
-        entities.addParticle(500,500,20);
         entities.run(canvas);
 
     }
