@@ -9,17 +9,13 @@ import java.util.Random;
  * Created by Kiko on 11/07/2016.
  */
 public class Particle extends Entity{
-    Paint paint;
     Random generator;
-    float life, radius;
+    float life;
     public Particle(float locx, float locy, float rad, Random generator_){
         super(locx, locy);
         generator = generator_;
         radius = rad;
         life = 255;
-        paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setARGB(255,255,255,255);
 
     }
 
@@ -37,6 +33,7 @@ public class Particle extends Entity{
 
     }
 
+    @Override
     public void display(Canvas canvas){
         paint.setAlpha((int)life);
         canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);

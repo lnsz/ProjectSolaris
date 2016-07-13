@@ -8,8 +8,6 @@ import android.graphics.Path;
  * Created by Kiko on 11/07/2016.
  */
 public class Missile extends Entity{
-    Paint paint;
-    float radius;
     EntitySystem entities;
 
     public Missile(float locX, float locY, float tarX, float tarY, float str, EntitySystem entities_){
@@ -23,16 +21,9 @@ public class Missile extends Entity{
         velocity.normalize();
         velocity.mult(str);
 
-
-
-        // Temp code, will change to a sprite later
-        radius = 20;
-        paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setARGB(255,255,255,255);
     }
 
-
+    @Override
     public void display(Canvas canvas){
         float angle = velocity.getHeading();
 
@@ -58,13 +49,6 @@ public class Missile extends Entity{
         p.velocity.mult(15);
         p.radius = 15;
         entities.addEntity(p);
-
-
     }
 
-    @Override
-    public void run(Canvas canvas){
-        update();
-        display(canvas);
-    }
 }
