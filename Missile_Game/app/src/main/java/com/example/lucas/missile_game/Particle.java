@@ -10,17 +10,22 @@ import java.util.Random;
  */
 public class Particle extends Entity{
     Random generator;
-    float life;
-    public Particle(float locx, float locy, float rad, Random generator_){
+    float life, decay;
+    public Particle(float locx, float locy, float rad, float duration, Random generator_){
         super(locx, locy);
+
         generator = generator_;
         radius = rad;
         life = 255;
-        mass = 0;
+        decay = (255 - 30) / duration;
+        paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setARGB(255,255,255,255);
+        mass =0;
 
     }
 
-    public Particle(float locx, float locy, float velx, float vely, float rad, Random generator_){
+    public Particle(float locx, float locy, float velx, float vely, float rad, float duration, Random generator_){
         super(locx, locy);
         velocity.x = velx;
         velocity.y = vely;
@@ -28,9 +33,11 @@ public class Particle extends Entity{
         generator = generator_;
         radius = rad;
         life = 255;
+        decay = (255 - 30) / duration;
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setARGB(255,255,255,255);
+        mass =0;
 
     }
 
@@ -42,7 +49,7 @@ public class Particle extends Entity{
 
     @Override
     public void run(Canvas canvas){
-        life -= 15f;
+        life -= decay;
         if(life < 30){
             alive=false;
             return;

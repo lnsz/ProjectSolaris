@@ -113,6 +113,14 @@ public class Vector {
         }
     }
 
+
+    public static Vector random(){
+        float angle = (float)(Math.random() * Math.PI * 2);
+        return new Vector((float) Math.cos(angle), (float)Math.sin(angle));
+
+    }
+
+    @Override
     public String toString(){
         return("(" + this.x + ", " + this.y + ")");
     }

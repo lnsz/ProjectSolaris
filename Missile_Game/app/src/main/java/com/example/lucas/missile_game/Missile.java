@@ -44,7 +44,7 @@ public class Missile extends Entity{
         path.close();
         canvas.drawPath(path, paint);
 
-        Particle p = new Particle(location.x, location.y, 10, entities.generator);
+        Particle p = new Particle(location.x, location.y, 10, 120, entities.generator);
         p.velocity= Vector.mult(this.velocity, -1);
         p.velocity.normalize();
         p.velocity.mult(15);
@@ -57,9 +57,25 @@ public class Missile extends Entity{
         entities.gravity(this);
         if(entities.collision(this)){
             //explode!
+            explode();
         }
         display(canvas);
         update();
+    }
+
+    public void explode(){
+        for(int i=0;i<4;i++) {
+            Particle p = new Particle(location.x, location.y, 10, 60, entities.generator);
+            if(i%2 == 0) {
+                p.paint.setARGB(255,255, 0, 0);
+            }else{
+                p.paint.setARGB(255, 255, 69, 0);
+            }
+            p.velocity = Vector.random();
+            p.velocity.mult(15);
+            p.radius = 40;
+            entities.addEntity(p, false);
+        }
     }
 
 
