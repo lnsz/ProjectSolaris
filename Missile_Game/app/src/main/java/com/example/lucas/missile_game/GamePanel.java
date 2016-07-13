@@ -17,8 +17,10 @@ import android.util.Log;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
-    public static float height;
-    public static float width;
+    public static float height, width;
+    Paint paint;
+    long lastDown, lastDuration;
+    boolean isPressed = false;
 
     public GamePanel(Context context){
         super(context);
@@ -29,6 +31,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         thread = new MainThread(getHolder(), this);
 
         setFocusable(true);
+
+        paint = new Paint();
+        paint.setARGB(255,255,255,255);
     }
 
     @Override
@@ -62,23 +67,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         thread.start();
     }
 
-    long lastDown;
-    long lastDuration;
     @Override
     public boolean onTouchEvent(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             lastDown = System.currentTimeMillis();
+            isPressed = true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             lastDuration = System.currentTimeMillis() - lastDown;
             entities.addEntity(new Missile(width / 2, height- 100, event.getX(), event.getY(),
-                    (lastDuration > 50)?(lastDuration / 50) : 1, entities));
+                    (lastDuration > 500)?(lastDuration / 50) : 10, entities)); // Min str is 10
+            isPressed = false;
         }
-        //System.out.println(lastDown);
-        //System.out.println(lastDuration);
-
-
-
         return true;
+    }
+
+    public void strMeter(Canvas canvas){
+        if (System.currentTimeMillis() - lastDown > 5000){ // Max str is 50, after that it resets
+            lastDown = System.currentTimeMillis();
+        }
+        double timeRatio = (System.currentTimeMillis() - lastDown) / 5000.0;
+        paint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle(width / 2, height- 100, (float)(500 * timeRatio), this.paint);
+
     }
 
     @Override
@@ -86,6 +96,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         super.draw(canvas);
 
         canvas.drawColor(0);
+        if (isPressed){
+            strMeter(canvas);
+        }
         entities.run(canvas);
 
     }
