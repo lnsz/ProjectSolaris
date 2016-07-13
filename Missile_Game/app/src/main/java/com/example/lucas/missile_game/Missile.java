@@ -54,6 +54,7 @@ public class Missile extends Entity{
 
     @Override
     public void run(Canvas canvas){
+        entities.gravity(this);
         if(entities.collision(this)){
             //explode!
         }
