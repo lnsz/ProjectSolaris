@@ -63,6 +63,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         width = getResources().getDisplayMetrics().widthPixels;
         height = getResources().getDisplayMetrics().heightPixels;
 
+        entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, 500, 100), true);
         thread.setRunning(true);
         thread.start();
     }
