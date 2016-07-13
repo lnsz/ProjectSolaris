@@ -64,6 +64,7 @@ public class Missile extends Entity{
     }
 
     public void explode(){
+        alive=false;
         for(int i=0;i<4;i++) {
             Particle p = new Particle(location.x, location.y, 10, 60, entities.generator);
             if(i%2 == 0) {

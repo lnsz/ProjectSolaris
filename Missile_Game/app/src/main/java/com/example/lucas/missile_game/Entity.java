@@ -62,8 +62,8 @@ public class Entity {
         if(f >= totalRadius *totalRadius){
             return false;
         }
-        ent1.alive=false;
-        ent2.alive=false;
+        //ent1.alive=false;
+        //ent2.alive=false;
 
         return true;
     }
