@@ -48,7 +48,7 @@ public class Missile extends Entity{
         p.velocity.normalize();
         p.velocity.mult(15);
         p.radius = 15;
-        entities.addEntity(p);
+        entities.addEntity(p, false);
     }
 
 }
