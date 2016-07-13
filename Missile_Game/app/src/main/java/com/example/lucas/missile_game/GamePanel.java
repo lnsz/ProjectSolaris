@@ -17,8 +17,8 @@ import android.util.Log;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
-    float height;
-    float width;
+    public static float height;
+    public static float width;
 
     public GamePanel(Context context){
         super(context);
