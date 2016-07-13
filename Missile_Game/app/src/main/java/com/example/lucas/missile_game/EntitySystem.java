@@ -37,11 +37,11 @@ public class EntitySystem {
         }
     }
 
-    public boolean collision(Entity entity){
+    public boolean collision(Entity missile){
         Iterator<Entity> it = solidEntities.iterator();
         while (it.hasNext()) {
             Entity ent = it.next();
-            if(Entity.collision(entity, ent)){
+            if(Entity.collision(missile, ent)){
                 return true;
             }
         }
