@@ -77,12 +77,40 @@ public class Vector {
         this.y = (float)(yy* Math.cos(angle) + xx * Math.sin(angle));
     }
 
-    public static void rotate (Vector vec ,float angle){
+    public static Vector rotate (Vector vec ,float angle){
         //angle in rads
-        float xx = vec.x;
-        float yy = vec.y;
-        vec.x = (float)(xx* Math.cos(angle) - yy * Math.sin(angle));
-        vec.y = (float)(yy* Math.cos(angle) + xx * Math.sin(angle));
+        Vector result = new Vector(vec.x, vec.y);
+        result.x = (float)(vec.x* Math.cos(angle) - vec.y * Math.sin(angle));
+        result.y = (float)(vec.y* Math.cos(angle) + vec.x * Math.sin(angle));
+        return result;
+    }
+
+
+    //heading return can be negative
+    //flip phone upside down to se, heading is clockwise goes clockwise from a [0,1] vector
+    public float getHeading(){
+        //handle dividing by 0
+        if(this.y ==0){
+            if(this.x == 0){
+                //Zero vector special case
+                return 0;
+            }else if(this.x > 0){
+                //vector colliniar with x axis
+                return (float)(Math.PI /2);
+            }else{
+                //vector opposite to x axis
+                return (float)(-Math.PI /2);
+            }
+        }
+
+        float angle = (float)Math.atan(this.x / Math.abs(this.y));
+
+        if(this.y > 0){
+            return -angle;
+        }else{
+            //y must be less than 0
+            return (float)Math.PI + angle;
+        }
     }
 
     public String toString(){
