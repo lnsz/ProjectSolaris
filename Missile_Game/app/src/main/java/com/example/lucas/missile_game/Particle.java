@@ -49,12 +49,7 @@ public class Particle extends Entity{
     @Override
     public void display(Canvas canvas){
         paint.setAlpha((int)life);
-        Path path = new Path();
-        path.moveTo(location.x, location.y - 5);
-        path.lineTo(location.x, location.y + 5);
-        path.close();
-        canvas.drawPath(path, paint);
-       // canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);
+       canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);
     }
 
     @Override
