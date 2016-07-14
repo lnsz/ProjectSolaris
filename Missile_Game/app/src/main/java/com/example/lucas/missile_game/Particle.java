@@ -20,7 +20,8 @@ public class Particle extends Entity{
         life = 255;
         decay = (255 - 30) / duration;
         paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStrokeWidth(2);
         paint.setARGB(255,255,255,255);
         mass =0;
         randomness = 1;
@@ -37,7 +38,8 @@ public class Particle extends Entity{
         life = 255;
         decay = (255 - 30) / duration;
         paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStrokeWidth(2);
         paint.setARGB(255,255,255,255);
         mass =0;
         randomness = 1;
@@ -46,7 +48,7 @@ public class Particle extends Entity{
 
     @Override
     public void display(Canvas canvas){
-       // paint.setAlpha((int)life);
+        paint.setAlpha((int)life);
         Path path = new Path();
         path.moveTo(location.x, location.y - 5);
         path.lineTo(location.x, location.y + 5);
