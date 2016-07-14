@@ -44,12 +44,14 @@ public class Missile extends Entity{
         path.close();
         canvas.drawPath(path, paint);
 
-        Particle p = new Particle(location.x, location.y, 10, 15, entities.generator);
-        p.velocity= Vector.mult(this.velocity, -1);
-        p.velocity.normalize();
-        p.velocity.mult(15);
-        p.radius = 15;
-        entities.addEntity(p, false);
+        Particle p;
+        for (int i = 0; i < 30; i++) {
+            p = new Particle(location.x, location.y, 1, 20, entities.generator);
+            p.velocity = Vector.mult(this.velocity, -1);
+            p.velocity.normalize();
+            p.velocity.mult(15);
+            entities.addEntity(p, false);
+        }
     }
 
     @Override
