@@ -2,6 +2,7 @@ package com.example.lucas.missile_game;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 
 import java.util.Random;
 
@@ -10,7 +11,7 @@ import java.util.Random;
  */
 public class Particle extends Entity{
     Random generator;
-    float life, decay;
+    float life, decay, randomness;
     public Particle(float locx, float locy, float rad, float duration, Random generator_){
         super(locx, locy);
 
@@ -22,6 +23,7 @@ public class Particle extends Entity{
         paint.setStyle(Paint.Style.FILL);
         paint.setARGB(255,255,255,255);
         mass =0;
+        randomness = 1;
 
     }
 
@@ -35,16 +37,22 @@ public class Particle extends Entity{
         life = 255;
         decay = (255 - 30) / duration;
         paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.STROKE);
         paint.setARGB(255,255,255,255);
         mass =0;
+        randomness = 1;
 
     }
 
     @Override
     public void display(Canvas canvas){
-        paint.setAlpha((int)life);
-        canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);
+       // paint.setAlpha((int)life);
+        Path path = new Path();
+        path.moveTo(location.x, location.y - 5);
+        path.lineTo(location.x, location.y + 5);
+        path.close();
+        canvas.drawPath(path, paint);
+       // canvas.drawCircle(this.location.x, this.location.y, this.radius, this.paint);
     }
 
     @Override
@@ -54,8 +62,8 @@ public class Particle extends Entity{
             alive=false;
             return;
         }
-        acceleration.x += 1f*(float)generator.nextGaussian();
-        acceleration.y += 1f*(float)generator.nextGaussian();
+        acceleration.x += randomness*(float)generator.nextGaussian();
+        acceleration.y += randomness*(float)generator.nextGaussian();
         update();
         display(canvas);
     }
