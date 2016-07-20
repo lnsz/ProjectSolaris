@@ -1,10 +1,13 @@
 package com.example.lucas.missile_game;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -18,6 +21,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private MainThread thread;
     private Background background;
     public static float height, width;
+    public Bitmap dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
     Paint paint;
     long lastDown, lastDuration;
     boolean isPressed = false;
@@ -76,7 +80,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         } else if (event.getAction() == MotionEvent.ACTION_UP ||event.getAction() ==  MotionEvent.ACTION_CANCEL) {
             lastDuration = System.currentTimeMillis() - lastDown;
             entities.addEntity(new Missile(width / 2, height- 100, event.getX(), event.getY(),
-                    (lastDuration > 500)?(lastDuration / 50) : 10, entities), true); // Min str is 10
+                    (lastDuration > 500)?(lastDuration / 50) : 10, entities, dot), true); // Min str is 10
             isPressed = false;
         }
         return true;

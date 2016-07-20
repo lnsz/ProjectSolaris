@@ -1,5 +1,6 @@
 package com.example.lucas.missile_game;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -10,12 +11,12 @@ import android.speech.tts.TextToSpeech;
  */
 public class Missile extends Entity{
     EntitySystem entities;
-
-    public Missile(float locX, float locY, float tarX, float tarY, float str, EntitySystem entities_){
+    Bitmap particleSprite;
+    public Missile(float locX, float locY, float tarX, float tarY, float str, EntitySystem entities_, Bitmap particleSprite){
         super(locX, locY);
         //get entities array
         entities=entities_;
-
+        this.particleSprite = particleSprite;
         // Set initial velocity of missile
         velocity = new Vector(tarX, tarY);
         velocity.sub(location);
@@ -45,12 +46,12 @@ public class Missile extends Entity{
         canvas.drawPath(path, paint);
 
         Particle p;
-        for (int i = 0; i < 10; i++) {
-            p = new Particle(location.x, location.y, 30, 20, entities.generator);
-            p.randomness = 5;
+        for (int i = 0; i < 8; i++) {
+            p = new Particle(location.x, location.y, 3, 20, entities.generator, particleSprite);
+            p.randomness = 2;
             p.velocity = Vector.mult(this.velocity, -1);
             p.velocity.normalize();
-            p.velocity.mult(50);
+            p.velocity.mult(20);
             entities.addEntity(p, false);
         }
     }
@@ -69,7 +70,7 @@ public class Missile extends Entity{
     public void explode(){
         alive=false;
         for(int i=0;i<4;i++) {
-            Particle p = new Particle(location.x, location.y, 10, 60, entities.generator);
+            Particle p = new Particle(location.x, location.y, 10, 60, entities.generator, particleSprite);
             if(i%2 == 0) {
                 p.paint.setARGB(255,255, 0, 0);
             }else{
