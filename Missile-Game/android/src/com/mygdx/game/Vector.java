@@ -121,6 +121,11 @@ public class Vector {
 
     }
 
+    public void reset(){
+        x = 0;
+        y = 0;
+    }
+
     @Override
     public String toString(){
         return("(" + this.x + ", " + this.y + ")");

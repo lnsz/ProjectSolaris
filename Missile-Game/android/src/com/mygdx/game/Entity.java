@@ -16,7 +16,7 @@ public class Entity {
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.radius = 20;
-        this.mass =1;
+        this.mass = 1;
         this.alive = true;
     }
 
@@ -57,7 +57,7 @@ public class Entity {
             return false;
         }
         float d = dispRel.dot(shortestLength) / dispRel.mag();
-        float f = (sL * sL) - (d*d);
+        float f = (sL * sL) - (d * d);
         if(f >= totalRadius *totalRadius){
             return false;
         }
