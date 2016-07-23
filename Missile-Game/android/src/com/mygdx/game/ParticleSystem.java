@@ -19,12 +19,12 @@ public class ParticleSystem {
     Sprite sprite;
     Vector location;
 
-    public ParticleSystem(float x, float y,  int size, boolean recycle, Sprite sprite){
+    public ParticleSystem(float x, float y,  int size, int duration, boolean recycle, Sprite sprite){
         this.sprite = sprite;
         location = new Vector(x, y);
         this.recycle = recycle;
         this.size = size;
-        particleDuration = 20;
+        particleDuration = duration;
         if (size < particleDuration){
             particleDuration = size;
         }
@@ -48,12 +48,12 @@ public class ParticleSystem {
     }
 
 
-    public ParticleSystem(float x, float y, Vector velocity, int size, boolean recycle, Sprite sprite){
+    public ParticleSystem(float x, float y, Vector velocity, int size, int duration, boolean recycle, Sprite sprite){
         this.sprite = sprite;
         location = new Vector(x, y);
         this.recycle = recycle;
         this.size = size;
-        particleDuration = 20;
+        particleDuration = duration;
         if (size < particleDuration){
             particleDuration = size;
         }

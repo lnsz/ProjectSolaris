@@ -30,7 +30,7 @@ public class Missile extends Entity{
         velocity.sub(location);
         velocity.normalize();
         velocity.mult(str);
-        this.particles = new ParticleSystem(location.x, location.y, velocity, 500, true, particleSprite);
+        this.particles = new ParticleSystem(location.x, location.y, velocity, 500, 40, true, particleSprite);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Missile extends Entity{
 
     public void explode(){
         visible = false;
-        particles = new ParticleSystem(location.x, location.y, 1000, false, explosionSprite);
+        particles = new ParticleSystem(location.x, location.y, 1000, 225, false, explosionSprite);
     }
 
 
