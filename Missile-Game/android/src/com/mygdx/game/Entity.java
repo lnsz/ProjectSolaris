@@ -10,14 +10,16 @@ public class Entity {
     Vector location, velocity, acceleration;
     float radius, mass;
     boolean alive;
+    boolean visible;
 
     public Entity (float locX, float locY){
         this.location = new Vector(locX, locY);
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.radius = 20;
-        this.mass =1;
+        this.mass = 1;
         this.alive = true;
+        this.visible = true;
     }
 
     public void update(){
@@ -57,7 +59,7 @@ public class Entity {
             return false;
         }
         float d = dispRel.dot(shortestLength) / dispRel.mag();
-        float f = (sL * sL) - (d*d);
+        float f = (sL * sL) - (d * d);
         if(f >= totalRadius *totalRadius){
             return false;
         }

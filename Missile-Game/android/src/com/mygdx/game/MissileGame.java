@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -18,6 +20,7 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
     public static float height, width;
+    public static Random generator;
     EntitySystem entities;
 
     // Touch variables
@@ -42,6 +45,8 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
         entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, 500, 100), true);
+
+        generator = new Random();
 
     }
 
@@ -90,7 +95,9 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         if (isPressed){
             strMeter();
         }
+
         entities.run(batch, renderer);
+
     }
 
     @Override
