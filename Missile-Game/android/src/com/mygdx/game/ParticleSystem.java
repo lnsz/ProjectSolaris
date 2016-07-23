@@ -86,6 +86,8 @@ public class ParticleSystem {
         int index = 0;
         Particle p;
         batch.begin();
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(255, 255, 255, 1);
         while (index < lastAlive){
             p = particles.get(index);
 
@@ -112,6 +114,7 @@ public class ParticleSystem {
             }
         }
         batch.end();
+        renderer.end();
     }
 
     public boolean isAlive(){

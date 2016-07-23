@@ -22,6 +22,7 @@ public class Particle extends Entity{
         decay = (255 - 30) / duration;
         randomness = 2;
         mass = 0;
+        radius = 3;
         this.sprite = sprite;
 
     }
@@ -31,10 +32,7 @@ public class Particle extends Entity{
         sprite.setPosition(location.x, location.y);
         sprite.draw(batch);
 
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(255, 255, 255, 1);
-//        renderer.rect(location.x, location.y, radius, radius);
-//        renderer.end();
+        // renderer.rect(location.x, location.y, radius, radius);
     }
 
     @Override
