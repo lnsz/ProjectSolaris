@@ -132,7 +132,6 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         lastDuration = System.currentTimeMillis() - lastDown;
         entities.addEntity(new Missile(width / 2, height- 100, x, y,
                 (lastDuration > 500)?(lastDuration / 50) : 10, entities), true); // Min str is 10
-        System.out.println(x + " "+ y);
         isPressed = false;
         return true;
     }

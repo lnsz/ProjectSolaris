@@ -25,11 +25,8 @@ public class Missile extends Entity{
         float angle = velocity.getHeading();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(255, 255, 255, 1);
-        //renderer.rotate(0, 1, 0 , angle);
         renderer.circle(location.x, location.y, radius);
         renderer.end();
-
-        //canvas.drawPath(path, paint);
 
         Particle p;
         for (int i = 0; i < 8; i++) {
