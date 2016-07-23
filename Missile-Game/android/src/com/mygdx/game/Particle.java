@@ -49,4 +49,5 @@ public class Particle extends Entity{
         update();
         display(batch, renderer);
     }
+
 }

@@ -138,7 +138,7 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
     public boolean touchUp (int x, int y, int pointer, int button) {
         lastDuration = System.currentTimeMillis() - lastDown;
         entities.addEntity(new Missile(width / 2, height- 100, x, y,
-                (lastDuration > 500)?(lastDuration / 50) : 10), true); // Min str is 10
+                (lastDuration > 500)?(lastDuration / 50) : 10, entities), true); // Min str is 10
         isPressed = false;
         return true;
     }

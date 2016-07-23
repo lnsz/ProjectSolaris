@@ -10,6 +10,7 @@ public class Entity {
     Vector location, velocity, acceleration;
     float radius, mass;
     boolean alive;
+    boolean visible;
 
     public Entity (float locX, float locY){
         this.location = new Vector(locX, locY);
@@ -18,6 +19,7 @@ public class Entity {
         this.radius = 20;
         this.mass = 1;
         this.alive = true;
+        this.visible = true;
     }
 
     public void update(){

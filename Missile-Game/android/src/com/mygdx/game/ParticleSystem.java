@@ -17,26 +17,68 @@ public class ParticleSystem {
     int lastAlive, maxRecycle, size;  // Index of last live particle, number of particles that can be recycled per loop, total size of particle system
     float particleDuration;
     Sprite sprite;
-    Texture texture;
     Vector location;
 
-    public ParticleSystem(float x, float y, int size, boolean recycle){
-        texture = new Texture(Gdx.files.internal("dot.png"));
-        sprite = new Sprite(texture);
+    public ParticleSystem(float x, float y,  int size, boolean recycle, Sprite sprite){
+        this.sprite = sprite;
         location = new Vector(x, y);
         this.recycle = recycle;
         this.size = size;
-        particleDuration = 1;
+        particleDuration = 20;
         if (size < particleDuration){
             particleDuration = size;
         }
         maxRecycle = (int)(size / particleDuration);
-        // Particle system starts with some particles and recycles maxRecycle on every loop
+        // Particle system starts with 1 particle and recycles maxRecycle on every loop, or all particles if it's not recyclable
+        Particle p = new Particle(x, y, particleDuration, sprite);
+        particles.add(p);
         for (int i = 0; i < size; i++){
-            particles.add(new Particle(x, y, particleDuration, sprite));
+            p = new Particle(x, y, particleDuration, sprite);
+            if (recycle) {
+                p.alive = false;
+            }
+            particles.add(p);
         }
-        lastAlive = size - 1;
+        if (recycle) {
+            lastAlive = 1;
+        }
+        else{
+            lastAlive = size - 1;
+        }
     }
+
+
+    public ParticleSystem(float x, float y, Vector velocity, int size, boolean recycle, Sprite sprite){
+        this.sprite = sprite;
+        location = new Vector(x, y);
+        this.recycle = recycle;
+        this.size = size;
+        particleDuration = 20;
+        if (size < particleDuration){
+            particleDuration = size;
+        }
+        maxRecycle = (int)(size / particleDuration);
+        // Particle system starts with 1 particle and recycles maxRecycle on every loop, or all particles if it's not recyclable
+        Particle p = new Particle(x, y, particleDuration, sprite);
+        particles.add(p);
+        for (int i = 0; i < size; i++){
+            p = new Particle(x, y, particleDuration, sprite);
+            p.velocity = Vector.mult(velocity, -1);
+            p.velocity.normalize();
+            p.velocity.mult(10);
+            if (recycle) {
+                p.alive = false;
+            }
+            particles.add(p);
+        }
+        if (recycle) {
+            lastAlive = 1;
+        }
+        else{
+            lastAlive = size - 1;
+        }
+    }
+
 
     public void update(float x, float y, Vector velocity, SpriteBatch batch, ShapeRenderer renderer){
         this.location.x = x;
@@ -60,18 +102,19 @@ public class ParticleSystem {
         if(recycle){
             for (int i = 1; i < maxRecycle + 1; i++) {
                 if (lastAlive + i < size) {
-                    p = particles.get(lastAlive + i);
-                    p.alive = true;
-                    p.location = this.location;
-                    p.life = p.maxLife;
-                    p.acceleration.reset();
-                    p.velocity = Vector.mult(velocity, -1);
-                    p.velocity.normalize();
-                    p.velocity.mult(10);
+                    Particle m = new Particle (x, y, particleDuration, sprite);
+                    m.velocity = Vector.mult(velocity, -1);
+                    m.velocity.normalize();
+                    m.velocity.mult(10);
+                    particles.set(lastAlive + i, m);
                     lastAlive ++;
                 }
             }
         }
         batch.end();
+    }
+
+    public boolean isAlive(){
+        return lastAlive > 0;
     }
 }
