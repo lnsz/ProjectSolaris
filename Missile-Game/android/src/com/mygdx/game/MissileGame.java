@@ -57,7 +57,7 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         // Reset camera
-        //camera.update();
+        camera.update();
 
         // Tell the SpriteBatch to render in the camera
         renderer.setProjectionMatrix(camera.combined);
