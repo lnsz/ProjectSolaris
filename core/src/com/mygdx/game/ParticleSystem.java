@@ -102,13 +102,13 @@ public class ParticleSystem {
             }
         }
         if(recycle){
-            for (int i = 1; i < maxRecycle + 1; i++) {
-                if (lastAlive + i < size) {
+            for (int i = 0; i < maxRecycle; i++) {
+                if (lastAlive + 1 < size) {
                     Particle m = new Particle (x, y, particleDuration, sprite);
                     m.velocity = Vector.mult(velocity, -1);
                     m.velocity.normalize();
                     m.velocity.mult(10);
-                    particles.set(lastAlive + i, m);
+                    particles.set(lastAlive + 1, m);
                     lastAlive ++;
                 }
             }
