@@ -59,13 +59,14 @@ public class Missile extends Entity{
                 alive = false;
             }
         }
+        // System.out.println("x: "+location.x + " y: " + location.y);
         particles.update(location.x, location.y, velocity, batch, renderer);
         update();
     }
 
     public void explode(){
         visible = false;
-        particles = new ParticleSystem(location.x, location.y, 1000, 225, false, explosionSprite);
+        particles = new ParticleSystem(location.x, location.y, 1000, 5000, false, explosionSprite);
     }
 
 

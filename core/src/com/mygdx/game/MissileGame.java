@@ -3,11 +3,16 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.Random;
 
@@ -15,13 +20,16 @@ import java.util.Random;
 /**
  * Created by lucas on 7/22/2016.
  */
-public class MissileGame extends ApplicationAdapter implements InputProcessor {
+public class MissileGame extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
-    public static float height, width;
+    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY;
     public static Random generator;
     EntitySystem entities;
+    GestureDetector gestureDetector;
+    InputMultiplexer inputMultiplexer;
+
 
     // Touch variables
     long lastDown, lastDuration;
@@ -36,18 +44,23 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         // Create the camera, SpriteBatch and ShapeRenderer
         camera = new OrthographicCamera();
         camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left corner, this should make it normal, 0, 0 top right corner
+        cameraHeight = camera.viewportHeight * camera.zoom;
+        cameraWidth = camera.viewportWidth * camera.zoom;
+        cameraOriginX = width / 2 - cameraWidth / 2;
+        cameraOriginY = height / 2 - cameraHeight / 2;
         batch = new SpriteBatch(); // Use to draw sprites
         renderer = new ShapeRenderer(); // Use to draw shapes
 
         // Start input processor
-        Gdx.input.setInputProcessor(this);
+        gestureDetector = new GestureDetector(this);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(gestureDetector, this);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
         entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, 500, 100), true);
 
         generator = new Random();
-
     }
 
     @Override
@@ -63,6 +76,10 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
 
         // Reset camera
         camera.update();
+        cameraHeight = camera.viewportHeight * camera.zoom;
+        cameraWidth = camera.viewportWidth * camera.zoom;
+        cameraOriginX = width / 2 - cameraWidth / 2;
+        cameraOriginY = height / 2 - cameraHeight / 2;
 
         // Tell the SpriteBatch to render in the camera
         renderer.setProjectionMatrix(camera.combined);
@@ -80,10 +97,20 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         renderer.end();
     }
 
+    public float remap(float n, float min1, float max1, float min2, float max2){
+        // Used to map a number from the screen resolution range to the camera resolution range
+        if (min1 != max1 && min2 != max2) {
+            return (((n - min1) * (max2 - min2)) / (max1 - min1)) + min2;
+        }
+        else{
+            return (max2 + min2) / 2;
+        }
+    }
+
     public void background(){
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0, 0, 0, 1);
-        renderer.rect(0, 0, width, height);
+        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth,  cameraHeight);
         renderer.end();
     }
 
@@ -95,9 +122,40 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
         if (isPressed){
             strMeter();
         }
-
         entities.run(batch, renderer);
+    }
 
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
+        if (initialDistance / distance > 1 && camera.zoom < 3){
+            camera.zoom += 0.01;
+        }
+        else if(camera.zoom > 1){
+            camera.zoom -= 0.01;
+        }
+        isPressed = false;
+        return true;
+    }
+
+    @Override
+    public boolean touchDown (float x, float y, int pointer, int button) {
+        lastDown = System.currentTimeMillis();
+        isPressed = true;
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int x, int y, int pointer, int button) {
+        if(isPressed) {
+            lastDuration = System.currentTimeMillis() - lastDown;
+            entities.addEntity(new Missile(width/2,
+                    height - 100,
+                    remap(x, 0, width, cameraOriginX, cameraWidth),
+                    remap(y, 0, height, cameraOriginY, cameraHeight),
+                    (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
+            isPressed = false;
+        }
+        return true;
     }
 
     @Override
@@ -112,49 +170,76 @@ public class MissileGame extends ApplicationAdapter implements InputProcessor {
     public void resume() {
     }
 
+
     @Override
-    public boolean keyDown (int keycode) {
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2)
+    {
         return false;
     }
 
     @Override
-    public boolean keyUp (int keycode) {
+    public void pinchStop(){
+    }
+
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button){
         return false;
     }
 
     @Override
-    public boolean keyTyped (char character) {
+    public boolean tap(float x, float y, int count, int button){
         return false;
     }
 
     @Override
-    public boolean touchDown (int x, int y, int pointer, int button) {
-        lastDown = System.currentTimeMillis();
-        isPressed = true;
-        return true;
-    }
-
-    @Override
-    public boolean touchUp (int x, int y, int pointer, int button) {
-        lastDuration = System.currentTimeMillis() - lastDown;
-        entities.addEntity(new Missile(width / 2, height- 100, x, y,
-                (lastDuration > 500)?(lastDuration / 50) : 10, entities), true); // Min str is 10
-        isPressed = false;
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged (int x, int y, int pointer) {
+    public boolean pan(float x, float y, float deltaX, float deltaY){
         return false;
     }
 
     @Override
-    public boolean mouseMoved (int x, int y) {
+    public boolean longPress(float x, float y){
         return false;
     }
 
     @Override
-    public boolean scrolled (int amount) {
+    public boolean panStop(float x, float y, int pointer, int button){
         return false;
     }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int x, int y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int x, int y, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int x, int y) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+
 }

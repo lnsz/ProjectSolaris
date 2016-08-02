@@ -27,7 +27,10 @@ public class Entity {
         location.add(velocity);
         acceleration.mult(0);
 
-        if(location.x < 0 || location.x > MissileGame.width || location.y > MissileGame.height || location.y < 0){
+        if(location.x < MissileGame.cameraOriginX||
+                location.x > MissileGame.cameraWidth ||
+                location.y > MissileGame.cameraHeight ||
+                location.y < MissileGame.cameraOriginY){
             alive = false;
         }
     }

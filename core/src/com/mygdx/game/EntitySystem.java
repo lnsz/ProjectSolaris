@@ -83,7 +83,5 @@ public class EntitySystem {
                 it.remove();
             }
         }
-
-
     }
 }
