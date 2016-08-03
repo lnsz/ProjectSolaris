@@ -24,12 +24,12 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
-    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY;
+    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY, maxHeight, maxWidth, maxOriginX, maxOriginY;
     public static Random generator;
     EntitySystem entities;
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
-
+    float maxZoom;
 
     // Touch variables
     long lastDown, lastDuration;
@@ -43,11 +43,14 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create the camera, SpriteBatch and ShapeRenderer
         camera = new OrthographicCamera();
-        camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left corner, this should make it normal, 0, 0 top right corner
-        cameraHeight = camera.viewportHeight * camera.zoom;
-        cameraWidth = camera.viewportWidth * camera.zoom;
-        cameraOriginX = width / 2 - cameraWidth / 2;
-        cameraOriginY = height / 2 - cameraHeight / 2;
+        camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
+        // corner, this should make it normal, 0, 0 top right corner
+        updateCamera();
+        maxZoom = 3;
+        maxHeight = camera.viewportHeight * maxZoom;
+        maxWidth = camera.viewportWidth * maxZoom;
+        maxOriginX = width / 2 - maxWidth / 2;
+        maxOriginY = height / 2 - maxHeight / 2;
         batch = new SpriteBatch(); // Use to draw sprites
         renderer = new ShapeRenderer(); // Use to draw shapes
 
@@ -58,7 +61,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
-        entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, 500, 100), true);
+        entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, height / 5, height / 15), true);
 
         generator = new Random();
     }
@@ -75,15 +78,19 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Reset camera
-        camera.update();
-        cameraHeight = camera.viewportHeight * camera.zoom;
-        cameraWidth = camera.viewportWidth * camera.zoom;
-        cameraOriginX = width / 2 - cameraWidth / 2;
-        cameraOriginY = height / 2 - cameraHeight / 2;
+        updateCamera();
 
         // Tell the SpriteBatch to render in the camera
         renderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
+    }
+
+    public void updateCamera(){
+        camera.update();
+        cameraHeight = camera.viewportHeight * camera.zoom;
+        cameraWidth = camera.viewportWidth * camera.zoom;
+        cameraOriginX = -(cameraWidth - width) / 2;
+        cameraOriginY = -(cameraHeight - height) / 2;
     }
 
     public void strMeter(){
@@ -127,7 +134,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        if (initialDistance / distance > 1 && camera.zoom < 3){
+        if (initialDistance / distance > 1 && camera.zoom < maxZoom){
             camera.zoom += 0.01;
         }
         else if(camera.zoom > 1){
@@ -148,10 +155,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public boolean touchUp(int x, int y, int pointer, int button) {
         if(isPressed) {
             lastDuration = System.currentTimeMillis() - lastDown;
-            entities.addEntity(new Missile(width/2,
-                    height - 100,
-                    remap(x, 0, width, cameraOriginX, cameraWidth),
-                    remap(y, 0, height, cameraOriginY, cameraHeight),
+            entities.addEntity(new Missile(width / 2,
+                    height - height / 15,
+                    remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth),
+                    remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight),
                     (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
             isPressed = false;
         }
