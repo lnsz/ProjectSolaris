@@ -16,7 +16,7 @@ public class Entity {
         this.location = new Vector(locX, locY);
         this.velocity = new Vector();
         this.acceleration = new Vector();
-        this.radius = 20;
+        this.radius = 10;
         this.mass = 1;
         this.alive = true;
         this.visible = true;

@@ -61,7 +61,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
-        entities.addEntity(new Obstacle(Obstacle.Type.PLANET, width / 2, height / 5, height / 15), true);
+        entities.addEntity(new Planet(width / 2, height / 5, height / 15), true);
 
         generator = new Random();
     }

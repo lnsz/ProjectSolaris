@@ -22,7 +22,6 @@ public class Missile extends Entity{
         explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
         explosionSprite = new Sprite(explosionTexture);
 
-
         //get entities array
         this.entities = entities;
         // Set initial velocity of missile
