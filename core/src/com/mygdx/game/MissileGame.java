@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,7 +25,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
-    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY, maxHeight, maxWidth, maxOriginX, maxOriginY;
+    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
+            maxHeight, maxWidth, maxOriginX, maxOriginY,
+            defaultHeight, defaultWidth, defaultOriginX, defaultOriginY;
     public static double GRAVITY_CONSTANT = 6.67e-11;
     public static double DISTANCE_UNITS = 500; // 1 pixel = 500 km
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
@@ -32,7 +35,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     EntitySystem entities;
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
-    float maxZoom;
+    FPSLogger fpsLogger;
+    float maxZoom, defaultZoom;
 
     // Touch variables
     long lastDown, lastDuration;
@@ -44,19 +48,27 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        // Create the camera, SpriteBatch and ShapeRenderer
+        // Create the camera, SpriteBatch, ShapeRenderer and initialize camera variables
         camera = new OrthographicCamera();
         camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
-        maxZoom = 3;
-        camera.zoom = 2;
+        maxZoom = 4;
+        defaultZoom = 2;
         maxHeight = camera.viewportHeight * maxZoom;
         maxWidth = camera.viewportWidth * maxZoom;
         maxOriginX = width / 2 - maxWidth / 2;
         maxOriginY = height / 2 - maxHeight / 2;
+        defaultHeight = camera.viewportHeight * defaultZoom;
+        defaultWidth = camera.viewportWidth * defaultZoom;
+        defaultOriginX = width / 2 - defaultWidth / 2;
+        defaultOriginY = height / 2 - defaultHeight / 2;
+        camera.zoom = defaultZoom;
         batch = new SpriteBatch(); // Use to draw sprites
         renderer = new ShapeRenderer(); // Use to draw shapes
+
+        // Create fps logger
+        fpsLogger = new FPSLogger();
 
         // Start input processor
         gestureDetector = new GestureDetector(this);
@@ -68,7 +80,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         Planet planet = new Planet(width / 2, height / 5, height / 15, 600);
         entities.addEntity(planet, true);
         entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 2, planet, 1000), true);
-        entities.addEntity(new Moon(width / 2, height / 5, height / 40, 400, true, 3 * Math.PI / 2, planet, 500, 1500), true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 3 * Math.PI / 2, planet, 1000), true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI, planet, 1000), true);
+        //entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
+
         generator = new Random();
     }
 
@@ -106,7 +122,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         double timeRatio = (System.currentTimeMillis() - lastDown) / 3000.0;
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        renderer.circle(width / 2, height - 100, (float)(500 * timeRatio));
+        renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
+                remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
+                (float)(500 * timeRatio));
         renderer.end();
     }
 
@@ -137,12 +155,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         }
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        renderer.circle(width / 2, height / 5, 1000);
-        renderer.setColor(255, 255, 0, 1);
-        renderer.circle(width / 2, height / 5, 500);
-        renderer.circle(width / 2, height / 5, 1500);
+        renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
+                remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight), 50); // Temp player character
         renderer.end();
         entities.run(batch, renderer);
+        // fpsLogger.log(); // Uncomment to show fps
     }
 
     @Override
@@ -168,8 +185,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public boolean touchUp(int x, int y, int pointer, int button) {
         if(isPressed) {
             lastDuration = System.currentTimeMillis() - lastDown;
-            entities.addEntity(new Missile(width / 2,
-                    height - height / 15,
+            entities.addEntity(new Missile(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
+                    remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
                     remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth),
                     remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight),
                     (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10

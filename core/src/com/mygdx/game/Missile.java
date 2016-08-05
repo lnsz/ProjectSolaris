@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Created by Kiko on 11/07/2016.
  */
 public class Missile extends Entity{
-    ParticleSystem particles;
+    ParticleSystem flightParticles, deathParticles;
     EntitySystem entities;
     Sprite particleSprite, explosionSprite;
     Texture particleTexture, explosionTexture;
@@ -29,7 +29,7 @@ public class Missile extends Entity{
         velocity.sub(location);
         velocity.normalize();
         velocity.mult(str);
-        this.particles = new ParticleSystem(location.x, location.y, velocity, 500, 40, true, particleSprite);
+        this.flightParticles = new ParticleSystem(location.x, location.y, velocity, 300, 20, true, particleSprite);
     }
 
     @Override
@@ -46,6 +46,7 @@ public class Missile extends Entity{
     @Override
     public void run(SpriteBatch batch, ShapeRenderer renderer){
         if(visible) {
+            update();
             entities.gravity(this);
             if (entities.collision(this)) {
                 // explode!
@@ -54,18 +55,20 @@ public class Missile extends Entity{
             display(batch, renderer);
         }
         else{
-            if (!particles.isAlive()){
+            deathParticles.update(location.x, location.y, velocity, batch, renderer);
+            if (!deathParticles.isAlive()){
                 alive = false;
             }
         }
         // System.out.println("x: "+location.x + " y: " + location.y);
-        particles.update(location.x, location.y, velocity, batch, renderer);
-        update();
+        flightParticles.update(location.x, location.y, velocity, batch, renderer);
+
     }
 
     public void explode(){
         visible = false;
-        particles = new ParticleSystem(location.x, location.y, 1000, 5000, false, explosionSprite);
+        deathParticles = new ParticleSystem(location.x, location.y, 500, 100, false, explosionSprite);
+        flightParticles.recycle = false;
     }
 
 
