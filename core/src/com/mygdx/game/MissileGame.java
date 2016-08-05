@@ -25,6 +25,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY, maxHeight, maxWidth, maxOriginX, maxOriginY;
+    public static float GRAVITY_CONSTANT = 1;
     public static Random generator;
     EntitySystem entities;
     GestureDetector gestureDetector;
@@ -61,8 +62,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
-        entities.addEntity(new Planet(width / 2, height / 5, height / 15), true);
-
+        Planet planet = new Planet(width / 2, height / 5, height / 15);
+        entities.addEntity(planet, true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 40, true, planet, 1000), true);
+        //entities.addEntity(new Moon(width / 2, height / 5, height / 40, true, planet, 500, 1500, 0), true);
         generator = new Random();
     }
 
@@ -129,6 +132,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         if (isPressed){
             strMeter();
         }
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(255, 255, 255, 1);
+        //renderer.circle(width / 2, height / 5, 500);
+        renderer.circle(width / 2, height / 5, 1000);
+        renderer.end();
         entities.run(batch, renderer);
     }
 

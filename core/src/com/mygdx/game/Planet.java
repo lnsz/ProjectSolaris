@@ -9,4 +9,9 @@ public class Planet extends Obstacle{
         gravity = true;
         mass = (float)Math.pow(radius, 3);
     }
+
+    @Override
+    public void update(){
+        // planet doesn't move
+    }
 }
