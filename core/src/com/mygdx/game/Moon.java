@@ -8,39 +8,43 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Moon extends Obstacle{
     Planet planet;
-    public Moon(float locX, float locY, float radius, boolean clockwise, Planet planet, float altitude){
+    public Moon(float locX, float locY, float radius, float mass, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
         super(locX, locY, radius);
-        location.x = planet.location.x - altitude;
-        location.y = planet.location.y;
-        velocity.y = (float)Math.sqrt(MissileGame.GRAVITY_CONSTANT * planet.mass / (planet.location.x - location.x));
-        if (clockwise){
+        location.x = 0;
+        location.y = -altitude;
+        location.rotate((float)angle);
+        location.add(planet.location);
+        velocity.x = (float) Math.sqrt((MissileGame.GRAVITY_CONSTANT * planet.mass *
+                MissileGame.MASS_UNITS) / (altitude * MissileGame.DISTANCE_UNITS * 1000000));
+        if (clockwise) {
             velocity.y *= -1;
         }
+        velocity.rotate((float)angle);
         this.planet = planet;
+        this.mass = mass;
         gravity = true;
-        mass = (float)Math.pow(radius, 3);
     }
 
-    public Moon(float locX, float locY,  float radius, boolean clockwise, Planet planet, float perigee, float apogee, float angle ){
+    public Moon(float locX, float locY,  float radius, float mass, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
         // Elliptical orbit moon
         super(locX, locY, radius);
-        location.x = planet.location.x;
-        location.y = planet.location.y + perigee;
-        float e = (apogee - perigee) / (apogee + perigee); // How close orbit is to being a circle
-        float axis = (apogee + perigee) / 2;
-        float vel = (float)Math.sqrt(MissileGame.GRAVITY_CONSTANT * planet.mass * ((2 / (axis - e)) - (1 / axis)));
-        velocity.x = (planet.location.x - location.x);
-        velocity.y = (planet.location.y - location.y);
-        velocity.normalize();
-        velocity.rotate((float)Math.PI /  2);
-        velocity.mult(vel);
+        location.x = 0;
+        location.y = -perigee;
+        location.rotate((float)angle);
+        location.add(planet.location);
+        double GM = MissileGame.GRAVITY_CONSTANT * planet.mass * MissileGame.MASS_UNITS;
+        double r = perigee * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
+        double a = (apogee + perigee) / 2 * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
+        velocity.x = (float) Math.sqrt(GM * (2/r - 1/a));
+        System.out.println(velocity);
         if(clockwise){
             velocity.mult(-1);
         }
+        velocity.rotate((float)angle);
         this.planet = planet;
+        this.mass = mass;
         gravity = true;
-        mass = (float)Math.pow(radius, 3);
     }
 
     @Override

@@ -25,7 +25,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY, maxHeight, maxWidth, maxOriginX, maxOriginY;
-    public static float GRAVITY_CONSTANT = 1;
+    public static double GRAVITY_CONSTANT = 6.67e-11;
+    public static double DISTANCE_UNITS = 500; // 1 pixel = 500 km
+    public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
     EntitySystem entities;
     GestureDetector gestureDetector;
@@ -48,6 +50,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
         maxZoom = 3;
+        camera.zoom = 2;
         maxHeight = camera.viewportHeight * maxZoom;
         maxWidth = camera.viewportWidth * maxZoom;
         maxOriginX = width / 2 - maxWidth / 2;
@@ -62,10 +65,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create Entity System and add a planet to it
         entities = new EntitySystem();
-        Planet planet = new Planet(width / 2, height / 5, height / 15);
+        Planet planet = new Planet(width / 2, height / 5, height / 15, 600);
         entities.addEntity(planet, true);
-        entities.addEntity(new Moon(width / 2, height / 5, height / 40, true, planet, 1000), true);
-        //entities.addEntity(new Moon(width / 2, height / 5, height / 40, true, planet, 500, 1500, 0), true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 2, planet, 1000), true);
+        entities.addEntity(new Moon(width / 2, height / 5, height / 40, 400, true, 3 * Math.PI / 2, planet, 500, 1500), true);
         generator = new Random();
     }
 
@@ -134,8 +137,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         }
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        //renderer.circle(width / 2, height / 5, 500);
         renderer.circle(width / 2, height / 5, 1000);
+        renderer.setColor(255, 255, 0, 1);
+        renderer.circle(width / 2, height / 5, 500);
+        renderer.circle(width / 2, height / 5, 1500);
         renderer.end();
         entities.run(batch, renderer);
     }
