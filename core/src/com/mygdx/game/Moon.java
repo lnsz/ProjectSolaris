@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -7,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Created by lucas on 8/3/2016.
  */
 public class Moon extends Obstacle{
+    // Orbits planets, have gravity
     Planet planet;
     public Moon(float locX, float locY, float radius, float mass, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
@@ -24,6 +28,8 @@ public class Moon extends Obstacle{
         this.planet = planet;
         this.mass = mass;
         gravity = true;
+        texture = new Texture(Gdx.files.internal("moon.png"));
+        sprite = new Sprite(texture);
     }
 
     public Moon(float locX, float locY,  float radius, float mass, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
@@ -45,6 +51,8 @@ public class Moon extends Obstacle{
         this.planet = planet;
         this.mass = mass;
         gravity = true;
+        texture = new Texture(Gdx.files.internal("moon.png"));
+        sprite = new Sprite(texture);
     }
 
     @Override
@@ -52,5 +60,18 @@ public class Moon extends Obstacle{
         planet.gravity(this);
         display(batch, renderer);
         update();
+    }
+
+    @Override
+    public void display(SpriteBatch batch, ShapeRenderer renderer){
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(255, 255, 255, 1);
+//        renderer.circle(location.x, location.y, radius);
+//        renderer.end();
+        batch.begin();
+        sprite.setSize(radius * 2, radius * 2);
+        sprite.setPosition(location.x - radius, location.y - radius);
+        sprite.draw(batch);
+        batch.end();
     }
 }

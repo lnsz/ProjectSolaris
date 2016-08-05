@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -17,7 +18,7 @@ public class Entity {
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.radius = 10;
-        this.mass = 1;
+        this.mass = 0;
         this.alive = true;
         this.visible = true;
     }
@@ -37,7 +38,7 @@ public class Entity {
 
     public void display(SpriteBatch batch, ShapeRenderer renderer){
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(255, 255, 255, 1);
+        renderer.setColor(Color.WHITE);
         renderer.circle(location.x, location.y, radius);
         renderer.end();
     }

@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,7 +38,7 @@ public class Missile extends Entity{
         if (visible) {
             float angle = velocity.getHeading();
             renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(255, 255, 255, 1);
+            renderer.setColor(Color.WHITE);
             renderer.circle(location.x, location.y, radius);
             renderer.end();
         }

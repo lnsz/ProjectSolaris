@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -8,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Obstacle extends Entity{
     boolean gravity;
+    Sprite sprite;
+    Texture texture;
     public Obstacle(float locX, float locY, float radius){
         super(locX, locY);
         this.radius = radius;
