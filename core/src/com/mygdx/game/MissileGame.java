@@ -27,7 +27,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     private OrthographicCamera camera;
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
             maxHeight, maxWidth, maxOriginX, maxOriginY,
-            defaultHeight, defaultWidth, defaultOriginX, defaultOriginY;
+            defaultHeight, defaultWidth, defaultOriginX, defaultOriginY, entityBorder;
     public static double GRAVITY_CONSTANT = 6.67e-11;
     public static double DISTANCE_UNITS = 500; // 1 pixel = 500 km
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
@@ -59,6 +59,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         maxWidth = camera.viewportWidth * maxZoom;
         maxOriginX = width / 2 - maxWidth / 2;
         maxOriginY = height / 2 - maxHeight / 2;
+        entityBorder = (float)Math.sqrt(Math.pow(maxWidth / 2, 2) + Math.pow(maxHeight / 2, 2)); // Maximum distance that entities can be from the center
         defaultHeight = camera.viewportHeight * defaultZoom;
         defaultWidth = camera.viewportWidth * defaultZoom;
         defaultOriginX = width / 2 - defaultWidth / 2;
@@ -85,8 +86,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 1000), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
         entities.addEntity(new Asteroid(height / 30, true, 0, planet, 1000), true);
-        entities.addEntity(new Comet(0, Math.PI, 20, height / 10), true);
 
+        entities.addEntity(new Comet(0, Math.PI, 20, height / 10), true);
         generator = new Random();
     }
 

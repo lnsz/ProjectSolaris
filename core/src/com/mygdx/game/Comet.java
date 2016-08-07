@@ -16,16 +16,17 @@ public class Comet extends Obstacle{
         super(0, 0, radius);
         initialLocation = new Vector();
         location.x = 0;
-        location.y = (MissileGame.maxHeight -  MissileGame.maxOriginY) / 2;
+        location.y = MissileGame.entityBorder;
         location.rotate((float)originAngle);
-        location.x += MissileGame.width;
+        location.x += MissileGame.width / 2;
+        location.y += MissileGame.height / 2;
         initialLocation.x = location.x;
         initialLocation.y = location.y;
+        System.out.println(location);
         velocity.x = 0;
         velocity.y = 1;
         velocity.rotate((float)targetAngle);
         velocity.mult(speed);
-
         texture = new Texture(Gdx.files.internal("asteroid.png"));
         sprite = new Sprite(texture);
         gravity = true;
@@ -50,10 +51,9 @@ public class Comet extends Obstacle{
         location.add(velocity);
         acceleration.mult(0);
 
-        float distanceX = location.x - (MissileGame.maxWidth -  MissileGame.maxOriginX) / 2;
-        float distanceY = location.y - (MissileGame.maxHeight -  MissileGame.maxOriginY) / 2;
-        if(distanceX > (MissileGame.maxWidth -  MissileGame.maxOriginX) / 2 || distanceY >
-                (MissileGame.maxHeight -  MissileGame.maxOriginY) / 2){
+        Vector distance = new Vector(location.x - MissileGame.width / 2,
+                location.y - MissileGame.height / 2); // Distance from current location to center
+        if(distance.mag() > MissileGame.entityBorder){
             location.x = initialLocation.x;
             location.y = initialLocation.y;
         }

@@ -28,10 +28,9 @@ public class Entity {
         location.add(velocity);
         acceleration.mult(0);
 
-        if(location.x < MissileGame.maxOriginX ||
-                location.x > MissileGame.maxOriginX + MissileGame.maxWidth ||
-                location.y > MissileGame.maxOriginY + MissileGame.maxHeight ||
-                location.y < MissileGame.maxOriginY){
+        Vector distance = new Vector(location.x - MissileGame.width / 2,
+                location.y - MissileGame.height / 2); // Distance from current location to center
+        if(distance.mag() > MissileGame.entityBorder){
             alive = false;
         }
     }
