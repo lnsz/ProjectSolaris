@@ -13,9 +13,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Asteroid extends Obstacle{
     // Orbits planets, don't have gravity
     Planet planet;
-    public Asteroid(float locX, float locY, float radius, boolean clockwise, double angle, Planet planet, float altitude) {
+    public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
-        super(locX, locY, radius);
+        super(0, 0, radius);
         location.x = 0;
         location.y = -altitude;
         location.rotate((float)angle);
@@ -32,9 +32,9 @@ public class Asteroid extends Obstacle{
         sprite = new Sprite(texture);
     }
 
-    public Asteroid(float locX, float locY,  float radius, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
+    public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
         // Elliptical orbit moon
-        super(locX, locY, radius);
+        super(0, 0, radius);
         location.x = 0;
         location.y = -perigee;
         location.rotate((float)angle);

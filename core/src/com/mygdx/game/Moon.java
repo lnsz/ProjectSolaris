@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Moon extends Obstacle{
     // Orbits planets, have gravity
     Planet planet;
-    public Moon(float locX, float locY, float radius, float mass, boolean clockwise, double angle, Planet planet, float altitude) {
+    public Moon(float radius, float mass, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
-        super(locX, locY, radius);
+        super(0, 0, radius);
         location.x = 0;
         location.y = -altitude;
         location.rotate((float)angle);
@@ -32,9 +32,9 @@ public class Moon extends Obstacle{
         sprite = new Sprite(texture);
     }
 
-    public Moon(float locX, float locY,  float radius, float mass, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
+    public Moon(float radius, float mass, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
         // Elliptical orbit moon
-        super(locX, locY, radius);
+        super(0, 0, radius);
         location.x = 0;
         location.y = -perigee;
         location.rotate((float)angle);

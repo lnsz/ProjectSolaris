@@ -79,12 +79,13 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         entities = new EntitySystem();
         Planet planet = new Planet(width / 2, height / 5, height / 10, 600);
         entities.addEntity(planet, true);
-        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 2, planet, 1000), true);
-        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 3 * Math.PI / 2, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 1000), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 1000), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Asteroid(width / 2, height / 5, height / 30, true, 0, planet, 1000), true);
+        entities.addEntity(new Asteroid(height / 30, true, 0, planet, 1000), true);
+        entities.addEntity(new Comet(0, Math.PI, 20, height / 10), true);
 
         generator = new Random();
     }
