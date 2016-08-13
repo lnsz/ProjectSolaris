@@ -33,16 +33,16 @@ public class Comet extends Obstacle{
     }
 
     @Override
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(Color.GRAY);
-//        renderer.circle(location.x, location.y, radius);
-//        renderer.end();
-        batch.begin();
+    public void draw(){
+//        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        MissileGame.renderer.setColor(Color.GRAY);
+//        MissileGame.renderer.circle(location.x, location.y, radius);
+//        MissileGame.renderer.end();
+        MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(location.x - radius, location.y - radius);
-        sprite.draw(batch);
-        batch.end();
+        sprite.draw(MissileGame.batch);
+        MissileGame.batch.end();
     }
 
     public void update(){

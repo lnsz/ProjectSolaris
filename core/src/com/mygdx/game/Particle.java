@@ -28,15 +28,15 @@ public class Particle extends Entity{
     }
 
     @Override
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
+    public void draw(){
         sprite.setPosition(location.x, location.y);
-        sprite.draw(batch);
+        sprite.draw(MissileGame.batch);
 
         // renderer.rect(location.x, location.y, radius, radius);
     }
 
     @Override
-    public void run(SpriteBatch batch, ShapeRenderer renderer){
+    public void run(){
         life -= decay;
         if(life < 30){
             alive = false;
@@ -45,7 +45,7 @@ public class Particle extends Entity{
         acceleration.x += randomness * (float)MissileGame.generator.nextGaussian();
         acceleration.y += randomness * (float)MissileGame.generator.nextGaussian();
         update();
-        display(batch, renderer);
+        draw();
     }
 
 }

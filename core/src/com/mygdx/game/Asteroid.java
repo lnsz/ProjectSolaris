@@ -55,22 +55,22 @@ public class Asteroid extends Obstacle{
     }
 
     @Override
-    public void run(SpriteBatch batch, ShapeRenderer renderer){
+    public void run(){
         planet.gravity(this);
-        display(batch, renderer);
+        draw();
         update();
     }
 
     @Override
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
+    public void draw(){
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(Color.GRAY);
 //        renderer.circle(location.x, location.y, radius);
 //        renderer.end();
-        batch.begin();
+        MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(location.x - radius, location.y - radius);
-        sprite.draw(batch);
-        batch.end();
+        sprite.draw(MissileGame.batch);
+        MissileGame.batch.end();
     }
 }

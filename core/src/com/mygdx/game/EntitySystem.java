@@ -59,7 +59,7 @@ public class EntitySystem {
         }
     }
 
-    void run(SpriteBatch batch, ShapeRenderer renderer) {
+    void run() {
         solidEntities.addAll(solidBuffer);
         solidBuffer.clear();
 
@@ -69,7 +69,7 @@ public class EntitySystem {
         Iterator<Entity> it = solidEntities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
-            p.run(batch, renderer);
+            p.run();
             if (!p.alive) {
                 it.remove();
             }
@@ -78,7 +78,7 @@ public class EntitySystem {
         it = ghostEntities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
-            p.run(batch, renderer);
+            p.run();
             if (!p.alive) {
                 it.remove();
             }

@@ -35,16 +35,16 @@ public class Entity {
         }
     }
 
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(Color.WHITE);
-        renderer.circle(location.x, location.y, radius);
-        renderer.end();
+    public void draw(){
+        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        MissileGame.renderer.setColor(Color.WHITE);
+        MissileGame.renderer.circle(location.x, location.y, radius);
+        MissileGame.renderer.end();
     }
 
 
-    public void run(SpriteBatch batch, ShapeRenderer renderer){
-        display(batch, renderer);
+    public void run(){
+        draw();
         update();
     }
 

@@ -34,18 +34,18 @@ public class Missile extends Entity{
     }
 
     @Override
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
+    public void draw(){
         if (visible) {
             float angle = velocity.getHeading();
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(Color.WHITE);
-            renderer.circle(location.x, location.y, radius);
-            renderer.end();
+            MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
+            MissileGame.renderer.setColor(Color.WHITE);
+            MissileGame.renderer.circle(location.x, location.y, radius);
+            MissileGame.renderer.end();
         }
 }
 
     @Override
-    public void run(SpriteBatch batch, ShapeRenderer renderer){
+    public void run(){
         if(visible) {
             update();
             entities.gravity(this);
@@ -53,16 +53,16 @@ public class Missile extends Entity{
                 // explode!
                 explode();
             }
-            display(batch, renderer);
+            draw();
         }
         else{
-            deathParticles.update(location.x, location.y, velocity, batch, renderer);
+            deathParticles.update(location.x, location.y, velocity);
             if (!deathParticles.isAlive()){
                 alive = false;
             }
         }
         // System.out.println("x: "+location.x + " y: " + location.y);
-        flightParticles.update(location.x, location.y, velocity, batch, renderer);
+        flightParticles.update(location.x, location.y, velocity);
 
     }
 

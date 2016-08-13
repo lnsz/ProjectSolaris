@@ -26,11 +26,11 @@ public class Planet extends Obstacle{
     }
 
     @Override
-    public void display(SpriteBatch batch, ShapeRenderer renderer){
-        batch.begin();
+    public void draw(){
+        MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(location.x - radius, location.y - radius);
-        sprite.draw(batch);
-        batch.end();
+        sprite.draw(MissileGame.batch);
+        MissileGame.batch.end();
     }
 }

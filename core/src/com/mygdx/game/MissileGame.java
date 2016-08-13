@@ -8,6 +8,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
@@ -15,6 +17,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -22,8 +26,8 @@ import java.util.Random;
  * Created by lucas on 7/22/2016.
  */
 public class MissileGame extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
-    private SpriteBatch batch;
-    private ShapeRenderer renderer;
+    public static SpriteBatch batch;
+    public static ShapeRenderer renderer;
     private OrthographicCamera camera;
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
             maxHeight, maxWidth, maxOriginX, maxOriginY,
@@ -32,6 +36,13 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static double DISTANCE_UNITS = 500; // 1 pixel = 500 km
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
+    enum Mode {START_SCREEN,
+            MAIN_MENU,
+            PLAY,
+            PAUSE
+    }
+    Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton, menuButton;
+    Mode mode;
     EntitySystem entities;
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
@@ -49,27 +60,18 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         height = Gdx.graphics.getHeight();
 
         // Create the camera, SpriteBatch, ShapeRenderer and initialize camera variables
-        camera = new OrthographicCamera();
-        camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
-        // corner, this should make it normal, 0, 0 top right corner
-        updateCamera();
-        maxZoom = 4;
-        defaultZoom = 2;
-        maxHeight = camera.viewportHeight * maxZoom;
-        maxWidth = camera.viewportWidth * maxZoom;
-        maxOriginX = width / 2 - maxWidth / 2;
-        maxOriginY = height / 2 - maxHeight / 2;
-        entityBorder = (float)Math.sqrt(Math.pow(maxWidth / 2, 2) + Math.pow(maxHeight / 2, 2)); // Maximum distance that entities can be from the center
-        defaultHeight = camera.viewportHeight * defaultZoom;
-        defaultWidth = camera.viewportWidth * defaultZoom;
-        defaultOriginX = width / 2 - defaultWidth / 2;
-        defaultOriginY = height / 2 - defaultHeight / 2;
-        camera.zoom = defaultZoom;
+        setUpCamera();
         batch = new SpriteBatch(); // Use to draw sprites
         renderer = new ShapeRenderer(); // Use to draw shapes
 
         // Create fps logger
         fpsLogger = new FPSLogger();
+
+        // Set mode
+        mode = Mode.START_SCREEN;
+
+        // Create buttons
+        createButtons();
 
         // Start input processor
         gestureDetector = new GestureDetector(this);
@@ -87,7 +89,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
         entities.addEntity(new Asteroid(height / 30, true, 0, planet, 1000), true);
 
-        entities.addEntity(new Comet(0, Math.PI, 20, height / 10), true);
+        entities.addEntity(new Comet(Math.PI / 2 * 3, Math.PI / 2, 20, height / 20), true);
+
+        // Start random number generator
         generator = new Random();
     }
 
@@ -110,12 +114,38 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         batch.setProjectionMatrix(camera.combined);
     }
 
+    public void createButtons(){
+        Texture tempTexture = new Texture(Gdx.files.internal("startButton.png"));
+        Sprite tempSprite = new Sprite(tempTexture);
+        startButton = new Button(0, 0, width, height, tempSprite);
+
+    }
+
     public void updateCamera(){
         camera.update();
         cameraHeight = camera.viewportHeight * camera.zoom;
         cameraWidth = camera.viewportWidth * camera.zoom;
         cameraOriginX = -(cameraWidth - width) / 2;
         cameraOriginY = -(cameraHeight - height) / 2;
+    }
+
+    public void setUpCamera(){
+        camera = new OrthographicCamera();
+        camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
+        // corner, this should make it normal, 0, 0 top right corner
+        updateCamera();
+        maxZoom = 4;
+        defaultZoom = 2;
+        maxHeight = camera.viewportHeight * maxZoom;
+        maxWidth = camera.viewportWidth * maxZoom;
+        maxOriginX = width / 2 - maxWidth / 2;
+        maxOriginY = height / 2 - maxHeight / 2;
+        entityBorder = (float)Math.sqrt(Math.pow(maxWidth / 2, 2) + Math.pow(maxHeight / 2, 2)); // Maximum distance that entities can be from the center
+        defaultHeight = camera.viewportHeight * defaultZoom;
+        defaultWidth = camera.viewportWidth * defaultZoom;
+        defaultOriginX = width / 2 - defaultWidth / 2;
+        defaultOriginY = height / 2 - defaultHeight / 2;
+        camera.zoom = defaultZoom;
     }
 
     public void strMeter(){
@@ -153,6 +183,25 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         clearScreen();
         background();
 
+        checkMode();
+    }
+
+    public void checkMode(){
+        switch(mode){
+            case START_SCREEN:
+                startButton.draw();
+                break;
+
+            case PLAY:
+                play();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void play(){
         if (isPressed){
             strMeter();
         }
@@ -161,7 +210,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
                 remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight), 50); // Temp player character
         renderer.end();
-        entities.run(batch, renderer);
+        entities.run();
         // fpsLogger.log(); // Uncomment to show fps
     }
 
@@ -179,23 +228,49 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public boolean touchDown (float x, float y, int pointer, int button) {
-        lastDown = System.currentTimeMillis();
-        isPressed = true;
+        switch(mode){
+            case PLAY:
+                lastDown = System.currentTimeMillis();
+                isPressed = true;
+                break;
+
+            default:
+                break;
+        }
         return true;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(isPressed) {
-            lastDuration = System.currentTimeMillis() - lastDown;
-            entities.addEntity(new Missile(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
-                    remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
-                    remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth),
-                    remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight),
-                    (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
-            isPressed = false;
+        switch(mode){
+            case START_SCREEN:
+                if (startButton.isClicked(x, y)){
+                    mode = Mode.PLAY;
+                }
+                break;
+
+            case PLAY:
+                if(isPressed) {
+                    lastDuration = System.currentTimeMillis() - lastDown;
+                    entities.addEntity(new Missile(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
+                            remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
+                            remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth),
+                            remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight),
+                            (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
+                    isPressed = false;
+                }
+                break;
+
+            default:
+                break;
         }
         return true;
+    }
+
+    @Override
+    public boolean tap(float x, float y, int count, int button){
+
+        return false;
     }
 
     @Override
@@ -223,11 +298,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button){
-        return false;
-    }
-
-    @Override
-    public boolean tap(float x, float y, int count, int button){
         return false;
     }
 

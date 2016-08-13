@@ -80,19 +80,19 @@ public class ParticleSystem {
     }
 
 
-    public void update(float x, float y, Vector velocity, SpriteBatch batch, ShapeRenderer renderer){
+    public void update(float x, float y, Vector velocity){
         this.location.x = x;
         this.location.y = y;
         int index = 0;
         Particle p;
-        batch.begin();
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(255, 255, 255, 1);
+        MissileGame.batch.begin();
+        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        MissileGame.renderer.setColor(255, 255, 255, 1);
         while (index < lastAlive){
             p = particles.get(index);
 
             if (p.alive) {
-                p.run(batch, renderer);
+                p.run();
                 index++;
             }
             else{ // Swap dead particle with last live particle
@@ -113,8 +113,8 @@ public class ParticleSystem {
                 }
             }
         }
-        batch.end();
-        renderer.end();
+        MissileGame.batch.end();
+        MissileGame.renderer.end();
     }
 
     public boolean isAlive(){
