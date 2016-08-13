@@ -28,7 +28,7 @@ import java.util.Random;
 public class MissileGame extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
     public static SpriteBatch batch;
     public static ShapeRenderer renderer;
-    private OrthographicCamera camera;
+    public static OrthographicCamera camera;
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
             maxHeight, maxWidth, maxOriginX, maxOriginY,
             defaultHeight, defaultWidth, defaultOriginX, defaultOriginY, entityBorder;
@@ -47,7 +47,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
     FPSLogger fpsLogger;
-    float maxZoom, defaultZoom;
+    float maxZoom, defaultZoom, startZoom;
 
     // Touch variables
     long lastDown, lastDuration;
@@ -119,6 +119,29 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         Sprite tempSprite = new Sprite(tempTexture);
         startButton = new Button(0, 0, width, height, tempSprite);
 
+        tempTexture = new Texture(Gdx.files.internal("playButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        playButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("shopButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        shopButton = new Button(width / 6, height / 2, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("settingsButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        settingsButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("pauseButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        pauseButton = new Button(0, height - height / 20, width / 10, height / 20, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("resumeButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        resumeButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("menuButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
     }
 
     public void updateCamera(){
@@ -135,6 +158,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
         maxZoom = 4;
+        startZoom = 1;
         defaultZoom = 2;
         maxHeight = camera.viewportHeight * maxZoom;
         maxWidth = camera.viewportWidth * maxZoom;
@@ -145,7 +169,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         defaultWidth = camera.viewportWidth * defaultZoom;
         defaultOriginX = width / 2 - defaultWidth / 2;
         defaultOriginY = height / 2 - defaultHeight / 2;
-        camera.zoom = defaultZoom;
+        camera.zoom = startZoom;
     }
 
     public void strMeter(){
@@ -161,7 +185,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         renderer.end();
     }
 
-    public float remap(float n, float min1, float max1, float min2, float max2){
+    public static float remap(float n, float min1, float max1, float min2, float max2){
         // Used to map a number from the screen resolution range to the camera resolution range
         if (min1 != max1 && min2 != max2) {
             return (((n - min1) * (max2 - min2)) / (max1 - min1)) + min2;
@@ -192,10 +216,21 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 startButton.draw();
                 break;
 
-            case PLAY:
-                play();
+            case MAIN_MENU:
+                playButton.draw();
+                shopButton.draw();
+                settingsButton.draw();
                 break;
 
+            case PLAY:
+                play();
+                pauseButton.scale();
+                pauseButton.draw();
+                break;
+
+            case PAUSE:
+                pauseGame();
+                break;
             default:
                 break;
         }
@@ -205,15 +240,27 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         if (isPressed){
             strMeter();
         }
+        drawShip();
+        entities.run(true);
+        // fpsLogger.log(); // Uncomment to show fps
+    }
+
+    public void pauseGame(){
+        drawShip();
+        entities.run(false);
+        resumeButton.scale();
+        resumeButton.draw();
+        menuButton.scale();
+        menuButton.draw();
+    }
+
+    public void drawShip(){
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
         renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
                 remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight), 50); // Temp player character
         renderer.end();
-        entities.run();
-        // fpsLogger.log(); // Uncomment to show fps
     }
-
     @Override
     public boolean zoom(float initialDistance, float distance) {
         if (initialDistance / distance > 1 && camera.zoom < maxZoom){
@@ -242,20 +289,42 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
+        float remapX = remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth);
+        float remapY = remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
         switch(mode){
             case START_SCREEN:
-                if (startButton.isClicked(x, y)){
+                if (startButton.isClicked(remapX, remapY)){
+                    mode = Mode.MAIN_MENU;
+                }
+                break;
+            case MAIN_MENU:
+                if (playButton.isClicked(remapX, remapY)){
+                    camera.zoom = defaultZoom;
                     mode = Mode.PLAY;
                 }
                 break;
 
+            case PAUSE:
+                if (resumeButton.isClicked(remapX, remapY)){
+                    mode = Mode.PLAY;
+                }
+                if (menuButton.isClicked(remapX, remapY)){
+                    camera.zoom = startZoom;
+                    mode = Mode.MAIN_MENU;
+                }
+                break;
+
             case PLAY:
+                if (pauseButton.isClicked(remapX, remapY)){
+                    mode = Mode.PAUSE;
+                    isPressed = false;
+                }
+
                 if(isPressed) {
                     lastDuration = System.currentTimeMillis() - lastDown;
                     entities.addEntity(new Missile(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
                             remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
-                            remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth),
-                            remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight),
+                            remapX, remapY,
                             (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
                     isPressed = false;
                 }

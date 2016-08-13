@@ -45,24 +45,25 @@ public class Missile extends Entity{
 }
 
     @Override
-    public void run(){
+    public void run(boolean move){
         if(visible) {
-            update();
-            entities.gravity(this);
-            if (entities.collision(this)) {
-                // explode!
-                explode();
+            if (move) {
+                update();
+                entities.gravity(this);
+                if (entities.collision(this)) {
+                    // explode!
+                    explode();
+                }
             }
             draw();
         }
         else{
-            deathParticles.update(location.x, location.y, velocity);
+            deathParticles.update(location.x, location.y, velocity, move);
             if (!deathParticles.isAlive()){
                 alive = false;
             }
         }
-        // System.out.println("x: "+location.x + " y: " + location.y);
-        flightParticles.update(location.x, location.y, velocity);
+        flightParticles.update(location.x, location.y, velocity, move);
 
     }
 

@@ -8,13 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Button {
     Sprite sprite;
-    float width, height;
-    Vector location;
+    float width, height, startingWidth, startingHeight;
+    Vector location, startingLocation;
     public Button(float xPos, float yPos, float width, float height, Sprite sprite){
         location = new Vector(xPos, yPos);
+        startingLocation = new Vector(xPos, yPos);
         this.sprite = sprite;
         this.width = width;
         this.height = height;
+        startingWidth = width;
+        startingHeight = height;
     }
 
     public boolean isClicked(float x, float y){
@@ -32,5 +35,16 @@ public class Button {
         sprite.setFlip(false, true);
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
+    }
+
+    public void scale(){
+        // Moves button so it's in the same position when zoom is changed
+        location.x = MissileGame.remap(startingLocation.x, 0, MissileGame.width, MissileGame.cameraOriginX,
+                MissileGame.cameraOriginX + MissileGame.cameraWidth);
+        location.y = MissileGame.remap(startingLocation.y, 0, MissileGame.height, MissileGame.cameraOriginY,
+                MissileGame.cameraOriginY + MissileGame.cameraHeight);
+        width = startingWidth * MissileGame.camera.zoom;
+        height = startingHeight * MissileGame.camera.zoom;
+
     }
 }

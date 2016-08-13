@@ -36,15 +36,17 @@ public class Particle extends Entity{
     }
 
     @Override
-    public void run(){
-        life -= decay;
-        if(life < 30){
-            alive = false;
-            return;
+    public void run(boolean move){
+        if (move) {
+            life -= decay;
+            if (life < 30) {
+                alive = false;
+                return;
+            }
+            acceleration.x += randomness * (float) MissileGame.generator.nextGaussian();
+            acceleration.y += randomness * (float) MissileGame.generator.nextGaussian();
+            update();
         }
-        acceleration.x += randomness * (float)MissileGame.generator.nextGaussian();
-        acceleration.y += randomness * (float)MissileGame.generator.nextGaussian();
-        update();
         draw();
     }
 

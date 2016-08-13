@@ -43,9 +43,11 @@ public class Entity {
     }
 
 
-    public void run(){
+    public void run(boolean move){
+        if (move) {
+            update();
+        }
         draw();
-        update();
     }
 
     public static boolean collision(Entity ent1, Entity ent2){

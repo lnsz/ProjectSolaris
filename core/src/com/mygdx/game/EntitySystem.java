@@ -59,7 +59,7 @@ public class EntitySystem {
         }
     }
 
-    void run() {
+    void run(boolean move) {
         solidEntities.addAll(solidBuffer);
         solidBuffer.clear();
 
@@ -69,7 +69,7 @@ public class EntitySystem {
         Iterator<Entity> it = solidEntities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
-            p.run();
+            p.run(move);
             if (!p.alive) {
                 it.remove();
             }
@@ -78,7 +78,7 @@ public class EntitySystem {
         it = ghostEntities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
-            p.run();
+            p.run(move);
             if (!p.alive) {
                 it.remove();
             }

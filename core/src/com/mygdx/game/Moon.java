@@ -56,10 +56,12 @@ public class Moon extends Obstacle{
     }
 
     @Override
-    public void run(){
-        planet.gravity(this);
+    public void run(boolean move){
+        if (move) {
+            planet.gravity(this);
+            update();
+        }
         draw();
-        update();
     }
 
     @Override
