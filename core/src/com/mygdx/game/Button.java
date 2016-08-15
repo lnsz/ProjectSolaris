@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -10,6 +11,7 @@ public class Button {
     Sprite sprite;
     float width, height, startingWidth, startingHeight;
     Vector location, startingLocation;
+    boolean selected;
     public Button(float xPos, float yPos, float width, float height, Sprite sprite){
         location = new Vector(xPos, yPos);
         startingLocation = new Vector(xPos, yPos);
@@ -18,6 +20,7 @@ public class Button {
         this.height = height;
         startingWidth = width;
         startingHeight = height;
+        selected = false;
     }
 
     public boolean isClicked(float x, float y){
@@ -31,6 +34,12 @@ public class Button {
     public void draw(){
         MissileGame.batch.begin();
         sprite.setSize(width, height);
+        if (selected) {
+            sprite.setColor(Color.YELLOW);
+        }
+        else{
+            sprite.setColor(Color.WHITE);
+        }
         sprite.setPosition(location.x, location.y);
         sprite.setFlip(false, true);
         sprite.draw(MissileGame.batch);

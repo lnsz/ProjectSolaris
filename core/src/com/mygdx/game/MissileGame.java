@@ -39,18 +39,24 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
-            PAUSE
+            PAUSE,
+        LEVEL_SELECTOR
     }
-    Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton, menuButton;
+    Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton,
+            menuButton, levelButton;
     Mode mode;
     EntitySystem entities;
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
     FPSLogger fpsLogger;
     float maxZoom, defaultZoom, startZoom;
+    int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected;
+    boolean levelScroll = false;
+    ArrayList<Button> levelList;
 
     // Touch variables
     long lastDown, lastDuration;
+    Vector lastTouch, lastTap;
     boolean isPressed = false;
 
     @Override
@@ -93,6 +99,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Start random number generator
         generator = new Random();
+
+        lastTouch = new Vector(0, 0);
+        lastTap = new Vector(0, 0);
     }
 
     @Override
@@ -122,6 +131,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         tempTexture = new Texture(Gdx.files.internal("playButton.png"));
         tempSprite = new Sprite(tempTexture);
         playButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+        levelButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
 
         tempTexture = new Texture(Gdx.files.internal("shopButton.png"));
         tempSprite = new Sprite(tempTexture);
@@ -142,6 +152,27 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         tempTexture = new Texture(Gdx.files.internal("menuButton.png"));
         tempSprite = new Sprite(tempTexture);
         menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("levelButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        episodeNumber = 3;
+        levelX = 3;
+        levelY = 5;
+        levelSelected = -1;
+        episodeSelected = -1;
+        levelNumber = levelX * levelY * episodeNumber;
+        levelList = new ArrayList<Button>();
+        for (int i = 0; i < episodeNumber; i++){
+            for (int y = 0; y < levelY; y++) {
+                for (int x = 0; x < levelX; x++){
+                    float levelButtonX = width / 5 + x * width / 5 + width * i + (width / 5 - width / 6) / 2;
+                    float levelButtonY = height / 7 + y * height / 7 + (height / 7 - height / 8) / 2;
+                    Button b = new Button(levelButtonX, levelButtonY, width / 6, height / 8, tempSprite);
+                    levelList.add(b);
+                }
+            }
+        }
+
     }
 
     public void updateCamera(){
@@ -222,6 +253,13 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 settingsButton.draw();
                 break;
 
+            case LEVEL_SELECTOR:
+                if (levelSelected >= 0) {
+                    levelButton.draw();
+                }
+                levelSelector();
+                break;
+
             case PLAY:
                 play();
                 pauseButton.scale();
@@ -254,6 +292,22 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         menuButton.draw();
     }
 
+    public void levelSelector(){
+        for (int i = 0; i < levelNumber; i++){
+            if (i == levelSelected){
+                levelList.get(i).selected = true;
+            }
+            else{
+                levelList.get(i).selected = false;
+            }
+
+            if(!isPressed){
+                episodeSelector();
+            }
+            levelList.get(i).draw();
+        }
+    }
+
     public void drawShip(){
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
@@ -263,18 +317,47 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        if (initialDistance / distance > 1 && camera.zoom < maxZoom){
-            camera.zoom += 0.01;
+        switch (mode) {
+            case PLAY:
+                if (initialDistance / distance > 1 && camera.zoom < maxZoom) {
+                    camera.zoom += 0.01;
+                } else if (camera.zoom > 1) {
+                    camera.zoom -= 0.01;
+                }
+                isPressed = false;
+                return true;
+
+            default:
+                return false;
         }
-        else if(camera.zoom > 1){
-            camera.zoom -= 0.01;
+    }
+
+    public void episodeSelector(){
+        episodeSelected = (int)((width / 5 - levelList.get(0).location.x + 2 * width / 5) / width);
+        //System.out.println((width / 5 - levelList.get(0).location.x + width / 5) + " " +episodeSelected);
+
+        if(levelList.get(episodeSelected * levelX * levelY).location.x >
+                width / 5 + width / 20){
+            System.out.println("Move left");
+//            for (int i = 0; i < episodeNumber; i++){
+//                levelList.get(i).location.x -= width / 20;
+//            }
         }
-        isPressed = false;
-        return true;
+        else if (levelList.get(episodeSelected * levelX * levelY).location.x <
+                width / 5 - width / 20){
+            System.out.println("Move right");
+//            for (int i = 0; i < episodeNumber; i++){
+//                levelList.get(i).location.x += width / 20;
+//            }
+        }
     }
 
     @Override
     public boolean touchDown (float x, float y, int pointer, int button) {
+        lastTouch.x = x;
+        lastTouch.y = y;
+        lastTap.x = x;
+        lastTap.y = y;
         switch(mode){
             case PLAY:
                 lastDown = System.currentTimeMillis();
@@ -299,9 +382,32 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 break;
             case MAIN_MENU:
                 if (playButton.isClicked(remapX, remapY)){
+                    levelSelected = -1;
+                    episodeSelected = -1;
+                    mode = Mode.LEVEL_SELECTOR;
+                }
+                break;
+
+            case LEVEL_SELECTOR:
+                if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
                     camera.zoom = defaultZoom;
                     mode = Mode.PLAY;
                 }
+                Vector pos = new Vector(x, y);
+                pos.sub(lastTap);
+                if(pos.mag() < width / 20) {
+                    boolean nullTap = true;
+                    for(int i = 0; i < levelNumber; i++){
+                        if (levelList.get(i).isClicked(remapX, remapY)) {
+                            nullTap = false;
+                            levelSelected = i;
+                        }
+                    }
+                    if(nullTap){
+                        levelSelected = -1;
+                    }
+                }
+                isPressed = false;
                 break;
 
             case PAUSE:
@@ -336,6 +442,34 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         return true;
     }
 
+
+    @Override
+    public boolean touchDragged(int x, int y, int pointer) {
+        float dX = x - lastTouch.x;
+        lastTouch.x = x;
+        float dY = y - lastTouch.y;
+        lastTouch.y = y;
+        switch(mode) {
+            case LEVEL_SELECTOR:
+                if(levelList.get(0).location.x + dX < width / 5 &&
+                        levelList.get(levelNumber - 1).location.x + dX > 3 * width / 5) {
+                    for (int i = 0; i < levelNumber; i++) {
+                        levelList.get(i).location.x += dX;
+                    }
+                }
+
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button){
+        return false;
+    }
+
     @Override
     public boolean tap(float x, float y, int count, int button){
 
@@ -363,11 +497,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public void pinchStop(){
-    }
-
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button){
-        return false;
     }
 
     @Override
@@ -402,11 +531,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int x, int y, int pointer) {
         return false;
     }
 
