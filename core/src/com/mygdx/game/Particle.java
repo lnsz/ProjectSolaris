@@ -29,10 +29,10 @@ public class Particle extends Entity{
 
     @Override
     public void draw(){
-        sprite.setPosition(location.x, location.y);
+        sprite.setPosition(position.x, position.y);
         sprite.draw(MissileGame.batch);
 
-        // renderer.rect(location.x, location.y, radius, radius);
+        // renderer.rect(position.x, position.y, radius, radius);
     }
 
     @Override

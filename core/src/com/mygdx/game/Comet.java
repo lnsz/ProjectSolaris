@@ -11,18 +11,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Comet extends Obstacle{
     // Move in straight lines, don't have gravity
-    Vector initialLocation;
+    Vector initialposition;
     public Comet(double originAngle, double targetAngle, float speed, float radius){
         super(0, 0, radius);
-        initialLocation = new Vector();
-        location.x = 0;
-        location.y = MissileGame.entityBorder;
-        location.rotate((float)originAngle);
-        location.x += MissileGame.width / 2;
-        location.y += MissileGame.height / 2;
-        initialLocation.x = location.x;
-        initialLocation.y = location.y;
-        System.out.println(location);
+        initialposition = new Vector();
+        position.x = 0;
+        position.y = MissileGame.entityBorder;
+        position.rotate((float)originAngle);
+        position.x += MissileGame.width / 2;
+        position.y += MissileGame.height / 2;
+        initialposition.x = position.x;
+        initialposition.y = position.y;
+        System.out.println(position);
         velocity.x = 0;
         velocity.y = 1;
         velocity.rotate((float)targetAngle);
@@ -36,11 +36,11 @@ public class Comet extends Obstacle{
     public void draw(){
 //        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        MissileGame.renderer.setColor(Color.GRAY);
-//        MissileGame.renderer.circle(location.x, location.y, radius);
+//        MissileGame.renderer.circle(position.x, position.y, radius);
 //        MissileGame.renderer.end();
         MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
-        sprite.setPosition(location.x - radius, location.y - radius);
+        sprite.setPosition(position.x - radius, position.y - radius);
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
     }
@@ -48,14 +48,14 @@ public class Comet extends Obstacle{
     public void update(){
         // Goes back to the start instead of being destroyed when offscreen
         velocity.add(acceleration);
-        location.add(velocity);
+        position.add(velocity);
         acceleration.mult(0);
 
-        Vector distance = new Vector(location.x - MissileGame.width / 2,
-                location.y - MissileGame.height / 2); // Distance from current location to center
+        Vector distance = new Vector(position.x - MissileGame.width / 2,
+                position.y - MissileGame.height / 2); // Distance from current position to center
         if(distance.mag() > MissileGame.entityBorder){
-            location.x = initialLocation.x;
-            location.y = initialLocation.y;
+            position.x = initialposition.x;
+            position.y = initialposition.y;
         }
     }
 }

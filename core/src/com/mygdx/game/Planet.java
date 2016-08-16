@@ -29,7 +29,7 @@ public class Planet extends Obstacle{
     public void draw(){
         MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
-        sprite.setPosition(location.x - radius, location.y - radius);
+        sprite.setPosition(position.x - radius, position.y - radius);
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
     }

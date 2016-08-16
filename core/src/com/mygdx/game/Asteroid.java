@@ -16,14 +16,14 @@ public class Asteroid extends Obstacle{
     public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
         super(0, 0, radius);
-        location.x = 0;
-        location.y = -altitude;
-        location.rotate((float)angle);
-        location.add(planet.location);
+        position.x = 0;
+        position.y = -altitude;
+        position.rotate((float)angle);
+        position.add(planet.position);
         velocity.x = (float) Math.sqrt((MissileGame.GRAVITY_CONSTANT * planet.mass *
                 MissileGame.MASS_UNITS) / (altitude * MissileGame.DISTANCE_UNITS * 1000000));
         if (clockwise) {
-            velocity.y *= -1;
+            velocity.mult(-1);
         }
         velocity.rotate((float)angle);
         this.planet = planet;
@@ -35,10 +35,10 @@ public class Asteroid extends Obstacle{
     public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
         // Elliptical orbit moon
         super(0, 0, radius);
-        location.x = 0;
-        location.y = -perigee;
-        location.rotate((float)angle);
-        location.add(planet.location);
+        position.x = 0;
+        position.y = -perigee;
+        position.rotate((float)angle);
+        position.add(planet.position);
         double GM = MissileGame.GRAVITY_CONSTANT * planet.mass * MissileGame.MASS_UNITS;
         double r = perigee * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
         double a = (apogee + perigee) / 2 * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
@@ -67,11 +67,11 @@ public class Asteroid extends Obstacle{
     public void draw(){
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(Color.GRAY);
-//        renderer.circle(location.x, location.y, radius);
+//        renderer.circle(position.x, position.y, radius);
 //        renderer.end();
         MissileGame.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
-        sprite.setPosition(location.x - radius, location.y - radius);
+        sprite.setPosition(position.x - radius, position.y - radius);
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
     }

@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Created by lucas on 7/11/2016.
  */
 public class Entity {
-    Vector location, velocity, acceleration;
+    Vector position, velocity, acceleration;
     float radius, mass;
     boolean alive;
     boolean visible;
 
     public Entity (float locX, float locY){
-        this.location = new Vector(locX, locY);
+        this.position = new Vector(locX, locY);
         this.velocity = new Vector();
         this.acceleration = new Vector();
         this.radius = 10;
@@ -25,11 +25,11 @@ public class Entity {
 
     public void update(){
         velocity.add(acceleration);
-        location.add(velocity);
+        position.add(velocity);
         acceleration.mult(0);
 
-        Vector distance = new Vector(location.x - MissileGame.width / 2,
-                location.y - MissileGame.height / 2); // Distance from current location to center
+        Vector distance = new Vector(position.x - MissileGame.width / 2,
+                position.y - MissileGame.height / 2); // Distance from current position to center
         if(distance.mag() > MissileGame.entityBorder){
             alive = false;
         }
@@ -38,7 +38,7 @@ public class Entity {
     public void draw(){
         MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
         MissileGame.renderer.setColor(Color.WHITE);
-        MissileGame.renderer.circle(location.x, location.y, radius);
+        MissileGame.renderer.circle(position.x, position.y, radius);
         MissileGame.renderer.end();
     }
 
@@ -54,7 +54,7 @@ public class Entity {
         Vector dispRel = Vector.add(ent2.velocity, ent2.acceleration);
         dispRel.sub(Vector.add(ent1.velocity, ent1.acceleration));
 
-        Vector shortestLength = Vector.sub(ent1.location, ent2.location);
+        Vector shortestLength = Vector.sub(ent1.position, ent2.position);
         if(shortestLength.dot(dispRel) <= 0){
             return false;
         }

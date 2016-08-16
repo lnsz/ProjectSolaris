@@ -27,10 +27,10 @@ public class Missile extends Entity{
         this.entities = entities;
         // Set initial velocity of missile
         velocity = new Vector(tarX, tarY);
-        velocity.sub(location);
+        velocity.sub(position);
         velocity.normalize();
         velocity.mult(str);
-        this.flightParticles = new ParticleSystem(location.x, location.y, velocity, 300, 20, true, particleSprite);
+        this.flightParticles = new ParticleSystem(position.x, position.y, velocity, 300, 20, true, particleSprite);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Missile extends Entity{
             float angle = velocity.getHeading();
             MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
             MissileGame.renderer.setColor(Color.WHITE);
-            MissileGame.renderer.circle(location.x, location.y, radius);
+            MissileGame.renderer.circle(position.x, position.y, radius);
             MissileGame.renderer.end();
         }
 }
@@ -58,18 +58,18 @@ public class Missile extends Entity{
             draw();
         }
         else{
-            deathParticles.update(location.x, location.y, velocity, move);
+            deathParticles.update(position.x, position.y, velocity, move);
             if (!deathParticles.isAlive()){
                 alive = false;
             }
         }
-        flightParticles.update(location.x, location.y, velocity, move);
+        flightParticles.update(position.x, position.y, velocity, move);
 
     }
 
     public void explode(){
         visible = false;
-        deathParticles = new ParticleSystem(location.x, location.y, 500, 100, false, explosionSprite);
+        deathParticles = new ParticleSystem(position.x, position.y, 500, 100, false, explosionSprite);
         flightParticles.recycle = false;
     }
 

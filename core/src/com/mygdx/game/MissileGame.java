@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -51,7 +53,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     FPSLogger fpsLogger;
     float maxZoom, defaultZoom, startZoom;
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected;
-    boolean levelScroll = false;
+
+    public static BitmapFont arial;
+    public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;
 
     // Touch variables
@@ -88,20 +92,36 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         entities = new EntitySystem();
         Planet planet = new Planet(width / 2, height / 5, height / 10, 600);
         entities.addEntity(planet, true);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 750), true);
+        entities.addEntity(new Moon(height / 20, 400, false, 3 * Math.PI / 2, planet, 1250), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 2, planet, 1250), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Asteroid(height / 30, true, 0, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 0, planet, 750), true);
 
-        entities.addEntity(new Comet(Math.PI / 2 * 3, Math.PI / 2, 20, height / 20), true);
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI, planet, 1250), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 750), true);
+//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 750), true);
+//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
+        entities.addEntity(new Moon(height / 20, 400, false, 0, planet, 1250), true);
+//        entities.addEntity(new Comet(Math.PI / 2 * 3, Math.PI / 2, 20, height / 20), true);
+
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 4, planet, 1000, 3000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 4, planet, 1000, 3000), true);
+//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 5 * Math.PI / 4, planet,  1000, 3000), true);
+//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
+        entities.addEntity(new Moon(height / 20, 400, false, 7 * Math.PI / 4, planet,  1000, 3000), true);
 
         // Start random number generator
         generator = new Random();
 
         lastTouch = new Vector(0, 0);
         lastTap = new Vector(0, 0);
+
+        arial = new BitmapFont(Gdx.files.internal("arial.fnt"), true);
+        glyphLayout = new GlyphLayout();
     }
 
     @Override
@@ -163,11 +183,13 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         levelNumber = levelX * levelY * episodeNumber;
         levelList = new ArrayList<Button>();
         for (int i = 0; i < episodeNumber; i++){
+            int count = 0;
             for (int y = 0; y < levelY; y++) {
                 for (int x = 0; x < levelX; x++){
+                    count++;
                     float levelButtonX = width / 5 + x * width / 5 + width * i + (width / 5 - width / 6) / 2;
                     float levelButtonY = height / 7 + y * height / 7 + (height / 7 - height / 8) / 2;
-                    Button b = new Button(levelButtonX, levelButtonY, width / 6, height / 8, tempSprite);
+                    Button b = new Button(levelButtonX, levelButtonY, width / 6, height / 8, tempSprite, Integer.toString(count));
                     levelList.add(b);
                 }
             }
@@ -179,8 +201,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         camera.update();
         cameraHeight = camera.viewportHeight * camera.zoom;
         cameraWidth = camera.viewportWidth * camera.zoom;
-        cameraOriginX = -(cameraWidth - width) / 2;
-        cameraOriginY = -(cameraHeight - height) / 2;
+        cameraOriginX = camera.position.x - cameraWidth / 2;
+        cameraOriginY = camera.position.y - cameraHeight / 2;
     }
 
     public void setUpCamera(){
@@ -229,7 +251,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void background(){
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0, 0, 0, 1);
-        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth,  cameraHeight);
+        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth, cameraHeight);
         renderer.end();
     }
 
@@ -255,6 +277,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
             case LEVEL_SELECTOR:
                 if (levelSelected >= 0) {
+                    levelButton.position.x = camera.position.x - levelButton.width / 2;
                     levelButton.draw();
                 }
                 levelSelector();
@@ -333,21 +356,21 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
 
     public void episodeSelector(){
-        episodeSelected = (int)((width / 5 - levelList.get(0).location.x + 2 * width / 5) / width);
-        //System.out.println((width / 5 - levelList.get(0).location.x + width / 5) + " " +episodeSelected);
+        episodeSelected = (int)((width / 5 - levelList.get(0).position.x + 2 * width / 5) / width);
+        //System.out.println((width / 5 - levelList.get(0).position.x + width / 5) + " " +episodeSelected);
 
-        if(levelList.get(episodeSelected * levelX * levelY).location.x >
+        if(levelList.get(episodeSelected * levelX * levelY).position.x >
                 width / 5 + width / 20){
             System.out.println("Move left");
 //            for (int i = 0; i < episodeNumber; i++){
-//                levelList.get(i).location.x -= width / 20;
+//                levelList.get(i).position.x -= width / 20;
 //            }
         }
-        else if (levelList.get(episodeSelected * levelX * levelY).location.x <
+        else if (levelList.get(episodeSelected * levelX * levelY).position.x <
                 width / 5 - width / 20){
             System.out.println("Move right");
 //            for (int i = 0; i < episodeNumber; i++){
-//                levelList.get(i).location.x += width / 20;
+//                levelList.get(i).position.x += width / 20;
 //            }
         }
     }
@@ -390,6 +413,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
             case LEVEL_SELECTOR:
                 if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
+                    camera.position.x = width / 2;
+                    camera.position.y = height / 2;
                     camera.zoom = defaultZoom;
                     mode = Mode.PLAY;
                 }
@@ -451,11 +476,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         lastTouch.y = y;
         switch(mode) {
             case LEVEL_SELECTOR:
-                if(levelList.get(0).location.x + dX < width / 5 &&
-                        levelList.get(levelNumber - 1).location.x + dX > 3 * width / 5) {
-                    for (int i = 0; i < levelNumber; i++) {
-                        levelList.get(i).location.x += dX;
-                    }
+                if(camera.position.x - dX > width / 2 &&
+                        camera.position.x - dX < width * episodeNumber - width / 2) {
+                    camera.translate(-dX, 0);
                 }
 
                 return true;

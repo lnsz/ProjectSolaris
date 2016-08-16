@@ -17,11 +17,11 @@ public class ParticleSystem {
     int lastAlive, maxRecycle, size;  // Index of last live particle, number of particles that can be recycled per loop, total size of particle system
     float particleDuration;
     Sprite sprite;
-    Vector location;
+    Vector position;
 
     public ParticleSystem(float x, float y,  int size, int duration, boolean recycle, Sprite sprite){
         this.sprite = sprite;
-        location = new Vector(x, y);
+        position = new Vector(x, y);
         this.recycle = recycle;
         this.size = size;
         particleDuration = duration;
@@ -50,7 +50,7 @@ public class ParticleSystem {
 
     public ParticleSystem(float x, float y, Vector velocity, int size, int duration, boolean recycle, Sprite sprite){
         this.sprite = sprite;
-        location = new Vector(x, y);
+        position = new Vector(x, y);
         this.recycle = recycle;
         this.size = size;
         particleDuration = duration;
@@ -81,8 +81,8 @@ public class ParticleSystem {
 
 
     public void update(float x, float y, Vector velocity, boolean move){
-        this.location.x = x;
-        this.location.y = y;
+        this.position.x = x;
+        this.position.y = y;
         int index = 0;
         Particle p;
         MissileGame.batch.begin();

@@ -18,7 +18,7 @@ public class Obstacle extends Entity{
     }
 
     public void gravity (Entity other){
-        Vector newAcceleration =  new Vector(this.location.x - other.location.x, this.location.y - other.location.y);
+        Vector newAcceleration =  new Vector(this.position.x - other.position.x, this.position.y - other.position.y);
         double distance = newAcceleration.mag();
         distance = distance * MissileGame.DISTANCE_UNITS * 1000; // Convert pixels to meters
         double distanceSq = Math.pow(distance, 2);
