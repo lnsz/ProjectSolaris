@@ -25,6 +25,8 @@ public class Entity {
 
     public void update(){
         velocity.add(acceleration);
+        velocity.mult(MissileGame.velocityMultiplier);
+        velocity.mult(MissileGame.resolutionMultiplier);
         position.add(velocity);
         acceleration.mult(0);
 

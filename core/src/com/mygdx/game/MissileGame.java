@@ -31,6 +31,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static SpriteBatch batch;
     public static ShapeRenderer renderer;
     public static OrthographicCamera camera;
+
     // Screen size variables. Height and width are the actual resolution, the others are the
     // size of the screen after being changed because of the camera zoom
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
@@ -41,6 +42,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
     public static boolean isPaused = false; // True iff game is paused
+    public static float velocityMultiplier, resolutionMultiplier; // Used to scale velocity of entities
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -51,16 +53,19 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             menuButton, levelButton; // Buttons
     Mode mode; // Mode enum used for selecting
     EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
+
     // Gesture detector and index multiplexer handle the touch screen
     GestureDetector gestureDetector;
     InputMultiplexer inputMultiplexer;
     FPSLogger fpsLogger;
     float maxZoom, minZoom, defaultZoom, startZoom; // Zoom values
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
+
     // Fonts
     public static BitmapFont arial;
     public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;  // List of buttons in the level selector screen
+
     // Touch variables
     long lastDown, lastDuration;
     Vector lastTouch, lastTap;
@@ -127,6 +132,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Initialize font variables
         arial = new BitmapFont(Gdx.files.internal("arial.fnt"), true);
         glyphLayout = new GlyphLayout();
+
+        // Initialize velocity variables
+        velocityMultiplier = (float)0.5;
+        resolutionMultiplier = (float)(height / 1920.0);
     }
 
     @Override
@@ -280,7 +289,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Clear screen, draw background, then depending on current mode, do something
         clearScreen();
         background();
-
+        System.out.println(Gdx.graphics.getFramesPerSecond());
         checkMode();
     }
 
