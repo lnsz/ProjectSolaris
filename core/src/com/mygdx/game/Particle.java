@@ -36,8 +36,8 @@ public class Particle extends Entity{
     }
 
     @Override
-    public void run(boolean move){
-        if (move) {
+    public void run(){
+        if (!MissileGame.isPaused) {
             life -= decay;
             if (life < 30) {
                 alive = false;

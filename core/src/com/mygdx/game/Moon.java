@@ -56,8 +56,8 @@ public class Moon extends Obstacle{
     }
 
     @Override
-    public void run(boolean move){
-        if (move) {
+    public void run(){
+        if (!MissileGame.isPaused) {
             planet.gravity(this);
             update();
         }

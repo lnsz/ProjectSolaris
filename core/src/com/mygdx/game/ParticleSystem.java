@@ -80,7 +80,7 @@ public class ParticleSystem {
     }
 
 
-    public void update(float x, float y, Vector velocity, boolean move){
+    public void update(float x, float y, Vector velocity){
         this.position.x = x;
         this.position.y = y;
         int index = 0;
@@ -92,7 +92,7 @@ public class ParticleSystem {
             p = particles.get(index);
 
             if (p.alive) {
-                p.run(move);
+                p.run();
                 index++;
             }
             else{ // Swap dead particle with last live particle

@@ -43,8 +43,8 @@ public class Entity {
     }
 
 
-    public void run(boolean move){
-        if (move) {
+    public void run(){
+        if (!MissileGame.isPaused) {
             update();
         }
         draw();

@@ -45,9 +45,9 @@ public class Missile extends Entity{
 }
 
     @Override
-    public void run(boolean move){
+    public void run(){
         if(visible) {
-            if (move) {
+            if (!MissileGame.isPaused) {
                 update();
                 entities.gravity(this);
                 if (entities.collision(this)) {
@@ -58,12 +58,12 @@ public class Missile extends Entity{
             draw();
         }
         else{
-            deathParticles.update(position.x, position.y, velocity, move);
+            deathParticles.update(position.x, position.y, velocity);
             if (!deathParticles.isAlive()){
                 alive = false;
             }
         }
-        flightParticles.update(position.x, position.y, velocity, move);
+        flightParticles.update(position.x, position.y, velocity);
 
     }
 
