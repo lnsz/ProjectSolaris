@@ -51,8 +51,8 @@ public class Entity {
     }
 
     public static boolean collision(Entity ent1, Entity ent2){
-        Vector dispRel = Vector.add(ent2.velocity, ent2.acceleration);
-        dispRel.sub(Vector.add(ent1.velocity, ent1.acceleration));
+        Vector dispRel = Vector.add(ent2.velocity.scale(), ent2.acceleration.scale());
+        dispRel.sub(Vector.add(ent1.velocity.scale(), ent1.acceleration.scale()));
 
         Vector shortestLength = Vector.sub(ent1.position, ent2.position);
         if(shortestLength.dot(dispRel) <= 0){
