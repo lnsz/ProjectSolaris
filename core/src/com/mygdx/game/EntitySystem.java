@@ -50,27 +50,9 @@ public class EntitySystem {
         }
     }
 
-<<<<<<< HEAD
-    void run(boolean move) {
+    void run() {
         entities.addAll(buffer);
         buffer.clear();
-=======
-    void run() {
-        solidEntities.addAll(solidBuffer);
-        solidBuffer.clear();
-
-        ghostEntities.addAll(ghostBuffer);
-        ghostBuffer.clear();
-
-        Iterator<Entity> it = solidEntities.iterator();
-        while (it.hasNext()) {
-            Entity p = it.next();
-            p.run();
-            if (!p.alive) {
-                it.remove();
-            }
-        }
->>>>>>> origin/master
 
         Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
