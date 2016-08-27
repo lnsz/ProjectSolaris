@@ -42,7 +42,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
     public static boolean isPaused = false; // True iff game is paused
-    public static float velocityMult, resolutionMult, framerateMult; // Used to scale velocity of entities
+    public static float timeScale, maxTimeScale, minTimeScale, timeScaleStage,
+            resolutionMult, framerateMult; // Used to scale velocity of entities
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -50,7 +51,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         LEVEL_SELECTOR
     }
     Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton,
-            menuButton, levelButton; // Buttons
+            menuButton, levelButton, timeScaleButton; // Buttons
     Mode mode; // Mode enum used for selecting
     EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
 
@@ -114,7 +115,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
-        velocityMult = (float)0.5;
+        timeScaleStage = 1;
+        maxTimeScale = (float)0.75;
+        minTimeScale = (float)0.25;
+        timeScale = minTimeScale + (maxTimeScale - minTimeScale) /  2 * timeScaleStage;
         resolutionMult = (float)(height / 1920.0);
         framerateMult = (float)(60.0 / Gdx.graphics.getFramesPerSecond());
 
@@ -202,6 +206,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         tempTexture = new Texture(Gdx.files.internal("menuButton.png"));
         tempSprite = new Sprite(tempTexture);
         menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("timeScaleButton1.png"));
+        tempSprite = new Sprite(tempTexture);
+        timeScaleButton = new Button(width - width / 10, height - height / 20, width / 10, height / 20, tempSprite);
 
         createLevelButtons();
     }
@@ -332,8 +340,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             // Where the game happens, to get to this the player has to press the level button in level selector
             case PLAY:
                 play();
-                pauseButton.scale();
-                pauseButton.draw();
                 break;
 
             // Pauses the game stopping all movement
@@ -354,6 +360,12 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         }
         drawShip(); // Draw player ship
         entities.run(); //  Run all the movement, collisions and drawing of entities
+
+        pauseButton.scale();
+        pauseButton.draw();
+        timeScaleButton.scale();
+        timeScaleButton.draw();
+        timeScale = minTimeScale + (maxTimeScale - minTimeScale) /  2 * timeScaleStage;
 
         // fpsLogger.log(); // Uncomment to show fps
         // System.out.println(Gdx.graphics.getFramesPerSecond()); // Uncomment to show fps
@@ -520,6 +532,29 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 if (pauseButton.isClicked(remapX, remapY)){
                     mode = Mode.PAUSE;
                     isPressed = false;
+                }
+                if (timeScaleButton.isClicked(remapX, remapY)){
+                    isPressed = false;
+                    Texture tempTexture;
+                    Sprite tempSprite;
+                    if(timeScaleStage == 0){
+                        timeScaleStage++;
+                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton1.png"));
+                        tempSprite = new Sprite(tempTexture);
+                        timeScaleButton.sprite = tempSprite;
+                    }
+                    else if(timeScaleStage == 1){
+                        timeScaleStage++;
+                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton2.png"));
+                        tempSprite = new Sprite(tempTexture);
+                        timeScaleButton.sprite = tempSprite;
+                    }
+                    else{
+                        timeScaleStage = 0;
+                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton0.png"));
+                        tempSprite = new Sprite(tempTexture);
+                        timeScaleButton.sprite = tempSprite;
+                    }
                 }
                 // Create a missile where the release happened
                 if(isPressed) {
