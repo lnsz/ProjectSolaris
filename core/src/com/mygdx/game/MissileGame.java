@@ -42,7 +42,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
     public static boolean isPaused = false; // True iff game is paused
-    public static float velocityMultiplier, resolutionMultiplier; // Used to scale velocity of entities
+    public static float velocityMult, resolutionMult, framerateMult; // Used to scale velocity of entities
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -56,7 +56,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     // Gesture detector and index multiplexer handle the touch screen
     GestureDetector gestureDetector;
-    InputMultiplexer inputMultiplexer;
     FPSLogger fpsLogger;
     float maxZoom, minZoom, defaultZoom, startZoom; // Zoom values
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
@@ -70,6 +69,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     long lastDown, lastDuration;
     Vector lastTouch, lastTap;
     boolean isPressed = false;
+
+    // Player variables
+    Vector shipPosition;
 
     @Override
     public void create(){
@@ -98,7 +100,34 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Create Entity System and add obstacles
         entities = new EntitySystem();
-        Planet planet = new Planet(width / 2, height / 5, height / 10, 600);
+        createObstacles();
+
+        // Start random number generator
+        generator = new Random();
+
+        // Initialize touch variables
+        lastTouch = new Vector(0, 0);
+        lastTap = new Vector(0, 0);
+
+        // Initialize font variables
+        arial = new BitmapFont(Gdx.files.internal("arial.fnt"), true);
+        glyphLayout = new GlyphLayout();
+
+        // Initialize velocity variables
+        velocityMult = (float)0.5;
+        resolutionMult = (float)(height / 1920.0);
+        framerateMult = (float)(60.0 / Gdx.graphics.getFramesPerSecond());
+
+        // Initialize player variables
+        shipPosition = new Vector(
+                remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
+                remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight));
+    }
+
+    public void createObstacles(){
+        Planet planet = new Planet(width / 2,
+                remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
+                height / 8, 600);
         entities.addEntity(planet, true);
         entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 750), true);
         entities.addEntity(new Moon(height / 20, 400, false, 3 * Math.PI / 2, planet, 1250), true);
@@ -121,21 +150,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         entities.addEntity(new Moon(height / 20, 400, true, 5 * Math.PI / 4, planet,  1000, 3000), true);
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
         entities.addEntity(new Moon(height / 20, 400, false, 7 * Math.PI / 4, planet,  1000, 3000), true);
-
-        // Start random number generator
-        generator = new Random();
-
-        // Initialize touch variables
-        lastTouch = new Vector(0, 0);
-        lastTap = new Vector(0, 0);
-
-        // Initialize font variables
-        arial = new BitmapFont(Gdx.files.internal("arial.fnt"), true);
-        glyphLayout = new GlyphLayout();
-
-        // Initialize velocity variables
-        velocityMultiplier = (float)0.5;
-        resolutionMultiplier = (float)(height / 1920.0);
     }
 
     @Override
@@ -221,6 +235,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void updateCamera(){
         // Update camera to apply any changes to camera zoom and positions,
         // then set the camera variables to their updated value
+        framerateMult = (float)(60.0 / Gdx.graphics.getFramesPerSecond());
         camera.update();
         cameraHeight = camera.viewportHeight * camera.zoom;
         cameraWidth = camera.viewportWidth * camera.zoom;
@@ -233,11 +248,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
-        // Set zoom  and camera variablesvariables
+        // Set zoom  and camera variables
         maxZoom = 6;
-        minZoom = 2;
+        minZoom = 3;
         startZoom = 1;
-        defaultZoom = 4;
+        defaultZoom = 3;
         maxHeight = camera.viewportHeight * maxZoom;
         maxWidth = camera.viewportWidth * maxZoom;
         maxOriginX = width / 2 - maxWidth / 2;
@@ -259,9 +274,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         double timeRatio = (System.currentTimeMillis() - lastDown) / maxStr;
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
-                remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
-                (float)(500 * timeRatio));
+        renderer.circle(shipPosition.x, shipPosition.y, (float)(500 * timeRatio));
         renderer.end();
     }
 
@@ -289,7 +302,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Clear screen, draw background, then depending on current mode, do something
         clearScreen();
         background();
-        System.out.println(Gdx.graphics.getFramesPerSecond());
         checkMode();
     }
 
@@ -342,7 +354,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         }
         drawShip(); // Draw player ship
         entities.run(); //  Run all the movement, collisions and drawing of entities
+
         // fpsLogger.log(); // Uncomment to show fps
+        // System.out.println(Gdx.graphics.getFramesPerSecond()); // Uncomment to show fps
     }
 
     public void pauseGame(){
@@ -377,8 +391,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Draw a circle where the ship should be
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        renderer.circle(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
-                remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight), 50); // Temp player character
+        renderer.circle(shipPosition.x, shipPosition.y, 50); // Temp player character
         renderer.end();
     }
 
@@ -511,9 +524,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 // Create a missile where the release happened
                 if(isPressed) {
                     lastDuration = System.currentTimeMillis() - lastDown;
-                    entities.addEntity(new Missile(remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
-                            remap(height - height / 15, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
-                            remapX, remapY,
+                    entities.addEntity(new Missile(shipPosition.x, shipPosition.y, remapX, remapY,
                             (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
                     isPressed = false;
                     // The missile strength is based on how long the screen was held
