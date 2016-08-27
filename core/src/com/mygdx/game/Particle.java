@@ -28,6 +28,19 @@ public class Particle extends Entity{
     }
 
     @Override
+    public void update(){
+        velocity.add(acceleration);
+        position.add(velocity);
+        acceleration.mult(0);
+
+        Vector distance = new Vector(position.x - MissileGame.width / 2,
+                position.y - MissileGame.height / 2); // Distance from current position to center
+        if(distance.mag() > MissileGame.entityBorder){
+            alive = false;
+        }
+    }
+
+    @Override
     public void draw(){
         sprite.setPosition(position.x, position.y);
         sprite.draw(MissileGame.batch);

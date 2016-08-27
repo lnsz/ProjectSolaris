@@ -43,7 +43,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static Random generator;
     public static boolean isPaused = false; // True iff game is paused
     public static float timeScale, maxTimeScale, minTimeScale, timeScaleStage,
-            resolutionMult, framerateMult; // Used to scale velocity of entities
+            resolutionMult; // Used to scale velocity of entities
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -120,7 +120,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         minTimeScale = (float)0.25;
         timeScale = minTimeScale + (maxTimeScale - minTimeScale) /  2 * timeScaleStage;
         resolutionMult = (float)(height / 1920.0);
-        framerateMult = (float)(60.0 / Gdx.graphics.getFramesPerSecond());
 
         // Initialize player variables
         shipPosition = new Vector(
@@ -243,7 +242,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void updateCamera(){
         // Update camera to apply any changes to camera zoom and positions,
         // then set the camera variables to their updated value
-        framerateMult = (float)(60.0 / Gdx.graphics.getFramesPerSecond());
         camera.update();
         cameraHeight = camera.viewportHeight * camera.zoom;
         cameraWidth = camera.viewportWidth * camera.zoom;

@@ -136,7 +136,6 @@ public class Vector {
 
         vec.mult(MissileGame.timeScale);
         vec.mult(MissileGame.resolutionMult);
-        vec.mult(MissileGame.framerateMult);
 
         return vec;
     }
