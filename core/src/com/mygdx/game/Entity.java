@@ -24,8 +24,11 @@ public class Entity {
     }
 
     public void update(){
+        acceleration.scale();
         velocity.add(acceleration);
-        position.add(velocity);
+        Vector tempVelocity = new Vector(velocity.x, velocity.y);
+        tempVelocity.scale();
+        position.add(tempVelocity);
         acceleration.mult(0);
 
         Vector distance = new Vector(position.x - MissileGame.width / 2,
@@ -43,8 +46,8 @@ public class Entity {
     }
 
 
-    public void run(boolean move){
-        if (move) {
+    public void run(){
+        if (!MissileGame.isPaused) {
             update();
         }
         draw();

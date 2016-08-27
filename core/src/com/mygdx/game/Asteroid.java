@@ -43,7 +43,6 @@ public class Asteroid extends Obstacle{
         double r = perigee * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
         double a = (apogee + perigee) / 2 * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
         velocity.x = (float) Math.sqrt(GM * (2/r - 1/a));
-        System.out.println(velocity);
         if(clockwise){
             velocity.mult(-1);
         }
@@ -55,8 +54,8 @@ public class Asteroid extends Obstacle{
     }
 
     @Override
-    public void run(boolean move){
-        if(move) {
+    public void run(){
+        if(!MissileGame.isPaused) {
             planet.gravity(this);
             update();
         }

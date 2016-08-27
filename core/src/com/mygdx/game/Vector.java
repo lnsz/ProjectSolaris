@@ -130,4 +130,10 @@ public class Vector {
     public String toString(){
         return("(" + this.x + ", " + this.y + ")");
     }
+
+    public void scale(){
+        this.mult(MissileGame.velocityMult);
+        this.mult(MissileGame.resolutionMult);
+        this.mult(MissileGame.framerateMult);
+    }
 }
