@@ -128,28 +128,28 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         Planet planet = new Planet(width / 2,
                 remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
                 height / 8, 600);
-        entities.addEntity(planet, true);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 750), true);
-        entities.addEntity(new Moon(height / 20, 400, false, 3 * Math.PI / 2, planet, 1250), true);
+        entities.addEntity(planet);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 750));
+        entities.addEntity(new Moon(height / 20, 400, false, 3 * Math.PI / 2, planet, 1250));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 2, planet, 1250), true);
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 2, planet, 1250));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 0, planet, 750), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 0, planet, 750));
 
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI, planet, 1250), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 750), true);
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI, planet, 1250));
+        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 750));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 750), true);
+        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 750));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, 0, planet, 1250), true);
+        entities.addEntity(new Moon(height / 20, 400, false, 0, planet, 1250));
 //        entities.addEntity(new Comet(Math.PI / 2 * 3, Math.PI / 2, 20, height / 20), true);
 
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 4, planet, 1000, 3000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 4, planet, 1000, 3000), true);
+        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 4, planet, 1000, 3000));
+        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 4, planet, 1000, 3000));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 5 * Math.PI / 4, planet,  1000, 3000), true);
+        entities.addEntity(new Moon(height / 20, 400, true, 5 * Math.PI / 4, planet,  1000, 3000));
 //        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, 7 * Math.PI / 4, planet,  1000, 3000), true);
+        entities.addEntity(new Moon(height / 20, 400, false, 7 * Math.PI / 4, planet,  1000, 3000));
     }
 
     @Override
@@ -525,7 +525,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 if(isPressed) {
                     lastDuration = System.currentTimeMillis() - lastDown;
                     entities.addEntity(new Missile(shipPosition.x, shipPosition.y, remapX, remapY,
-                            (lastDuration > 500) ? (lastDuration / 50) : 10, entities), true); // Min str is 10
+                            (lastDuration > 500) ? (lastDuration / 50) : 10, entities)); // Min str is 10
                     isPressed = false;
                     // The missile strength is based on how long the screen was held
                 }
