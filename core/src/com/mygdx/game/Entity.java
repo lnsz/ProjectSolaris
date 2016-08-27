@@ -51,6 +51,9 @@ public class Entity {
     }
 
     public static boolean collision(Entity ent1, Entity ent2){
+        if(!ent1.visible || !ent2.visible){
+            return false;
+        }
         Vector dispRel = Vector.add(ent2.velocity.scale(), ent2.acceleration.scale());
         dispRel.sub(Vector.add(ent1.velocity.scale(), ent1.acceleration.scale()));
 
