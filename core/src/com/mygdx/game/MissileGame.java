@@ -309,6 +309,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         clearScreen();
         background();
         checkMode();
+        drawFPS();
     }
 
     public void checkMode(){
@@ -367,6 +368,18 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // fpsLogger.log(); // Uncomment to show fps
         // System.out.println(Gdx.graphics.getFramesPerSecond()); // Uncomment to show fps
+    }
+
+    public void drawFPS(){
+        batch.begin();
+        arial.getData().setScale(height / 3000 * camera.zoom);
+        arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        String text = Gdx.graphics.getFramesPerSecond() + "";
+        glyphLayout.setText(MissileGame.arial, text);
+        float textX = remap(width, 0, width, cameraOriginX, cameraOriginX + cameraWidth) - glyphLayout.width;
+        float textY = remap(0, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, textX, textY);
+        batch.end();
     }
 
     public void pauseGame(){
