@@ -9,13 +9,9 @@ import java.util.Random;
  */
 public class ParticleSystem2 {
     private ArrayList<Particle> particles;
-    public Random generator;
 
     public ParticleSystem2() {
         particles = new ArrayList<Particle>();
-
-
-        generator = new Random();
     }
 
 
@@ -24,12 +20,11 @@ public class ParticleSystem2 {
     }
 
 
-
-    void run(boolean move) {
+    void run() {
         Iterator<Particle> it = particles.iterator();
         while (it.hasNext()) {
             Particle p = it.next();
-            p.run(move);
+            p.run();
             if (!p.alive) {
                 it.remove();
             }
