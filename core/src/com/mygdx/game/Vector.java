@@ -131,9 +131,13 @@ public class Vector {
         return("(" + this.x + ", " + this.y + ")");
     }
 
-    public void scale(){
-        this.mult(MissileGame.velocityMult);
-        this.mult(MissileGame.resolutionMult);
-        this.mult(MissileGame.framerateMult);
+    public Vector scale(){
+        Vector vec = new Vector(this.x, this.y);
+
+        vec.mult(MissileGame.velocityMult);
+        vec.mult(MissileGame.resolutionMult);
+        vec.mult(MissileGame.framerateMult);
+
+        return vec;
     }
 }

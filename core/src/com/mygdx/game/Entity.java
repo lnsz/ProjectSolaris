@@ -24,11 +24,8 @@ public class Entity {
     }
 
     public void update(){
-        acceleration.scale();
-        velocity.add(acceleration);
-        Vector tempVelocity = new Vector(velocity.x, velocity.y);
-        tempVelocity.scale();
-        position.add(tempVelocity);
+        velocity.add(acceleration.scale());
+        position.add(velocity.scale());
         acceleration.mult(0);
 
         Vector distance = new Vector(position.x - MissileGame.width / 2,
