@@ -11,35 +11,26 @@ import java.util.Random;
  * Created by Kiko on 11/07/2016.
  */
 public class EntitySystem {
-    private ArrayList<Entity> solidEntities;
-    private ArrayList<Entity> ghostEntities;
+    private ArrayList<Entity> entities;
 
-    private ArrayList<Entity> solidBuffer;
-    private ArrayList<Entity> ghostBuffer;
-    public Random generator;
+    private ArrayList<Entity> buffer;
 
     public EntitySystem() {
-        solidEntities = new ArrayList<Entity>();
-        ghostEntities = new ArrayList<Entity>();
+        entities = new ArrayList<Entity>();
+        buffer = new ArrayList<Entity>();
 
-        ghostBuffer = new ArrayList<Entity>();
-        solidBuffer = new ArrayList<Entity>();
 
-        generator = new Random();
+
     }
 
 
-    public void addEntity(Entity entity, boolean collision) {
-        if (collision) {
-            solidBuffer.add(entity);
-        } else {
-            ghostBuffer.add(entity);
+    public void addEntity(Entity entity) {
+        buffer.add(entity);
 
-        }
     }
 
     public boolean collision(Entity missile){
-        Iterator<Entity> it = solidEntities.iterator();
+        Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
             Entity ent = it.next();
             if(Entity.collision(missile, ent)){
@@ -50,7 +41,7 @@ public class EntitySystem {
     }
 
     public void gravity(Entity missile){
-        Iterator<Entity> it = solidEntities.iterator();
+        Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
             Entity ent = it.next();
             if (ent instanceof Obstacle){
@@ -60,22 +51,10 @@ public class EntitySystem {
     }
 
     void run(boolean move) {
-        solidEntities.addAll(solidBuffer);
-        solidBuffer.clear();
+        entities.addAll(buffer);
+        buffer.clear();
 
-        ghostEntities.addAll(ghostBuffer);
-        ghostBuffer.clear();
-
-        Iterator<Entity> it = solidEntities.iterator();
-        while (it.hasNext()) {
-            Entity p = it.next();
-            p.run(move);
-            if (!p.alive) {
-                it.remove();
-            }
-        }
-
-        it = ghostEntities.iterator();
+        Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
             Entity p = it.next();
             p.run(move);
