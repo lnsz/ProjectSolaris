@@ -13,7 +13,22 @@ public class Planet extends Obstacle{
     // Stationary, have their own gravity
 
     public Planet(float locX, float locY, float radius, float mass){
-        super(locX, locY, radius);
+        super(MissileGame.remap(locX, 0, MissileGame.width,
+                MissileGame.defaultOriginX,
+                MissileGame.defaultOriginX + MissileGame.defaultWidth),
+                MissileGame.remap(locY, 0, MissileGame.height,
+                        MissileGame.defaultOriginY,
+                        MissileGame.defaultOriginY + MissileGame.defaultHeight), radius);
+        texture = new Texture(Gdx.files.internal("earth.png"));
+        sprite = new Sprite(texture);
+        gravity = true;
+        this.mass = mass;
+    }
+
+    public Planet(MissileGame.Preset pos, float radius, float mass){
+        // Create a planet at a preset position
+        super(0, 0, radius);
+        position = MissileGame.generatePreset(pos);
         texture = new Texture(Gdx.files.internal("earth.png"));
         sprite = new Sprite(texture);
         gravity = true;

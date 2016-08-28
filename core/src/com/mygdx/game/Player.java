@@ -6,8 +6,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Created by lucas on 2016-08-27.
  */
 public class Player extends Entity{
+
     public Player(float locX, float locY){
-        super(locX, locY);
+        super(MissileGame.remap(locX, 0, MissileGame.width,
+                MissileGame.defaultOriginX,
+                MissileGame.defaultOriginX + MissileGame.defaultWidth),
+                MissileGame.remap(locY, 0, MissileGame.height,
+                        MissileGame.defaultOriginY,
+                        MissileGame.defaultOriginY + MissileGame.defaultHeight));
         radius = 50;
     }
 

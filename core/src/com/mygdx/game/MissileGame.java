@@ -51,6 +51,16 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             PAUSE,
         LEVEL_SELECTOR
     }
+    enum Preset{TOP_RIGHT,
+        TOP,
+        TOP_LEFT,
+        CENTER_LEFT,
+        CENTER,
+        CENTER_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM,
+        BOTTOM_RIGHT
+    }
     Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton,
             menuButton, levelButton, timeScaleButton; // Buttons
     Mode mode; // Mode enum used for selecting
@@ -122,9 +132,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         resolutionMult = (float)(height / 1920.0);
 
         // Initialize player variables
-        player = new Player(
-                remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
-                remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight));
+        player = new Player(0, 0);
     }
 
     public void createObstacles(){
@@ -407,6 +415,61 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 //                levelList.get(i).position.x += width / 20;
 //            }
         }
+    }
+
+    public static Vector generatePreset(Preset pos){
+        // return a preset position somewhere on the screen
+        Vector temp = new Vector(0, 0);
+        switch(pos){
+            case TOP_LEFT:
+                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case TOP:
+                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case TOP_RIGHT:
+                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case CENTER_LEFT:
+                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case CENTER:
+                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case CENTER_RIGHT:
+                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case BOTTOM_LEFT:
+                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case BOTTOM:
+                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            case BOTTOM_RIGHT:
+                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
+                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                break;
+
+            default:
+                break;
+        }
+        return temp;
     }
 
     @Override
