@@ -63,4 +63,8 @@ public class EntitySystem {
             }
         }
     }
+
+    void clear(){
+        entities.clear();
+    }
 }

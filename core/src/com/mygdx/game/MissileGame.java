@@ -44,6 +44,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static boolean isPaused = false; // True iff game is paused
     public static float timeScale, maxTimeScale, minTimeScale, timeScaleStage,
             resolutionMult; // Used to scale velocity of entities
+    public static EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -53,7 +54,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton,
             menuButton, levelButton, timeScaleButton; // Buttons
     Mode mode; // Mode enum used for selecting
-    EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
 
     // Gesture detector and index multiplexer handle the touch screen
     GestureDetector gestureDetector;
@@ -72,7 +72,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     boolean isPressed = false;
 
     // Player variables
-    Vector shipPosition;
+    public static Player player;
 
     @Override
     public void create(){
@@ -122,37 +122,13 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         resolutionMult = (float)(height / 1920.0);
 
         // Initialize player variables
-        shipPosition = new Vector(
+        player = new Player(
                 remap(width / 2, 0, width, defaultOriginX, defaultOriginX + defaultWidth),
                 remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight));
     }
 
     public void createObstacles(){
-        Planet planet = new Planet(width / 2,
-                remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight),
-                height / 8, 600);
-        entities.addEntity(planet);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI, planet, 750));
-        entities.addEntity(new Moon(height / 20, 400, false, 3 * Math.PI / 2, planet, 1250));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 2, planet, 1250));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 0, planet, 750));
 
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI, planet, 1250));
-        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 2, planet, 750));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, Math.PI / 2, planet, 750));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, 0, planet, 1250));
-//        entities.addEntity(new Comet(Math.PI / 2 * 3, Math.PI / 2, 20, height / 20), true);
-
-        entities.addEntity(new Moon(height / 20, 400, false, Math.PI / 4, planet, 1000, 3000));
-        entities.addEntity(new Moon(height / 20, 400, true, 3 * Math.PI / 4, planet, 1000, 3000));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, 0, planet, 1000), true);
-        entities.addEntity(new Moon(height / 20, 400, true, 5 * Math.PI / 4, planet,  1000, 3000));
-//        entities.addEntity(new Moon(width / 2, height / 5, height / 20, 400, true, Math.PI / 6, planet, 500, 2000), true);
-        entities.addEntity(new Moon(height / 20, 400, false, 7 * Math.PI / 4, planet,  1000, 3000));
     }
 
     @Override
@@ -280,7 +256,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         double timeRatio = (System.currentTimeMillis() - lastDown) / maxStr;
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(255, 255, 255, 1);
-        renderer.circle(shipPosition.x, shipPosition.y, (float)(500 * timeRatio));
+        renderer.circle(player.position.x, player.position.y, (float)(500 * timeRatio));
         renderer.end();
     }
 
@@ -322,6 +298,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
             // Main menu comes after start screen
             case MAIN_MENU:
+                entities.clear();
                 playButton.draw();
                 shopButton.draw();
                 settingsButton.draw();
@@ -357,7 +334,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         if (isPressed){
             strMeter();
         }
-        drawShip(); // Draw player ship
+        player.draw(); // Draw player ship
         entities.run(); //  Run all the movement, collisions and drawing of entities
 
         pauseButton.scale();
@@ -384,7 +361,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     public void pauseGame(){
         // Draws all entities but sets isPaused to false to they don't move
-        drawShip();
+        player.draw();
         isPaused = true;
         entities.run();
         resumeButton.scale();
@@ -408,14 +385,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             }
             levelList.get(i).draw();
         }
-    }
-
-    public void drawShip(){
-        // Draw a circle where the ship should be
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(255, 255, 255, 1);
-        renderer.circle(shipPosition.x, shipPosition.y, 50); // Temp player character
-        renderer.end();
     }
 
     public void episodeSelector(){
@@ -508,6 +477,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                     camera.position.x = width / 2;
                     camera.position.y = height / 2;
                     camera.zoom = defaultZoom;
+                    Levels.createLevel(levelSelected);
                     mode = Mode.PLAY;
                 }
                 // Go through all the level selector buttons to determine if any of them were clicked
@@ -570,7 +540,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 // Create a missile where the release happened
                 if(isPressed) {
                     lastDuration = System.currentTimeMillis() - lastDown;
-                    entities.addEntity(new Missile(shipPosition.x, shipPosition.y, remapX, remapY,
+                    entities.addEntity(new Missile(player.position.x, player.position.y, remapX, remapY,
                             (lastDuration > 500) ? (lastDuration / 50) : 10, entities)); // Min str is 10
                     isPressed = false;
                     // The missile strength is based on how long the screen was held
