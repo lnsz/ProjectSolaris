@@ -47,8 +47,8 @@ public class Comet extends Obstacle{
 
     public void update(){
         // Goes back to the start instead of being destroyed when offscreen
-        velocity.add(acceleration);
-        position.add(velocity);
+        velocity.add(acceleration.scale());
+        position.add(velocity.scale());
         acceleration.mult(0);
 
         Vector distance = new Vector(position.x - MissileGame.width / 2,

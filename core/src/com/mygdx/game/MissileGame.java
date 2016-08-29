@@ -84,6 +84,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     // Player variables
     public static Player player;
 
+    // Sprites
+    Texture bg1Texture;
+    Sprite bg1Sprite;
+
     @Override
     public void create(){
         // Set width and height
@@ -133,6 +137,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
         // Initialize player variables
         player = new Player(0, 0);
+
+        // Sprites
+        bg1Texture = new Texture(Gdx.files.internal("background1.png"));
+        bg1Sprite = new Sprite(bg1Texture);
     }
 
     public void createObstacles(){
@@ -280,10 +288,22 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     public void background(){
         // Draws a black square the size of screen
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0, 0, 0, 1);
-        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth, cameraHeight);
-        renderer.end();
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(0, 0, 0, 1);
+//        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth, cameraHeight);
+//        renderer.end();
+        // Draws background sprite
+        batch.begin();
+        if (mode == Mode.PLAY || mode == Mode.PAUSE) {
+            bg1Sprite.setSize(maxWidth, maxHeight);
+            bg1Sprite.setPosition(maxOriginX, maxOriginY);
+        }
+        else{
+            bg1Sprite.setSize(width, height);
+            bg1Sprite.setPosition(cameraOriginX, cameraOriginY);
+        }
+        bg1Sprite.draw(batch);
+        batch.end();
     }
 
     @Override
@@ -398,22 +418,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void episodeSelector(){
         // WIP
         // Automatically center the level selector screen, locking it to an episode
-        episodeSelected = (int)((width / 5 - levelList.get(0).position.x + 2 * width / 5) / width);
-        //System.out.println((width / 5 - levelList.get(0).position.x + width / 5) + " " +episodeSelected);
-
-        if(levelList.get(episodeSelected * levelX * levelY).position.x >
-                width / 5 + width / 20){
-            System.out.println("Move left");
-//            for (int i = 0; i < episodeNumber; i++){
-//                levelList.get(i).position.x -= width / 20;
-//            }
-        }
-        else if (levelList.get(episodeSelected * levelX * levelY).position.x <
-                width / 5 - width / 20){
-            System.out.println("Move right");
-//            for (int i = 0; i < episodeNumber; i++){
-//                levelList.get(i).position.x += width / 20;
-//            }
+        episodeSelected = (int)(camera.position.x / width);
+        if(!isPressed) {
+            camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 50;
         }
     }
 
@@ -535,18 +542,18 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 break;
 
             case LEVEL_SELECTOR:
-                if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
-                    // Set zoom to it's default value when the game starts
-                    camera.position.x = width / 2;
-                    camera.position.y = height / 2;
-                    camera.zoom = defaultZoom;
-                    Levels.createLevel(levelSelected);
-                    mode = Mode.PLAY;
-                }
                 // Go through all the level selector buttons to determine if any of them were clicked
                 Vector pos = new Vector(x, y);
                 pos.sub(lastTap);
                 if(pos.mag() < width / 20) {
+                    if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
+                        // Set zoom to it's default value when the game starts
+                        camera.position.x = width / 2;
+                        camera.position.y = height / 2;
+                        camera.zoom = defaultZoom;
+                        Levels.createLevel(levelSelected);
+                        mode = Mode.PLAY;
+                    }
                     boolean nullTap = true;
                     for(int i = 0; i < levelNumber; i++){
                         if (levelList.get(i).isClicked(remapX, remapY)) {
@@ -621,6 +628,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public boolean touchDragged(int x, int y, int pointer) {
         // Called when a dragging motion is detected
         // Used to scroll
+        isPressed = true;
         float dX = x - lastTouch.x;
         lastTouch.x = x;
         float dY = y - lastTouch.y;

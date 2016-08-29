@@ -19,7 +19,15 @@ public class Planet extends Obstacle{
                 MissileGame.remap(locY, 0, MissileGame.height,
                         MissileGame.defaultOriginY,
                         MissileGame.defaultOriginY + MissileGame.defaultHeight), radius);
-        texture = new Texture(Gdx.files.internal("earth.png"));
+        if(radius > Levels.LARGE_PLANET_RADIUS) {
+            texture = new Texture(Gdx.files.internal("largePlanet.png"));
+        }
+        else if(radius < Levels.SMALL_MOON_RADIUS){
+            texture = new Texture(Gdx.files.internal("smallPlanet.png"));
+        }
+        else{
+            texture = new Texture(Gdx.files.internal("earth.png"));
+        }
         sprite = new Sprite(texture);
         gravity = true;
         this.mass = mass;
@@ -29,7 +37,15 @@ public class Planet extends Obstacle{
         // Create a planet at a preset position
         super(0, 0, radius);
         position = MissileGame.generatePreset(pos);
-        texture = new Texture(Gdx.files.internal("earth.png"));
+        if(radius > Levels.LARGE_PLANET_RADIUS) {
+            texture = new Texture(Gdx.files.internal("largePlanet.png"));
+        }
+        else if(radius < Levels.SMALL_PLANET_RADIUS){
+            texture = new Texture(Gdx.files.internal("smallPlanet.png"));
+        }
+        else{
+            texture = new Texture(Gdx.files.internal("earth.png"));
+        }
         sprite = new Sprite(texture);
         gravity = true;
         this.mass = mass;

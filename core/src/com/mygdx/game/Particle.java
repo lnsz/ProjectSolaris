@@ -20,7 +20,7 @@ public class Particle extends Entity{
         life = 255;
         maxLife = 255;
         decay = (255 - 30) / duration;
-        randomness = 2;
+        randomness = 1;
         mass = 0;
         radius = 3;
         this.sprite = sprite;
