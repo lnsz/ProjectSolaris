@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Player extends Entity{
 
     public int ammo;
+    private int counter;
+    private boolean flashing;
     public Player(float locX, float locY){
         super(MissileGame.remap(locX, 0, MissileGame.width,
                 MissileGame.defaultOriginX,
@@ -18,6 +20,8 @@ public class Player extends Entity{
                         MissileGame.defaultOriginY + MissileGame.defaultHeight));
         ammo = 5;
         radius = 50;
+        counter=0;
+        flashing = false;
     }
 
     @Override
@@ -26,8 +30,17 @@ public class Player extends Entity{
         MissileGame.renderer.setColor(255, 255, 255, 1);
         MissileGame.renderer.circle(position.x, position.y, radius); // Temp player character
         MissileGame.renderer.end();
-
-        showAmmo();
+        if(flashing){
+            if(counter % 7 != 0){
+                showAmmo();
+            }
+            counter++;
+            if (counter >=30){
+                flashing = false;
+            }
+        }else {
+            showAmmo();
+        }
     }
 
     public void showAmmo(){
@@ -45,6 +58,8 @@ public class Player extends Entity{
     public void shootMissile(float targetX, float targetY, float strength){
         if(ammo <= 0){
             //show no ammo animation
+            flashing = true;
+            counter=0;
             return;
         }
         MissileGame.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));

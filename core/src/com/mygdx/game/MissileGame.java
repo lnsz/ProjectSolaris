@@ -264,6 +264,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
 
     public void strMeter(){
+        //don't show strMeter with no ammo
+        if(player.ammo <=0){
+            return;
+        }
+
         // Draws the circle around player ship that shows them how strong their current shot will be
         float maxStr = 3000; // Number of milliseconds for max strength
         if (System.currentTimeMillis() - lastDown > maxStr){
