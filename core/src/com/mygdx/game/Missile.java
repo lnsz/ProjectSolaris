@@ -12,10 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Missile extends Entity{
     ParticleSystem flightParticles, deathParticles;
-    EntitySystem entities;
     Sprite particleSprite, explosionSprite;
     Texture particleTexture, explosionTexture;
-    public Missile(float locX, float locY, float tarX, float tarY, float str, EntitySystem entities){
+    public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
         // Load sprites and textures
         particleTexture = new Texture(Gdx.files.internal("dot.png"));
@@ -23,8 +22,6 @@ public class Missile extends Entity{
         explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
         explosionSprite = new Sprite(explosionTexture);
 
-        //get entities array
-        this.entities = entities;
         // Set initial velocity of missile
         velocity = new Vector(tarX, tarY);
         velocity.sub(position);
@@ -36,7 +33,7 @@ public class Missile extends Entity{
     @Override
     public void draw(){
         if (visible) {
-            float angle = velocity.getHeading();
+            //float angle = velocity.getHeading();
             MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
             MissileGame.renderer.setColor(Color.WHITE);
             MissileGame.renderer.circle(position.x, position.y, radius);
@@ -49,8 +46,8 @@ public class Missile extends Entity{
         if(visible) {
             if (!MissileGame.isPaused) {
                 update();
-                entities.gravity(this);
-                if (entities.collision(this)) {
+                MissileGame.entities.gravity(this);
+                if (MissileGame.entities.collision(this)) {
                     // explode!
                     explode();
                 }

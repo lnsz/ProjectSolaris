@@ -610,8 +610,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 // Create a missile where the release happened
                 if(isPressed) {
                     lastDuration = System.currentTimeMillis() - lastDown;
-                    entities.addEntity(new Missile(player.position.x, player.position.y, remapX, remapY,
-                            (lastDuration > 500) ? (lastDuration / 50) : 10, entities)); // Min str is 10
+                    // Min str is 10
+                    player.shootMissile(remapX,remapY,(lastDuration > 500) ? (lastDuration / 50) : 10);
                     isPressed = false;
                     // The missile strength is based on how long the screen was held
                 }
