@@ -47,6 +47,7 @@ public class Levels {
         Planet planet;
         Player player = MissileGame.player;
         player.resetAmmo();
+        MissileGame.missile = false;
 
         switch(level){
             case 0:

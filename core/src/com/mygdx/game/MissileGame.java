@@ -45,6 +45,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public static float timeScale, maxTimeScale, minTimeScale, timeScaleStage,
             resolutionMult; // Used to scale velocity of entities
     public static EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
+    public static boolean missile = false; // True iff there is a live missile
     enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -259,21 +260,23 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
 
     public void strMeter(){
-        //don't show strMeter with no ammo
-        if(player.ammo <=0){
-            return;
-        }
+        if(!missile) {
+            //don't show strMeter with no ammo
+            if (player.ammo <= 0) {
+                return;
+            }
 
-        // Draws the circle around player ship that shows them how strong their current shot will be
-        float maxStr = 3000; // Number of milliseconds for max strength
-        if (System.currentTimeMillis() - lastDown > maxStr){
-            lastDown = System.currentTimeMillis();
+            // Draws the circle around player ship that shows them how strong their current shot will be
+            float maxStr = 3000; // Number of milliseconds for max strength
+            if (System.currentTimeMillis() - lastDown > maxStr) {
+                lastDown = System.currentTimeMillis();
+            }
+            double timeRatio = (System.currentTimeMillis() - lastDown) / maxStr;
+            renderer.begin(ShapeRenderer.ShapeType.Line);
+            renderer.setColor(255, 255, 255, 1);
+            renderer.circle(player.position.x, player.position.y, (float) (500 * timeRatio));
+            renderer.end();
         }
-        double timeRatio = (System.currentTimeMillis() - lastDown) / maxStr;
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(255, 255, 255, 1);
-        renderer.circle(player.position.x, player.position.y, (float)(500 * timeRatio));
-        renderer.end();
     }
 
     public static float remap(float n, float min1, float max1, float min2, float max2){
@@ -479,6 +482,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         return temp;
     }
 
+    public static float getTime(){
+        return System.currentTimeMillis();
+    }
+
     @Override
     public boolean zoom(float initialDistance, float distance) {
         // This method is called when a pinching motion is detected
@@ -509,8 +516,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         lastTap.y = y;
         switch(mode){
             case PLAY:
-                lastDown = System.currentTimeMillis();
-                isPressed = true;
+                if(!missile) {
+                    lastDown = System.currentTimeMillis();
+                    isPressed = true;
+                }
                 break;
 
             default:
@@ -608,7 +617,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                     }
                 }
                 // Create a missile where the release happened
-                if(isPressed) {
+                if(isPressed && !missile) {
                     lastDuration = System.currentTimeMillis() - lastDown;
                     // Min str is 10
                     player.shootMissile(remapX,remapY,(lastDuration > 500) ? (lastDuration / 50) : 10);
