@@ -113,9 +113,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         InputMultiplexer inputMultiplexer = new InputMultiplexer(gestureDetector, this);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        // Create Entity System and add obstacles
+        // Create Entity System
         entities = new EntitySystem();
-        createObstacles();
 
         // Start random number generator
         generator = new Random();
@@ -141,10 +140,6 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Sprites
         bg1Texture = new Texture(Gdx.files.internal("background1.png"));
         bg1Sprite = new Sprite(bg1Texture);
-    }
-
-    public void createObstacles(){
-
     }
 
     @Override

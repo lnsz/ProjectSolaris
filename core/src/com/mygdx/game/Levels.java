@@ -46,7 +46,7 @@ public class Levels {
     public static void createLevel(int level){
         Planet planet;
         Player player = MissileGame.player;
-
+        player.resetAmmo();
 
         switch(level){
             case 0:
