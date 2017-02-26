@@ -56,7 +56,7 @@ public class Missile extends Entity{
                     // explode!
                     explode();
                 }
-                System.out.println(TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - startTime + " " + TimeUtils.nanosToMillis(TimeUtils.nanoTime()) + " " + startTime);
+                //System.out.println(TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - startTime + " " + TimeUtils.nanosToMillis(TimeUtils.nanoTime()) + " " + startTime);
                 if (TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - startTime > life){
                     explode();
                 }

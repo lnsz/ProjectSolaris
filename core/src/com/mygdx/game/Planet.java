@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+
 /**
  * Created by lucas on 8/3/2016.
  */
+// Colour schemes (layer 0, layer 1, layer 2, layer 3):
+// 00 - Earth             : 204699, 15649B, 6FCD51, 000000
+// 01 - Jupiter           : FFEBD0, FFD7A3, F5CC94, ******
 public class Planet extends Obstacle{
     // Stationary, have their own gravity
 
@@ -17,11 +21,13 @@ public class Planet extends Obstacle{
     // B is the index
     // Layer 00: Atmosphere
     // Layer 10: Planet background
-    // Layer 2x: Land
-    //           0 <= x <= 5: Earth like continents
+    // Layer 2x: Planet foreground
+    //           0  <= x <= 05: Rock planets
+    //           20 <= x <= 39: Gas planets
     // Layer 3x: Clouds
-    //           0:           No clouds
-    //           1 <= x <= A: Clouds
+    //           00:           No clouds
+    //           01 <= x <= 10: Clouds
+
 
     Sprite sprite0;
     Sprite sprite1;
@@ -32,6 +38,18 @@ public class Planet extends Obstacle{
     Texture texture2;
     Texture texture3;
 
+    // Planet type and surface temp determine colour scheme
+    // Planet type determines the layer pattern
+    int planetType; //  0: Rock, 1: Gas
+    int surfaceTemp; // -250 to 1000
+    int tempRange;
+    ColourScheme colourScheme; // 0-x for rock planets, x-y for gas planets
+    int layer0;
+    int layer1;
+    int layer2;
+    int layer3;
+    int rotation;
+    int seed;
 
     public Planet(float locX, float locY, float radius, float mass){
         super(MissileGame.remap(locX, 0, MissileGame.width,
@@ -54,39 +72,80 @@ public class Planet extends Obstacle{
         this.mass = mass;
     }
 
+    public void generateSeed(){
+        planetType = MissileGame.randomInt(0, 1);
+
+        tempRange = MissileGame.randomInt(0, 4);
+        tempRange = 0;
+        switch(tempRange) {
+            case 0:
+                surfaceTemp = MissileGame.randomInt(-250, -100);
+                colourScheme = new ColourScheme(MissileGame.randomInt(0, 7), MissileGame.randomInt(0, 7), planetType);
+                break;
+            case 1:
+                surfaceTemp = MissileGame.randomInt(-99, 0);
+                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                break;
+            case 2:
+                surfaceTemp = MissileGame.randomInt(1, 70);
+                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                break;
+            case 3:
+                surfaceTemp = MissileGame.randomInt(71, 200);
+                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                break;
+            case 4:
+                surfaceTemp = MissileGame.randomInt(201, 1000);
+                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                break;
+        }
+        layer0 = 0;
+        layer1 = 0;
+        if (planetType == 0){
+            layer2 =  MissileGame.randomInt(0, 5);
+        } else{
+            layer2 =  MissileGame.randomInt(20, 39);
+        }
+
+        rotation = MissileGame.randomInt(0, 360);
+    }
+
+    public void readSeed(){
+
+    }
+
     public Planet(MissileGame.Preset pos, float radius, float mass){
         // Create a planet at a preset position
         super(0, 0, radius);
         position = MissileGame.generatePreset(pos);
-//        if(radius > Levels.LARGE_PLANET_RADIUS) {
-//            texture = new Texture(Gdx.files.internal("largePlanet.png"));
-//        }
-//        else if(radius < Levels.SMALL_PLANET_RADIUS){
-//            texture = new Texture(Gdx.files.internal("smallPlanet.png"));
-//        }
-//        else{
-//            texture = new Texture(Gdx.files.internal("planetLayer0.png"));
-//        }
+        generateSeed();
         generateSprites();
+//        for (int i = 0; i < 100; i++){
+//            generateSeed();
+//        }
         gravity = true;
         this.mass = mass;
     }
 
     public void generateSprites(){
-        texture0 = new Texture(Gdx.files.internal("planet/layer0_00.png"));
+        String c1 = colourScheme.c1;
+        String c2 = colourScheme.c2;
+        System.out.println("c1: " + c1 + ", c2: " + c2);
+        texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format("%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
         sprite0.setOrigin(radius, radius);
-        sprite0.setColor(Color.valueOf("204699"));
+        sprite0.setColor(Color.valueOf(c1));
 
-        texture1 = new Texture(Gdx.files.internal("planet/layer1_00.png"));
+        texture1 = new Texture(Gdx.files.internal("planet/layer1_" + String.format("%02d", layer1) + ".png"));
         sprite1 = new Sprite(texture1);
         sprite1.setOrigin(radius, radius);
-        sprite1.setColor(Color.valueOf("15649B"));
+        sprite1.setColor(Color.valueOf(c1));
 
-        texture2 = new Texture(Gdx.files.internal("planet/layer2_14.png"));
+        texture2 = new Texture(Gdx.files.internal("planet/layer2_" + String.format("%02d", layer2) + ".png"));
         sprite2 = new Sprite(texture2);
         sprite2.setOrigin(radius, radius);
-        sprite2.setColor(Color.valueOf("6FCD51"));
+        sprite2.setColor(Color.valueOf(c2));
+        sprite2.rotate(rotation);
 
         texture3 = new Texture(Gdx.files.internal("planet/layer3_00.png"));
         sprite3 = new Sprite(texture3);

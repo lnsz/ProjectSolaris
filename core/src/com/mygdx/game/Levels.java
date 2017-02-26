@@ -41,7 +41,7 @@ public class Levels {
     static final float NORMAL_COMET_SPEED = 50;
     static final float SLOW_COMET_SPEED = 30;
 
-    public Levels(){
+    private Levels(){
     }
     public static void createLevel(int level){
         Planet planet;
@@ -50,6 +50,9 @@ public class Levels {
         MissileGame.missile = false;
 
         switch(level){
+            case -1: // Test level
+                planet = new Planet(MissileGame.Preset.CENTER, LARGE_PLANET_RADIUS, NORMAL_PLANET_MASS);
+                MissileGame.entities.addEntity(planet);
             case 0:
                 // Introduces shooting mechanic
                 // One normal sized planet, no obstacles

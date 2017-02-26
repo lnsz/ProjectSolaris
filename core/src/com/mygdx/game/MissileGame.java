@@ -50,7 +50,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             MAIN_MENU,
             PLAY,
             PAUSE,
-        LEVEL_SELECTOR
+        LEVEL_SELECTOR,
+        TEST
     }
     enum Preset{TOP_RIGHT,
         TOP,
@@ -62,8 +63,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         BOTTOM,
         BOTTOM_RIGHT
     }
-    Button startButton, playButton, settingsButton, shopButton, pauseButton, resumeButton,
-            menuButton, levelButton, timeScaleButton; // Buttons
+    Button startButton, playButton, settingsButton, testButton, shopButton, pauseButton, resumeButton,
+            menuButton, levelButton, timeScaleButton, seedButton; // Buttons
     Mode mode; // Mode enum used for selecting
 
     // Gesture detector and index multiplexer handle the touch screen
@@ -182,6 +183,14 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         tempSprite = new Sprite(tempTexture);
         settingsButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
 
+        tempTexture = new Texture(Gdx.files.internal("testButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        testButton = new Button(width / 6, (float)2.5 * height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("seedButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        seedButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
+
         tempTexture = new Texture(Gdx.files.internal("pauseButton.png"));
         tempSprite = new Sprite(tempTexture);
         pauseButton = new Button(0, height - height / 20, width / 10, height / 20, tempSprite);
@@ -279,6 +288,14 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         }
     }
 
+    public static int randomInt(int min, int max){
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
     public static float remap(float n, float min1, float max1, float min2, float max2){
         // Used to map a number from the screen resolution range to the camera resolution range
         if (min1 != max1 && min2 != max2) {
@@ -333,6 +350,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 playButton.draw();
                 shopButton.draw();
                 settingsButton.draw();
+                testButton.draw();
                 break;
 
             // Level selector is what the player sees when the play button is pressed in the main menu
@@ -352,6 +370,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
             // Pauses the game stopping all movement
             case PAUSE:
                 pauseGame();
+                break;
+
+            case TEST:
+                seedButton.draw();
+                entities.run();
                 break;
 
             default:
@@ -548,6 +571,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                     episodeSelected = -1;
                     mode = Mode.LEVEL_SELECTOR;
                 }
+                if (testButton.isClicked(remapX, remapY)){
+                    // Set level and episode to an unused value
+                    Levels.createLevel(-1);
+                    mode = Mode.TEST;
+                }
                 break;
 
             case LEVEL_SELECTOR:
@@ -625,6 +653,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                     // The missile strength is based on how long the screen was held
                 }
                 break;
+
+            case TEST:
+                if (seedButton.isClicked(remapX, remapY)){
+                    entities.reSeed();
+                }
 
             default:
                 break;

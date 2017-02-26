@@ -18,9 +18,6 @@ public class EntitySystem {
     public EntitySystem() {
         entities = new ArrayList<Entity>();
         buffer = new ArrayList<Entity>();
-
-
-
     }
 
 
@@ -60,6 +57,17 @@ public class EntitySystem {
             p.run();
             if (!p.alive) {
                 it.remove();
+            }
+        }
+    }
+
+    void reSeed(){
+        Iterator<Entity> it = entities.iterator();
+        while (it.hasNext()) {
+            Entity p = it.next();
+            if(p instanceof Planet){
+                ((Planet) p).generateSeed();
+                ((Planet) p).generateSprites();
             }
         }
     }
