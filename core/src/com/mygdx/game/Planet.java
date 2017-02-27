@@ -44,6 +44,7 @@ public class Planet extends Obstacle{
     int surfaceTemp; // -250 to 1000
     int tempRange;
     ColourScheme colourScheme; // 0-x for rock planets, x-y for gas planets
+    boolean reversedColours;
     int layer0;
     int layer1;
     int layer2;
@@ -75,8 +76,10 @@ public class Planet extends Obstacle{
     public void generateSeed(){
         planetType = MissileGame.randomInt(0, 1);
 
-        tempRange = MissileGame.randomInt(0, 4);
-        tempRange = 0;
+        tempRange = MissileGame.randomInt(0, 1);
+        //planetType = 0;
+        //tempRange = 1;
+
         switch(tempRange) {
             case 0:
                 surfaceTemp = MissileGame.randomInt(-250, -100);
@@ -84,7 +87,7 @@ public class Planet extends Obstacle{
                 break;
             case 1:
                 surfaceTemp = MissileGame.randomInt(-99, 0);
-                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                colourScheme = new ColourScheme(MissileGame.randomInt(8, 15), MissileGame.randomInt(8, 15), planetType);
                 break;
             case 2:
                 surfaceTemp = MissileGame.randomInt(1, 70);
@@ -101,10 +104,13 @@ public class Planet extends Obstacle{
         }
         layer0 = 0;
         layer1 = 0;
+
         if (planetType == 0){
             layer2 =  MissileGame.randomInt(0, 5);
+            reversedColours = false;
         } else{
             layer2 =  MissileGame.randomInt(20, 39);
+            reversedColours = MissileGame.randomInt(0, 3) == 0; // 25% chance of reversing colours
         }
 
         rotation = MissileGame.randomInt(0, 360);
@@ -128,8 +134,8 @@ public class Planet extends Obstacle{
     }
 
     public void generateSprites(){
-        String c1 = colourScheme.c1;
-        String c2 = colourScheme.c2;
+        String c1 = reversedColours ? colourScheme.c2  : colourScheme.c1;
+        String c2 = reversedColours ? colourScheme.c1  : colourScheme.c2;
         System.out.println("c1: " + c1 + ", c2: " + c2);
         texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format("%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
