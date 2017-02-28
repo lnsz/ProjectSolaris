@@ -76,9 +76,9 @@ public class Planet extends Obstacle{
     public void generateSeed(){
         planetType = MissileGame.randomInt(0, 1);
 
-        tempRange = MissileGame.randomInt(0, 1);
-        //planetType = 0;
-        //tempRange = 1;
+        tempRange = MissileGame.randomInt(0, 2);
+    //   planetType = 0;
+//        tempRange = 2;
 
         switch(tempRange) {
             case 0:
@@ -91,25 +91,31 @@ public class Planet extends Obstacle{
                 break;
             case 2:
                 surfaceTemp = MissileGame.randomInt(1, 70);
-                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                colourScheme = new ColourScheme(MissileGame.randomInt(16, 23), MissileGame.randomInt(16, 23), planetType);
                 break;
             case 3:
                 surfaceTemp = MissileGame.randomInt(71, 200);
-                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                colourScheme = new ColourScheme(MissileGame.randomInt(24, 31), MissileGame.randomInt(24, 31), planetType);
                 break;
             case 4:
                 surfaceTemp = MissileGame.randomInt(201, 1000);
-                colourScheme = new ColourScheme(MissileGame.randomInt(0, 4), MissileGame.randomInt(0, 4), planetType);
+                colourScheme = new ColourScheme(MissileGame.randomInt(32, 39), MissileGame.randomInt(32, 39), planetType);
                 break;
         }
         layer0 = 0;
         layer1 = 0;
 
-        if (planetType == 0){
+        if (planetType == 0){ // Rock
             layer2 =  MissileGame.randomInt(0, 5);
+            if (tempRange == 2 && MissileGame.randomInt(0, 1) == 1){ // 50% chance to have clouds if the planet is in temp range 2
+                layer3 =  MissileGame.randomInt(1, 10);
+            } else{
+                layer3 = 0;
+            }
             reversedColours = false;
-        } else{
+        } else{ // Gas
             layer2 =  MissileGame.randomInt(20, 39);
+            layer3 = 0;
             reversedColours = MissileGame.randomInt(0, 3) == 0; // 25% chance of reversing colours
         }
 
@@ -153,9 +159,10 @@ public class Planet extends Obstacle{
         sprite2.setColor(Color.valueOf(c2));
         sprite2.rotate(rotation);
 
-        texture3 = new Texture(Gdx.files.internal("planet/layer3_00.png"));
+        texture3 = new Texture(Gdx.files.internal("planet/layer3_" + String.format("%02d", layer3) + ".png"));
         sprite3 = new Sprite(texture3);
         sprite3.setOrigin(radius, radius);
+        sprite3.rotate(rotation);
     }
 
     @Override

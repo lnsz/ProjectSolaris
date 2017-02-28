@@ -9,245 +9,50 @@ public class ColourScheme {
     public String c2; // Darker patches
     public String c3; // Clouds
 
+    public static final String[] RockC1 = {
+            "D4EDF4", "DDEEFF", "CDE7F4", "DBDBDB", "C3E9F6", "D2E7F2", "E8E8E8", "CAE6F7",     // Rock Planet, C1, Very Cold (0-8)
+            "EFF6FC", "EFF6FC", "F7F7F7", "E4E4E4", "E9E9E9", "EFEFEF", "E0E0E0", "D6D6D6",     // Rock Planet, C1, Cold (9-15)
+            "5DA9D8", "508FD3", "82C4D8", "6FB3D6", "3BA0D3", "5492DD", "74A8D3", "63C0FF",     // Rock Planet, C1, Normal (16-23)
+            "5DA9D8", "508FD3", "82C4D8", "6FB3D6", "3BA0D3", "5492DD", "74A8D3", "63C0FF",     // Rock Planet, C1, Hot (24-31)
+            "5DA9D8", "508FD3", "82C4D8", "6FB3D6", "3BA0D3", "5492DD", "74A8D3", "63C0FF",     // Rock Planet, C1, Very Hot (32-39)
+    };
+
+    public static final String[] RockC2 = {
+            "F2FAFD", "EBF3F6", "F3FBFE", "EFF6FC", "FFFFFF", "F7F7F7", "E8F6F9", "F3FDFF",     // Rock Planet, C2, Very Cold (0-8)
+            "AFAFAF", "919191", "C4C4C4", "A5A5A5", "EFEFEF", "B7B7B7", "AAAAAA", "999999",     // Rock Planet, C2, Cold (9-15)
+            "95C183", "94CC9A", "3FCC79", "A3D87C", "85CC66", "B5AE9F", "C1C17C", "74B56E",     // Rock Planet, C2, Normal (16-23)
+            "95C183", "94CC9A", "3FCC79", "A3D87C", "85CC66", "B5AE9F", "C1C17C", "74B56E",     // Rock Planet, C2, Hot (24-31)
+            "95C183", "94CC9A", "3FCC79", "A3D87C", "85CC66", "B5AE9F", "C1C17C", "74B56E"      // Rock Planet, C2, Very Hot (32-39)
+
+    };
+
+    public static final String[] GasC1 = {
+            "255366", "597CB7", "5C6668", "558789", "557389", "446289", "4677A8", "446B77",     // Gas Planet, C1, Very Cold (0-8)
+            "5B90E0", "3CBBE4", "93B1C1", "54B9DD", "72A8EA", "459FCC", "5FA8D8", "869CD6",     // Gas Planet, C1, Cold (9-15)
+            "5B90E0", "3CBBE4", "93B1C1", "54B9DD", "72A8EA", "459FCC", "5FA8D8", "869CD6",     // Gas Planet, C1, Normal (16-23)
+            "5B90E0", "3CBBE4", "93B1C1", "54B9DD", "72A8EA", "459FCC", "5FA8D8", "869CD6",     // Gas Planet, C1, Hot (24-31)
+            "5B90E0", "3CBBE4", "93B1C1", "54B9DD", "72A8EA", "459FCC", "5FA8D8", "869CD6",     // Gas Planet, C1, Very Hot (32-39)
+    };
+
+    public static final String[] GasC2 = {
+            "9CA6B7", "92B7B7", "A3B794", "87AEB7", "9BAAC4", "8ECBDB", "A4AAAD", "88A1AA",     // Gas Planet, C2, Very Cold (0-8)
+            "8DC0F5", "60D5F8", "CACEF7", "B5D7DD", "96BCEA", "9EC3D6", "B4C5F7", "BCCED8",     // Gas Planet, C2, Cold (9-15)
+            "8DC0F5", "60D5F8", "CACEF7", "B5D7DD", "96BCEA", "9EC3D6", "B4C5F7", "BCCED8",     // Gas Planet, C2, Normal (16-23)
+            "8DC0F5", "60D5F8", "CACEF7", "B5D7DD", "96BCEA", "9EC3D6", "B4C5F7", "BCCED8",     // Gas Planet, C2, Hot (24-31)
+            "8DC0F5", "60D5F8", "CACEF7", "B5D7DD", "96BCEA", "9EC3D6", "B4C5F7", "BCCED8",     // Gas Planet, C2, Very Hot (32-39)
+    };
+
+
     public ColourScheme(int i1, int i2, int planetType){
         if (planetType == 0) { // Rock planets
-            // Very cold: 0-7, Cold: 8-, Normal: -, Hot: -, Very Hot: -
-            switch (i1) {
-                // Rock Planet, C1, Very Cold
-                case 0:
-                    c1 = "D4EDF4";
-                    break;
-                case 1:
-                    c1 = "DDEEFF";
-                    break;
-                case 2:
-                    c1 = "CDE7F4";
-                    break;
-                case 3:
-                    c1 = "DBDBDB";
-                    break;
-                case 4:
-                    c1 = "C3E9F6";
-                    break;
-                case 5:
-                    c1 = "D2E7F2";
-                    break;
-                case 6:
-                    c1 = "E8E8E8";
-                    break;
-                case 7:
-                    c1 = "CAE6F7";
-                    break;
-
-                // Rock Planet, C1, Cold
-                case 8:
-                    c1 = "EFF6FC";
-                    break;
-                case 9:
-                    c1 = "EFF6FC";
-                    break;
-                case 10:
-                    c1 = "F7F7F7";
-                    break;
-                case 11:
-                    c1 = "E4E4E4";
-                    break;
-                case 12:
-                    c1 = "E9E9E9";
-                    break;
-                case 13:
-                    c1 = "EFEFEF";
-                    break;
-                case 14:
-                    c1 = "E0E0E0";
-                    break;
-                case 15:
-                    c1 = "D6D6D6";
-                    break;
-
-                default:
-                    c1 = "FFFFFF";
-                    break;
-            }
-            // Very cold: 0-7, Cold: 8-, Normal: -, Hot: -, Very Hot: -
-            switch (i2) {
-                // Rock Planet, C2, Very Cold
-                case 0:
-                    c2 = "F2FAFD";
-                    break;
-                case 1:
-                    c2 = "EBF3F6";
-                    break;
-                case 2:
-                    c2 = "F3FBFE";
-                    break;
-                case 3:
-                    c2 = "EFF6FC";
-                    break;
-                case 4:
-                    c2 = "FFFFFF";
-                    break;
-                case 5:
-                    c2 = "F7F7F7";
-                    break;
-                case 6:
-                    c2 = "E8F6F9";
-                    break;
-                case 7:
-                    c2 = "F3FDFF";
-                    break;
-
-                // Rock Planet, C2, Cold
-                case 8:
-                    c2 = "AFAFAF";
-                    break;
-                case 9:
-                    c2 = "919191";
-                    break;
-                case 10:
-                    c2 = "C4C4C4";
-                    break;
-                case 11:
-                    c2 = "A5A5A5";
-                    break;
-                case 12:
-                    c2 = "D6D6D6";
-                    break;
-                case 13:
-                    c2 = "B7B7B7";
-                    break;
-                case 14:
-                    c2 = "AAAAAA";
-                    break;
-                case 15:
-                    c2 = "999999";
-                    break;
-
-                default:
-                    c2 = "FFFFFF";
-                    break;
-            }
+            c1 = RockC1[i1];
+            c2 = RockC2[i2];
             c3 = "FFFFFF";
         }
 
         else{ // Gas planets
-            switch (i1) {
-                // Gas Planet, C1, Very Cold
-                case 0:
-                    c1 = "255366";
-                    break;
-                case 1:
-                    c1 = "597CB7";
-                    break;
-                case 2:
-                    c1 = "5C6668";
-                    break;
-                case 3:
-                    c1 = "558789";
-                    break;
-                case 4:
-                    c1 = "557389";
-                    break;
-                case 5:
-                    c1 = "446289";
-                    break;
-                case 6:
-                    c1 = "4677A8";
-                    break;
-                case 7:
-                    c1 = "446B77";
-                    break;
-
-                // Gas Planet, C1, Cold
-                case 8:
-                    c1 = "5B90E0";
-                    break;
-                case 9:
-                    c1 = "3CBBE4";
-                    break;
-                case 10:
-                    c1 = "93B1C1";
-                    break;
-                case 11:
-                    c1 = "54B9DD";
-                    break;
-                case 12:
-                    c1 = "72A8EA";
-                    break;
-                case 13:
-                    c1 = "459FCC";
-                    break;
-                case 14:
-                    c1 = "5FA8D8";
-                    break;
-                case 15:
-                    c1 = "869CD6";
-                    break;
-
-
-                default:
-                    c1 = "FFFFFF";
-                    break;
-            }
-
-            switch (i2) {
-                // Gas Planet, C2, Very Cold
-                case 0:
-                    c2 = "9CA6B7";
-                    break;
-                case 1:
-                    c2 = "92B7B7";
-                    break;
-                case 2:
-                    c2 = "A3B794";
-                    break;
-                case 3:
-                    c2 = "87AEB7";
-                    break;
-                case 4:
-                    c2 = "9BAAC4";
-                    break;
-                case 5:
-                    c2 = "8ECBDB";
-                    break;
-                case 6:
-                    c2 = "A4AAAD";
-                    break;
-                case 7:
-                    c2 = "88A1AA";
-                    break;
-
-                // Gas Planet, C2, Cold
-                case 8:
-                    c2 = "8DC0F5";
-                    break;
-                case 9:
-                    c2 = "60D5F8";
-                    break;
-                case 10:
-                    c2 = "CACEF7";
-                    break;
-                case 11:
-                    c2 = "B5D7DD";
-                    break;
-                case 12:
-                    c2 = "96BCEA";
-                    break;
-                case 13:
-                    c2 = "9EC3D6";
-                    break;
-                case 14:
-                    c2 = "B4C5F7";
-                    break;
-                case 15:
-                    c2 = "BCCED8";
-                    break;
-
-
-                default:
-                    c2 = "9A9AAD";
-                    break;
-            }
+            c1 = GasC1[i1];
+            c2 = GasC2[i2];
             c3 = "FFFFFF";
         }
     }
