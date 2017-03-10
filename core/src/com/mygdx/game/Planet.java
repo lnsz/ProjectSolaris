@@ -77,8 +77,8 @@ public class Planet extends Obstacle{
         planetType = MissileGame.randomInt(0, 1);
 
         tempRange = MissileGame.randomInt(0, 2);
-    //   planetType = 0;
-//        tempRange = 2;
+//        planetType = 0;
+//        tempRange = 3;
 
         switch(tempRange) {
             case 0:
