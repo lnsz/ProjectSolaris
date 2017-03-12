@@ -48,11 +48,11 @@ public class Levels {
         Player player = MissileGame.player;
         player.resetAmmo();
         MissileGame.missile = false;
-
         switch(level){
             case -1: // Test level
-                planet = new Planet(MissileGame.Preset.CENTER, LARGE_PLANET_RADIUS, NORMAL_PLANET_MASS);
+                planet = new Planet(MissileGame.Preset.CENTER, -1, -1);
                 MissileGame.entities.addEntity(planet);
+                break;
             case 0:
                 // Introduces shooting mechanic
                 // One normal sized planet, no obstacles

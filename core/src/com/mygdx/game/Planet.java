@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 
 /**
  * Created by lucas on 8/3/2016.
@@ -51,6 +54,13 @@ public class Planet extends Obstacle{
     int layer3;
     int rotation;
     int seed;
+    boolean randomSize;
+    String name;
+    int nameLine;
+    String atmosphere;
+    float atmosphereComposition;
+    boolean displayInfo;
+
 
     public Planet(float locX, float locY, float radius, float mass){
         super(MissileGame.remap(locX, 0, MissileGame.width,
@@ -59,27 +69,34 @@ public class Planet extends Obstacle{
                 MissileGame.remap(locY, 0, MissileGame.height,
                         MissileGame.defaultOriginY,
                         MissileGame.defaultOriginY + MissileGame.defaultHeight), radius);
-        if(radius > Levels.LARGE_PLANET_RADIUS) {
-            texture = new Texture(Gdx.files.internal("largePlanet.png"));
-        }
-        else if(radius < Levels.SMALL_MOON_RADIUS){
-            texture = new Texture(Gdx.files.internal("smallPlanet.png"));
-        }
-        else{
-            texture = new Texture(Gdx.files.internal("earth.png"));
-        }
-        sprite = new Sprite(texture);
-        gravity = true;
         this.mass = mass;
+        randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
+        generateSeed();
+        generateSprites();
+        gravity = true;
+    }
+
+    public Planet(MissileGame.Preset pos, float radius, float mass){
+        // Create a planet at a preset position
+        super(0, 0, radius);
+        position = MissileGame.generatePreset(pos);
+        this.mass = mass;
+        randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
+        generateSeed();
+        generateSprites();
+        gravity = true;
     }
 
     public void generateSeed(){
+        if (randomSize){
+            radius = MissileGame.randomInt((int)MissileGame.height / 12, (int)MissileGame.height / 5);
+            mass = MissileGame.randomInt(600, 2000);
+        }
+
+        nameLine = 0;
         planetType = MissileGame.randomInt(0, 1);
 
-        tempRange = MissileGame.randomInt(0, 2);
-//        planetType = 0;
-//        tempRange = 3;
-
+        tempRange = MissileGame.randomInt(0, 4);
         switch(tempRange) {
             case 0:
                 surfaceTemp = MissileGame.randomInt(-250, -100);
@@ -115,34 +132,31 @@ public class Planet extends Obstacle{
             reversedColours = false;
         } else{ // Gas
             layer2 =  MissileGame.randomInt(20, 39);
-            layer3 = 0;
+            if (MissileGame.randomInt(1, 4) == 1){
+                layer3 = MissileGame.randomInt(30, 32);
+            } else{
+                layer3 = 0;
+            }
             reversedColours = MissileGame.randomInt(0, 3) == 0; // 25% chance of reversing colours
         }
 
         rotation = MissileGame.randomInt(0, 360);
+
+        name = MissileGame.planetNames[MissileGame.randomInt(0, 23)] + "-" + String.format("%02d", MissileGame.randomInt(0, 99));
+        atmosphere =  MissileGame.planetAtmosphere[MissileGame.randomInt(0, 7)];
+        atmosphereComposition = MissileGame.randomInt(60, 100);
     }
 
     public void readSeed(){
 
     }
 
-    public Planet(MissileGame.Preset pos, float radius, float mass){
-        // Create a planet at a preset position
-        super(0, 0, radius);
-        position = MissileGame.generatePreset(pos);
-        generateSeed();
-        generateSprites();
-//        for (int i = 0; i < 100; i++){
-//            generateSeed();
-//        }
-        gravity = true;
-        this.mass = mass;
-    }
 
     public void generateSprites(){
         String c1 = reversedColours ? colourScheme.c2  : colourScheme.c1;
         String c2 = reversedColours ? colourScheme.c1  : colourScheme.c2;
-        System.out.println("c1: " + c1 + ", c2: " + c2);
+        String c3 = colourScheme.c3;
+        System.out.println("c1: " + c1 + ", c2: " + c2 + ", c3: " + c3);
         texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format("%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
         sprite0.setOrigin(radius, radius);
@@ -161,7 +175,12 @@ public class Planet extends Obstacle{
 
         texture3 = new Texture(Gdx.files.internal("planet/layer3_" + String.format("%02d", layer3) + ".png"));
         sprite3 = new Sprite(texture3);
-        sprite3.setOrigin(radius, radius);
+        sprite3.setColor(Color.valueOf(c3));
+        if (planetType == 1) {
+            sprite3.setOrigin(radius * (float) 1.5, radius * (float) 1.5);
+        } else{
+            sprite3.setOrigin(radius, radius);
+        }
         sprite3.rotate(rotation);
     }
 
@@ -185,9 +204,61 @@ public class Planet extends Obstacle{
         sprite2.setPosition(position.x - radius, position.y - radius);
         sprite2.draw(MissileGame.batch);
 
-        sprite3.setSize(radius * 2, radius * 2);
-        sprite3.setPosition(position.x - radius, position.y - radius);
+        if (planetType == 1){
+            sprite3.setSize(radius * 3, radius * 3);
+            sprite3.setPosition(position.x - radius * (float)1.5, position.y - radius * (float)1.5);
+        } else {
+            sprite3.setSize(radius * 2, radius * 2);
+            sprite3.setPosition(position.x - radius, position.y - radius);
+        }
         sprite3.draw(MissileGame.batch);
+
         MissileGame.batch.end();
+
+        if (randomSize){
+            drawInfo();
+        }
+    }
+
+    public void drawInfo(){
+        int textY = (int)(MissileGame.height / 100.0);
+        int lineHeight = 0;
+        int lineWidth = 0;
+
+        MissileGame.batch.begin();
+        MissileGame.arial.getData().setScale((float)0.7);
+        MissileGame.glyphLayout.setText(MissileGame.arial, name);
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        textY +=  MissileGame.glyphLayout.height;
+        lineWidth +=  MissileGame.glyphLayout.width;
+        MissileGame.arial.getData().setScale((float)0.3);
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Mass: " + String.format("%6.3e", Math.pow(mass, 8)) + " kg");
+        textY += MissileGame.height / 100.0;
+        lineHeight += textY;
+        textY +=  MissileGame.glyphLayout.height;
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Radius: " + NumberFormat.getNumberInstance(Locale.US).format((int)(Math.pow(radius, 3) / 700)) + " km");
+        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Surface Temperature: " + this.surfaceTemp + " °C");
+        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Axial Rotation: " + rotation + "°");
+        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Atmospheric Composition: " + atmosphere + "(" + (int)atmosphereComposition + "%)");
+        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
+        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
+        MissileGame.batch.end();
+
+        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Line);
+        MissileGame.renderer.setColor(255, 255, 255, 1);
+        if (nameLine < lineWidth){
+            nameLine +=  MissileGame.width / 40.0;
+            System.out.println(nameLine);
+        }
+
+        MissileGame.renderer.line(0, lineHeight, nameLine, lineHeight);
+        MissileGame.renderer.end();
     }
 }

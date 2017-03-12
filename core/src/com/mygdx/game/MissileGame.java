@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,12 +16,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 
@@ -34,6 +32,11 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
 
     // Screen size variables. Height and width are the actual resolution, the others are the
     // size of the screen after being changed because of the camera zoom
+    public static String[] planetNames = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota",
+            "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon",
+            "Phi", "Chi", "Psi", "Omega"};
+    public static String[] planetAtmosphere = {"Hydrogen", "Helium", "Oxygen", "Carbon Dioxide", "Nitrogen", "Methane",
+            "Sulfur", "Ammonia"};
     public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
             maxHeight, maxWidth, maxOriginX, maxOriginY,
             defaultHeight, defaultWidth, defaultOriginX, defaultOriginY, entityBorder;
@@ -126,7 +129,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         lastTap = new Vector(0, 0);
 
         // Initialize font variables
-        arial = new BitmapFont(Gdx.files.internal("arial.fnt"), true);
+        arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
+        arial.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
@@ -333,7 +337,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         clearScreen();
         background();
         checkMode();
-        drawFPS();
+        // drawFPS();
     }
 
     public void checkMode(){
@@ -409,7 +413,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         glyphLayout.setText(MissileGame.arial, text);
         float textX = remap(width, 0, width, cameraOriginX, cameraOriginX + cameraWidth) - glyphLayout.width;
         float textY = remap(0, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, textX, textY);
+        arial.draw(MissileGame.batch, MissileGame.glyphLayout, textX, textY);
         batch.end();
     }
 
