@@ -28,8 +28,7 @@ public class Moon extends Obstacle{
         this.planet = planet;
         this.mass = mass;
         gravity = true;
-        texture = new Texture(Gdx.files.internal("moon.png"));
-        sprite = new Sprite(texture);
+        generateSprites();
     }
 
     public Moon(float radius, float mass, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
@@ -50,7 +49,12 @@ public class Moon extends Obstacle{
         this.planet = planet;
         this.mass = mass;
         gravity = true;
-        texture = new Texture(Gdx.files.internal("moon.png"));
+        generateSprites();
+    }
+
+    public void generateSprites(){
+        int spriteNum = MissileGame.randomInt(1, 3);
+        texture = new Texture(Gdx.files.internal("moon/layer" + String.format("%02d", spriteNum) + ".png"));
         sprite = new Sprite(texture);
     }
 
