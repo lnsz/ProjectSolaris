@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Comet extends Obstacle{
     // Move in straight lines, don't have gravity
     Vector initialposition;
+    Trail trail;
     public Comet(double originAngle, double targetAngle, float speed, float radius){
         super(0, 0, radius);
         initialposition = new Vector();
@@ -30,6 +31,7 @@ public class Comet extends Obstacle{
         texture = new Texture(Gdx.files.internal("asteroid.png"));
         sprite = new Sprite(texture);
         gravity = true;
+        trail = new Trail(position.x, position.y, radius, 30);
     }
 
     @Override
@@ -56,6 +58,14 @@ public class Comet extends Obstacle{
         if(distance.mag() > MissileGame.entityBorder){
             position.x = initialposition.x;
             position.y = initialposition.y;
+            trail = new Trail(position.x, position.y, radius, 30);
         }
+        updateTrail();
+    }
+
+    public void updateTrail(){
+        trail.update(position.x, position.y);
+        trail.compute();
+        trail.draw();
     }
 }

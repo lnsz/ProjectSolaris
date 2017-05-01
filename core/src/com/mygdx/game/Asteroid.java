@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Asteroid extends Obstacle{
     // Orbits planets, don't have gravity
     Planet planet;
+    Trail trail;
     public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float altitude) {
         // Circular orbit moon
         super(0, 0, radius);
@@ -30,6 +31,7 @@ public class Asteroid extends Obstacle{
         gravity = true;
         texture = new Texture(Gdx.files.internal("asteroid.png"));
         sprite = new Sprite(texture);
+        trail = new Trail(position.x, position.y, radius, 30);
     }
 
     public Asteroid(float radius, boolean clockwise, double angle, Planet planet, float perigee, float apogee){
@@ -59,6 +61,7 @@ public class Asteroid extends Obstacle{
             planet.gravity(this);
             update();
         }
+        updateTrail();
         draw();
     }
 
@@ -73,5 +76,11 @@ public class Asteroid extends Obstacle{
         sprite.setPosition(position.x - radius, position.y - radius);
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
+    }
+
+    public void updateTrail(){
+        trail.update(position.x, position.y);
+        trail.compute();
+        trail.draw();
     }
 }
