@@ -3,6 +3,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -85,13 +86,14 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     long lastDown, lastDuration;
     Vector lastTouch, lastTap;
     boolean isPressed = false;
+    boolean dragLeft = false;
+    boolean dragRight = false;
 
     // Player variables
     public static Player player;
 
-    // Sprites
-    Texture bg1Texture;
-    Sprite bg1Sprite;
+    // Background
+    public static Background bg;
 
     @Override
     public void create(){
@@ -117,6 +119,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         gestureDetector = new GestureDetector(this);
         InputMultiplexer inputMultiplexer = new InputMultiplexer(gestureDetector, this);
         Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setCatchBackKey(true);
 
         // Create Entity System
         entities = new EntitySystem();
@@ -143,9 +146,9 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Initialize player variables
         player = new Player(0, 0);
 
-        // Sprites
-        bg1Texture = new Texture(Gdx.files.internal("background1.png"));
-        bg1Sprite = new Sprite(bg1Texture);
+        // Initialize background
+        bg = new Background(0, 1);
+
     }
 
     @Override
@@ -311,23 +314,16 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
 
     public void background(){
-        // Draws a black square the size of screen
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(0, 0, 0, 1);
-//        renderer.rect(cameraOriginX, cameraOriginY, cameraWidth, cameraHeight);
-//        renderer.end();
         // Draws background sprite
-        batch.begin();
         if (mode == Mode.PLAY || mode == Mode.PAUSE) {
-            bg1Sprite.setSize(maxWidth, maxHeight);
-            bg1Sprite.setPosition(maxOriginX, maxOriginY);
+            bg.setSize(maxWidth, maxHeight);
+            bg.setPosition(maxOriginX, maxOriginY);
         }
         else{
-            bg1Sprite.setSize(width, height);
-            bg1Sprite.setPosition(cameraOriginX, cameraOriginY);
+            bg.setSize(width, height);
+            bg.setPosition(cameraOriginX, cameraOriginY);
         }
-        bg1Sprite.draw(batch);
-        batch.end();
+        bg.draw();
     }
 
     @Override
@@ -448,8 +444,17 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void episodeSelector(){
         // WIP
         // Automatically center the level selector screen, locking it to an episode
-        episodeSelected = (int)(camera.position.x / width);
+        //episodeSelected = (int)(camera.position.x / width);
+
         if(!isPressed) {
+            if (dragLeft && episodeSelected < 3){
+                episodeSelected++;
+                dragLeft = false;
+            }
+            if (dragRight && episodeSelected > 0){
+                episodeSelected--;
+                dragRight = false;
+            }
             camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 50;
         }
     }
@@ -577,7 +582,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                 }
                 if (testButton.isClicked(remapX, remapY)){
                     // Set level and episode to an unused value
-                    Levels.createLevel(-1);
+                    Levels.createLevel(0, -1);
                     mode = Mode.TEST;
                 }
                 break;
@@ -592,7 +597,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                         camera.position.x = width / 2;
                         camera.position.y = height / 2;
                         camera.zoom = defaultZoom;
-                        Levels.createLevel(levelSelected);
+                        Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
                         mode = Mode.PLAY;
                     }
                     boolean nullTap = true;
@@ -685,8 +690,17 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                         camera.position.x - dX < width * episodeNumber - width / 2) {
                     camera.translate(-dX, 0);
                 }
+                if(dX > 0){
+                    dragLeft = false;
+                    dragRight = true;
+                } else if (dX < 0) {
+                    dragLeft = true;
+                    dragRight = false;
+                } else{
+                    dragLeft = false;
+                    dragRight = false;
+                }
                 return true;
-
             default: // Does nothing in modes where it's not needed
                 return false;
         }
@@ -736,12 +750,21 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
+    public boolean keyDown(int keycode) { return false;}
 
     @Override
     public boolean keyUp(int keycode) {
+
+        if (keycode == Input.Keys.BACK) {
+            switch(mode){
+                case TEST:
+                    entities.clear();
+                    mode = Mode.MAIN_MENU;
+                    break;
+                case LEVEL_SELECTOR:
+                    mode = Mode.MAIN_MENU;
+            }
+        }
         return false;
     }
 
@@ -764,6 +787,5 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public boolean scrolled(int amount) {
         return false;
     }
-
 
 }

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.Locale;
+
 /**
  * Created by lucas on 8/3/2016.
  */
@@ -54,7 +56,7 @@ public class Moon extends Obstacle{
 
     public void generateSprites(){
         int spriteNum = MissileGame.randomInt(1, 3);
-        texture = new Texture(Gdx.files.internal("moon/layer" + String.format("%02d", spriteNum) + ".png"));
+        texture = new Texture(Gdx.files.internal("moon/layer_" + String.format(Locale.US, "%02d", spriteNum) + ".png"));
         sprite = new Sprite(texture);
     }
 

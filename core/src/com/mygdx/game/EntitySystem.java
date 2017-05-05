@@ -66,7 +66,7 @@ public class EntitySystem {
         while (it.hasNext()) {
             Entity p = it.next();
             if(p instanceof Planet){
-                ((Planet) p).generateSeed();
+                ((Planet) p).generateVariables();
                 ((Planet) p).generateSprites();
             }
         }

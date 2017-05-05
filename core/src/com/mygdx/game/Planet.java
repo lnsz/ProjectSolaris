@@ -43,7 +43,7 @@ public class Planet extends Obstacle{
 
     // Planet type and surface temp determine colour scheme
     // Planet type determines the layer pattern
-    int planetType; //  0: Rock, 1: Gas
+    int planetType; //  0: Rock, F1: Gas
     int surfaceTemp; // -250 to 1000
     int tempRange;
     ColourScheme colourScheme; // 0-x for rock planets, x-y for gas planets
@@ -53,7 +53,6 @@ public class Planet extends Obstacle{
     int layer2;
     int layer3;
     int rotation;
-    int seed;
     boolean randomSize;
     String name;
     int nameLine;
@@ -71,7 +70,7 @@ public class Planet extends Obstacle{
                         MissileGame.defaultOriginY + MissileGame.defaultHeight), radius);
         this.mass = mass;
         randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
-        generateSeed();
+        generateVariables();
         generateSprites();
         gravity = true;
     }
@@ -82,21 +81,22 @@ public class Planet extends Obstacle{
         position = MissileGame.generatePreset(pos);
         this.mass = mass;
         randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
-        generateSeed();
+        generateVariables();
         generateSprites();
         gravity = true;
     }
 
-    public void generateSeed(){
-        if (randomSize){
-            radius = MissileGame.randomInt((int)MissileGame.height / 12, (int)MissileGame.height / 5);
-            mass = MissileGame.randomInt(600, 2000);
-        }
-
-        nameLine = 0;
+    public void generateSize(){
+        radius = MissileGame.randomInt((int)MissileGame.height / 12, (int)MissileGame.height / 5);
+        mass = MissileGame.randomInt(600, 2000);
+    }
+    public void generatePlanetType(){
         planetType = MissileGame.randomInt(0, 1);
-
+    }
+    public void generateTempRange(){
         tempRange = MissileGame.randomInt(0, 4);
+    }
+    public void generateColourScheme(){
         switch(tempRange) {
             case 0:
                 surfaceTemp = MissileGame.randomInt(-250, -100);
@@ -119,9 +119,8 @@ public class Planet extends Obstacle{
                 colourScheme = new ColourScheme(MissileGame.randomInt(32, 39), MissileGame.randomInt(32, 39), planetType);
                 break;
         }
-        layer0 = 0;
-        layer1 = 0;
-
+    }
+    public void generateLayers(){
         if (planetType == 0){ // Rock
             layer2 =  MissileGame.randomInt(0, 5);
             if (tempRange == 2 && MissileGame.randomInt(0, 1) == 1){ // 50% chance to have clouds if the planet is in temp range 2
@@ -139,41 +138,57 @@ public class Planet extends Obstacle{
             }
             reversedColours = MissileGame.randomInt(0, 3) == 0; // 25% chance of reversing colours
         }
-
+    }
+    public void generateRotation(){
         rotation = MissileGame.randomInt(0, 360);
-
-        name = MissileGame.planetNames[MissileGame.randomInt(0, 23)] + "-" + String.format("%02d", MissileGame.randomInt(0, 99));
+    }
+    public void generateName(){
+        name = MissileGame.planetNames[MissileGame.randomInt(0, 23)] + "-" + String.format(Locale.US, "%02d", MissileGame.randomInt(0, 99));
+    }
+    public void generateAtmosphere(){
         atmosphere =  MissileGame.planetAtmosphere[MissileGame.randomInt(0, 7)];
         atmosphereComposition = MissileGame.randomInt(60, 100);
     }
 
-    public void readSeed(){
 
+    public void generateVariables(){
+        layer0 = 0;
+        layer1 = 0;
+        nameLine = 0;
+        if (randomSize){
+            generateSize();
+        }
+        generatePlanetType();
+        generateTempRange();
+        generateColourScheme();
+        generateLayers();
+        generateRotation();
+        generateName();
+        generateAtmosphere();
     }
-
 
     public void generateSprites(){
         String c1 = reversedColours ? colourScheme.c2  : colourScheme.c1;
         String c2 = reversedColours ? colourScheme.c1  : colourScheme.c2;
         String c3 = colourScheme.c3;
         System.out.println("c1: " + c1 + ", c2: " + c2 + ", c3: " + c3);
-        texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format("%02d", layer0) + ".png"));
+        texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format(Locale.US, "%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
         sprite0.setOrigin(radius, radius);
         sprite0.setColor(Color.valueOf(c1));
 
-        texture1 = new Texture(Gdx.files.internal("planet/layer1_" + String.format("%02d", layer1) + ".png"));
+        texture1 = new Texture(Gdx.files.internal("planet/layer1_" + String.format(Locale.US, "%02d", layer1) + ".png"));
         sprite1 = new Sprite(texture1);
         sprite1.setOrigin(radius, radius);
         sprite1.setColor(Color.valueOf(c1));
 
-        texture2 = new Texture(Gdx.files.internal("planet/layer2_" + String.format("%02d", layer2) + ".png"));
+        texture2 = new Texture(Gdx.files.internal("planet/layer2_" + String.format(Locale.US, "%02d", layer2) + ".png"));
         sprite2 = new Sprite(texture2);
         sprite2.setOrigin(radius, radius);
         sprite2.setColor(Color.valueOf(c2));
         sprite2.rotate(rotation);
 
-        texture3 = new Texture(Gdx.files.internal("planet/layer3_" + String.format("%02d", layer3) + ".png"));
+        texture3 = new Texture(Gdx.files.internal("planet/layer3_" + String.format(Locale.US, "%02d", layer3) + ".png"));
         sprite3 = new Sprite(texture3);
         sprite3.setColor(Color.valueOf(c3));
         if (planetType == 1) {
@@ -215,7 +230,7 @@ public class Planet extends Obstacle{
 
         MissileGame.batch.end();
 
-        if (randomSize){
+        if (displayInfo){
             drawInfo();
         }
     }
@@ -232,7 +247,7 @@ public class Planet extends Obstacle{
         textY +=  MissileGame.glyphLayout.height;
         lineWidth +=  MissileGame.glyphLayout.width;
         MissileGame.arial.getData().setScale((float)0.3);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Mass: " + String.format("%6.3e", Math.pow(mass, 8)) + " kg");
+        MissileGame.glyphLayout.setText(MissileGame.arial, "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg");
         textY += MissileGame.height / 100.0;
         lineHeight += textY;
         textY +=  MissileGame.glyphLayout.height;
