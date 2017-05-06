@@ -78,6 +78,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
 
     // Fonts
+    public static BitmapFont dinPro;
     public static BitmapFont arial;
     public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;  // List of buttons in the level selector screen
@@ -88,6 +89,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     boolean isPressed = false;
     boolean dragLeft = false;
     boolean dragRight = false;
+    float xDrag = 0;
+    float xDragTotal = 0;
+    float xDragVelocity = 0;
+    int dragDuration = 0;
 
     // Player variables
     public static Player player;
@@ -134,6 +139,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Initialize font variables
         arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
+        dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
+        dinPro.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
@@ -147,7 +154,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         player = new Player(0, 0);
 
         // Initialize background
-        bg = new Background(0, 1);
+        bg = new Background(0, 0);
 
     }
 
@@ -359,6 +366,17 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
                     levelButton.position.x = camera.position.x - levelButton.width / 2;
                     levelButton.draw();
                 }
+                if (!isPressed){
+                    xDragTotal = 0;
+                    xDrag = 0;
+                    dragDuration = 0;
+                    xDragVelocity /= 1.5;
+
+                    if(camera.position.x - xDragVelocity * 5 > width / 2 &&
+                            camera.position.x - xDragVelocity * 5 < width * episodeNumber - width / 2) {
+                        camera.translate(-xDragVelocity * 5, 0);
+                    }
+                }
                 levelSelector();
                 break;
 
@@ -444,18 +462,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
     public void episodeSelector(){
         // WIP
         // Automatically center the level selector screen, locking it to an episode
-        //episodeSelected = (int)(camera.position.x / width);
+        episodeSelected = (int)(camera.position.x / width);
 
-        if(!isPressed) {
-            if (dragLeft && episodeSelected < 3){
-                episodeSelected++;
-                dragLeft = false;
-            }
-            if (dragRight && episodeSelected > 0){
-                episodeSelected--;
-                dragRight = false;
-            }
-            camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 50;
+        if(!isPressed && Math.abs(xDragVelocity) < 10) {
+            camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 100;
         }
     }
 
@@ -680,33 +690,22 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Called when a dragging motion is detected
         // Used to scroll
         isPressed = true;
-        float dX = x - lastTouch.x;
+        xDrag = x - lastTouch.x;
+        xDragTotal += xDrag;
         lastTouch.x = x;
-        float dY = y - lastTouch.y;
-        lastTouch.y = y;
+        dragDuration++;
+        xDragVelocity = xDragTotal / dragDuration;
         switch(mode) {
             case LEVEL_SELECTOR:
-                if(camera.position.x - dX > width / 2 &&
-                        camera.position.x - dX < width * episodeNumber - width / 2) {
-                    camera.translate(-dX, 0);
-                }
-                if(dX > 0){
-                    dragLeft = false;
-                    dragRight = true;
-                } else if (dX < 0) {
-                    dragLeft = true;
-                    dragRight = false;
-                } else{
-                    dragLeft = false;
-                    dragRight = false;
+                if(camera.position.x - xDrag > width / 2 &&
+                        camera.position.x - xDrag < width * episodeNumber - width / 2) {
+                    camera.translate(-xDrag, 0);
                 }
                 return true;
             default: // Does nothing in modes where it's not needed
                 return false;
         }
     }
-
-    // The following methods are unused but gestures
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button){

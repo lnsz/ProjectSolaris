@@ -33,7 +33,8 @@ public class Background {
     }
 
     public void generateSprite(){
-        texture = new Texture(Gdx.files.internal("background/bg" + colour + "_" + String.format(Locale.US, "%02d", pattern) + ".png"));
+        System.out.println("background/ep" + colour + "/bg" + pattern + ".png");
+        texture = new Texture(Gdx.files.internal("background/ep" + colour + "/bg" + pattern + ".png"));
         sprite = new Sprite(texture);
     }
 
@@ -49,7 +50,5 @@ public class Background {
         MissileGame.batch.begin();
         sprite.draw(MissileGame.batch);
         MissileGame.batch.end();
-
     }
-
 }
