@@ -139,8 +139,8 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Initialize font variables
         arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
-        dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
-        dinPro.setColor(Color.WHITE);
+        //dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
+        //dinPro.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
@@ -266,10 +266,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
         // Set zoom  and camera variables
-        maxZoom = 6;
-        minZoom = 3;
+        maxZoom = 4;
+        minZoom = 4;
         startZoom = 1;
-        defaultZoom = 3;
+        defaultZoom = 4;
         maxHeight = camera.viewportHeight * maxZoom;
         maxWidth = camera.viewportWidth * maxZoom;
         maxOriginX = width / 2 - maxWidth / 2;
@@ -464,7 +464,7 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         // Automatically center the level selector screen, locking it to an episode
         episodeSelected = (int)(camera.position.x / width);
 
-        if(!isPressed && Math.abs(xDragVelocity) < 10) {
+        if(!isPressed && Math.abs(xDragVelocity) < 15) {
             camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 100;
         }
     }
