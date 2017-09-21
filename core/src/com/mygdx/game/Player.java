@@ -13,12 +13,12 @@ public class Player extends Entity{
     private int counter;
     private boolean flashing;
     public Player(float locX, float locY){
-        super(MissileGame.remap(locX, 0, MissileGame.width,
-                MissileGame.defaultOriginX,
-                MissileGame.defaultOriginX + MissileGame.defaultWidth),
-                MissileGame.remap(locY, 0, MissileGame.height,
-                        MissileGame.defaultOriginY,
-                        MissileGame.defaultOriginY + MissileGame.defaultHeight));
+        super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
+                ProjectSolaris.defaultOriginX,
+                ProjectSolaris.defaultOriginX + ProjectSolaris.defaultWidth),
+                ProjectSolaris.remap(locY, 0, ProjectSolaris.height,
+                        ProjectSolaris.defaultOriginY,
+                        ProjectSolaris.defaultOriginY + ProjectSolaris.defaultHeight));
         maxAmmo = 5;
         ammo = maxAmmo;
         radius = 50;
@@ -28,10 +28,10 @@ public class Player extends Entity{
 
     @Override
     public void draw(){
-        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Line);
-        MissileGame.renderer.setColor(255, 255, 255, 1);
-        MissileGame.renderer.circle(position.x, position.y, radius); // Temp player character
-        MissileGame.renderer.end();
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Line);
+        ProjectSolaris.renderer.setColor(255, 255, 255, 1);
+        ProjectSolaris.renderer.circle(position.x, position.y, radius); // Temp player character
+        ProjectSolaris.renderer.end();
         if(flashing){
             if(counter % 7 != 0){
                 showAmmo();
@@ -46,15 +46,15 @@ public class Player extends Entity{
     }
 
     public void showAmmo(){
-        MissileGame.batch.begin();
-        MissileGame.arial.getData().setScale(MissileGame.height / 3000 * MissileGame.camera.zoom);
-        MissileGame.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ProjectSolaris.batch.begin();
+        ProjectSolaris.arial.getData().setScale(ProjectSolaris.height / 3000 * ProjectSolaris.camera.zoom);
+        ProjectSolaris.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = ammo + "";
-        MissileGame.glyphLayout.setText(MissileGame.arial, text);
-        float textX = MissileGame.remap(0, 0, MissileGame.width, MissileGame.cameraOriginX, MissileGame.cameraOriginX + MissileGame.cameraWidth);
-        float textY = MissileGame.remap(0, 0, MissileGame.height, MissileGame.cameraOriginY, MissileGame.cameraOriginY + MissileGame.cameraHeight);
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, textX, textY);
-        MissileGame.batch.end();
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, text);
+        float textX = ProjectSolaris.remap(0, 0, ProjectSolaris.width, ProjectSolaris.cameraOriginX, ProjectSolaris.cameraOriginX + ProjectSolaris.cameraWidth);
+        float textY = ProjectSolaris.remap(0, 0, ProjectSolaris.height, ProjectSolaris.cameraOriginY, ProjectSolaris.cameraOriginY + ProjectSolaris.cameraHeight);
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
+        ProjectSolaris.batch.end();
     }
 
     public void shootMissile(float targetX, float targetY, float strength){
@@ -64,7 +64,7 @@ public class Player extends Entity{
             counter=0;
             return;
         }
-        MissileGame.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));
+        ProjectSolaris.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));
         ammo--;
     }
 

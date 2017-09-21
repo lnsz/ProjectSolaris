@@ -19,23 +19,23 @@ public class Levels {
     static final float TINY_MOON_MASS = 200;
 
     // Radius
-    static final float MASSIVE_PLANET_RADIUS = MissileGame.height / 4;
-    static final float LARGE_PLANET_RADIUS = MissileGame.height / 6;
-    static final float NORMAL_PLANET_RADIUS = MissileGame.height / 8;
-    static final float SMALL_PLANET_RADIUS = MissileGame.height / 10;
-    static final float TINY_PLANET_RADIUS = MissileGame.height / 12;
+    static final float MASSIVE_PLANET_RADIUS = ProjectSolaris.height / 4;
+    static final float LARGE_PLANET_RADIUS = ProjectSolaris.height / 6;
+    static final float NORMAL_PLANET_RADIUS = ProjectSolaris.height / 8;
+    static final float SMALL_PLANET_RADIUS = ProjectSolaris.height / 10;
+    static final float TINY_PLANET_RADIUS = ProjectSolaris.height / 12;
 
-    static final float MASSIVE_MOON_RADIUS = MissileGame.height / 10;
-    static final float LARGE_MOON_RADIUS = MissileGame.height / 14;
-    static final float NORMAL_MOON_RADIUS = MissileGame.height / 16;
-    static final float SMALL_MOON_RADIUS = MissileGame.height / 22;
-    static final float TINY_MOON_RADIUS = MissileGame.height / 26;
+    static final float MASSIVE_MOON_RADIUS = ProjectSolaris.height / 10;
+    static final float LARGE_MOON_RADIUS = ProjectSolaris.height / 14;
+    static final float NORMAL_MOON_RADIUS = ProjectSolaris.height / 16;
+    static final float SMALL_MOON_RADIUS = ProjectSolaris.height / 22;
+    static final float TINY_MOON_RADIUS = ProjectSolaris.height / 26;
 
-    static final float MASSIVE_MOON_ALTITUDE = 5 * MissileGame.height / 4;
-    static final float LARGE_MOON_ALTITUDE = MissileGame.height;
-    static final float NORMAL_MOON_ALTITUDE = 3 * MissileGame.height / 4;
-    static final float SMALL_MOON_ALTITUDE = 2 * MissileGame.height / 4;
-    static final float TINY_MOON_ALTITUDE = MissileGame.height / 4;
+    static final float MASSIVE_MOON_ALTITUDE = 5 * ProjectSolaris.height / 4;
+    static final float LARGE_MOON_ALTITUDE = ProjectSolaris.height;
+    static final float NORMAL_MOON_ALTITUDE = 3 * ProjectSolaris.height / 4;
+    static final float SMALL_MOON_ALTITUDE = 2 * ProjectSolaris.height / 4;
+    static final float TINY_MOON_ALTITUDE = ProjectSolaris.height / 4;
 
     static final float FAST_COMET_SPEED = 70;
     static final float NORMAL_COMET_SPEED = 50;
@@ -45,82 +45,82 @@ public class Levels {
     }
     public static void createLevel(int episodeSelected, int levelSelected){
         Planet planet;
-        Player player = MissileGame.player;
+        Player player = ProjectSolaris.player;
         player.resetAmmo();
-        MissileGame.missile = false;
-        MissileGame.bg = new Background(episodeSelected, levelSelected / 3);
+        ProjectSolaris.missile = false;
+        ProjectSolaris.bg = new Background(episodeSelected, levelSelected / 3);
         if (episodeSelected == 0) {
             switch (levelSelected) {
                 case -1: // Test level
-                    planet = new Planet(MissileGame.Preset.CENTER, -1, -1);
+                    planet = new Planet(ProjectSolaris.Preset.CENTER, -1, -1);
                     planet.displayInfo = true;
-                    MissileGame.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(planet);
                     break;
                 case 0:
                     // Introduces shooting mechanic
                     // One normal sized planet, no obstacles
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.BOTTOM);
-                    planet = new Planet(MissileGame.Preset.TOP, NORMAL_PLANET_RADIUS, NORMAL_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM);
+                    planet = new Planet(ProjectSolaris.Preset.TOP, NORMAL_PLANET_RADIUS, NORMAL_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
                     break;
 
                 case 1:
                     // Introduces comets and asteroids
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.TOP_RIGHT);
-                    planet = new Planet(MissileGame.Preset.BOTTOM_LEFT, NORMAL_PLANET_RADIUS, NORMAL_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
-                    MissileGame.entities.addEntity(new Asteroid(NORMAL_MOON_RADIUS, true,
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.TOP_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.BOTTOM_LEFT, NORMAL_PLANET_RADIUS, NORMAL_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new Asteroid(NORMAL_MOON_RADIUS, true,
                             Math.PI, planet, SMALL_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Asteroid(NORMAL_MOON_RADIUS, true,
+                    ProjectSolaris.entities.addEntity(new Asteroid(NORMAL_MOON_RADIUS, true,
                             Math.PI, planet, LARGE_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Comet(2 * Math.PI / 3, -Math.PI / 3,
+                    ProjectSolaris.entities.addEntity(new Comet(2 * Math.PI / 3, -Math.PI / 3,
                             FAST_COMET_SPEED, NORMAL_MOON_RADIUS));
                     break;
 
                 case 2:
                     // Introduces moons
                     // One normal sized planet and one moon
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.BOTTOM_LEFT);
-                    planet = new Planet(MissileGame.Preset.TOP_RIGHT, SMALL_PLANET_RADIUS, SMALL_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
-                    MissileGame.entities.addEntity(new Moon(LARGE_MOON_RADIUS, LARGE_MOON_MASS, true,
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_LEFT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_RIGHT, SMALL_PLANET_RADIUS, SMALL_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new Moon(LARGE_MOON_RADIUS, LARGE_MOON_MASS, true,
                             Math.PI, planet, SMALL_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Moon(LARGE_MOON_RADIUS, LARGE_MOON_MASS, true,
+                    ProjectSolaris.entities.addEntity(new Moon(LARGE_MOON_RADIUS, LARGE_MOON_MASS, true,
                             0, planet, SMALL_MOON_ALTITUDE));
                     break;
 
                 case 3:
                     // Introduces Elliptical orbits
                     // Two moons in elliptical orbit
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.TOP_RIGHT);
-                    planet = new Planet(MissileGame.Preset.BOTTOM_LEFT, LARGE_PLANET_RADIUS, LARGE_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
-                    MissileGame.entities.addEntity(new Moon(SMALL_MOON_RADIUS, LARGE_MOON_MASS, true,
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.TOP_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.BOTTOM_LEFT, LARGE_PLANET_RADIUS, LARGE_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new Moon(SMALL_MOON_RADIUS, LARGE_MOON_MASS, true,
                             4 * Math.PI / 3, planet, TINY_MOON_ALTITUDE, MASSIVE_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Moon(SMALL_MOON_RADIUS, LARGE_MOON_MASS, true,
+                    ProjectSolaris.entities.addEntity(new Moon(SMALL_MOON_RADIUS, LARGE_MOON_MASS, true,
                             7 * Math.PI / 6, planet, TINY_MOON_ALTITUDE, MASSIVE_MOON_ALTITUDE));
                     break;
 
                 case 4:
                     // Introduces multiple planets
                     // One small planet and one large "target" planet
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.BOTTOM_RIGHT);
-                    planet = new Planet(MissileGame.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
-                    MissileGame.entities.addEntity(new Planet(MissileGame.Preset.CENTER, NORMAL_PLANET_RADIUS, LARGE_PLANET_MASS));
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new Planet(ProjectSolaris.Preset.CENTER, NORMAL_PLANET_RADIUS, LARGE_PLANET_MASS));
                     break;
 
                 case 5:
                     // Moons and asteroids
                     // One tiny planet, a moon and two asteroid
-                    player.position = MissileGame.generatePreset(MissileGame.Preset.TOP);
-                    planet = new Planet(MissileGame.Preset.BOTTOM, TINY_PLANET_RADIUS, TINY_PLANET_MASS);
-                    MissileGame.entities.addEntity(planet);
-                    MissileGame.entities.addEntity(new Moon(MASSIVE_MOON_RADIUS, MASSIVE_MOON_MASS, true,
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.TOP);
+                    planet = new Planet(ProjectSolaris.Preset.BOTTOM, TINY_PLANET_RADIUS, TINY_PLANET_MASS);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new Moon(MASSIVE_MOON_RADIUS, MASSIVE_MOON_MASS, true,
                             0, planet, NORMAL_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Asteroid(LARGE_MOON_RADIUS, true,
+                    ProjectSolaris.entities.addEntity(new Asteroid(LARGE_MOON_RADIUS, true,
                             0, planet, SMALL_MOON_ALTITUDE));
-                    MissileGame.entities.addEntity(new Asteroid(LARGE_MOON_RADIUS, true,
+                    ProjectSolaris.entities.addEntity(new Asteroid(LARGE_MOON_RADIUS, true,
                             Math.PI, planet, NORMAL_MOON_ALTITUDE));
                     break;
 

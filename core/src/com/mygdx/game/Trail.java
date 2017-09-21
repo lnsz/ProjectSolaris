@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -66,15 +65,15 @@ public class Trail extends Entity{
 
     @Override
     public void draw(){
-        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
         if (trail.size() < 3 && trail.size() > 0){
-            MissileGame.renderer.circle(trail.get(0).x, trail.get(0).y, 5);
+            ProjectSolaris.renderer.circle(trail.get(0).x, trail.get(0).y, 5);
         }else {
             for (int i = 0; i < trail.size() - 2; i ++) {
-                MissileGame.renderer.triangle(trail.get(i).x, trail.get(i).y, trail.get(i + 1).x, trail.get(i + 1).y, trail.get(i + 2).x, trail.get(i + 2).y);
+                ProjectSolaris.renderer.triangle(trail.get(i).x, trail.get(i).y, trail.get(i + 1).x, trail.get(i + 1).y, trail.get(i + 2).x, trail.get(i + 2).y);
             }
         }
-        MissileGame.renderer.end();
+        ProjectSolaris.renderer.end();
         trail.clear();
     }
 

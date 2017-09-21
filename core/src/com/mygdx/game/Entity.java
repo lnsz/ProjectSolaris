@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -28,23 +27,23 @@ public class Entity {
         position.add(velocity.scale());
         acceleration.mult(0);
 
-        Vector distance = new Vector(position.x - MissileGame.width / 2,
-                position.y - MissileGame.height / 2); // Distance from current position to center
-        if(distance.mag() > MissileGame.entityBorder){
+        Vector distance = new Vector(position.x - ProjectSolaris.width / 2,
+                position.y - ProjectSolaris.height / 2); // Distance from current position to center
+        if(distance.mag() > ProjectSolaris.entityBorder){
             alive = false;
         }
     }
 
     public void draw(){
-        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
-        MissileGame.renderer.setColor(Color.WHITE);
-        MissileGame.renderer.circle(position.x, position.y, radius);
-        MissileGame.renderer.end();
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(Color.WHITE);
+        ProjectSolaris.renderer.circle(position.x, position.y, radius);
+        ProjectSolaris.renderer.end();
     }
 
 
     public void run(){
-        if (!MissileGame.isPaused) {
+        if (!ProjectSolaris.isPaused) {
             update();
         }
         draw();

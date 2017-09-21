@@ -7,10 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
  * Created by Kiko on 11/07/2016.
  */
@@ -23,7 +19,7 @@ public class Missile extends Entity{
 
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
-        MissileGame.missile = true;
+        ProjectSolaris.missile = true;
 
         // Load sprites and textures
         particleTexture = new Texture(Gdx.files.internal("dot.png"));
@@ -46,20 +42,20 @@ public class Missile extends Entity{
     public void draw(){
         if (visible) {
             //float angle = velocity.getHeading();
-            MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
-            MissileGame.renderer.setColor(Color.WHITE);
-            MissileGame.renderer.circle(position.x, position.y, radius);
-            MissileGame.renderer.end();
+            ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+            ProjectSolaris.renderer.setColor(Color.WHITE);
+            ProjectSolaris.renderer.circle(position.x, position.y, radius);
+            ProjectSolaris.renderer.end();
         }
 }
 
     @Override
     public void run(){
         if(visible) {
-            if (!MissileGame.isPaused) {
+            if (!ProjectSolaris.isPaused) {
                 update();
-                MissileGame.entities.gravity(this);
-                if (MissileGame.entities.collision(this)) {
+                ProjectSolaris.entities.gravity(this);
+                if (ProjectSolaris.entities.collision(this)) {
                     // explode!
                     explode();
                 }
@@ -87,7 +83,7 @@ public class Missile extends Entity{
 
 
     public void explode(){
-        MissileGame.missile = false;
+        ProjectSolaris.missile = false;
         visible = false;
         deathParticles = new ParticleSystem(position.x, position.y, 500, 100, false, explosionSprite);
         flightParticles.recycle = false;
