@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import java.util.Locale;
-
 /**
  * Created by lucas on 5/5/2017.
  */
@@ -21,8 +19,8 @@ public class Background {
 
     public Background(){
         // Sprites
-        colour = MissileGame.randomInt(0, 2);
-        pattern = MissileGame.randomInt(0, 4);
+        colour = ProjectSolaris.randomInt(0, 2);
+        pattern = ProjectSolaris.randomInt(0, 4);
         generateSprite();
     }
 
@@ -47,8 +45,8 @@ public class Background {
     }
 
     public void draw(){
-        MissileGame.batch.begin();
-        sprite.draw(MissileGame.batch);
-        MissileGame.batch.end();
+        ProjectSolaris.batch.begin();
+        sprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.end();
     }
 }

@@ -1,11 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Created by lucas on 8/5/2016.
@@ -21,8 +18,8 @@ public class Asteroid extends Obstacle{
         position.y = -altitude;
         position.rotate((float)angle);
         position.add(planet.position);
-        velocity.x = (float) Math.sqrt((MissileGame.GRAVITY_CONSTANT * planet.mass *
-                MissileGame.MASS_UNITS) / (altitude * MissileGame.DISTANCE_UNITS * 1000000));
+        velocity.x = (float) Math.sqrt((ProjectSolaris.GRAVITY_CONSTANT * planet.mass *
+                ProjectSolaris.MASS_UNITS) / (altitude * ProjectSolaris.DISTANCE_UNITS * 1000000));
         if (clockwise) {
             velocity.mult(-1);
         }
@@ -41,9 +38,9 @@ public class Asteroid extends Obstacle{
         position.y = -perigee;
         position.rotate((float)angle);
         position.add(planet.position);
-        double GM = MissileGame.GRAVITY_CONSTANT * planet.mass * MissileGame.MASS_UNITS;
-        double r = perigee * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
-        double a = (apogee + perigee) / 2 * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
+        double GM = ProjectSolaris.GRAVITY_CONSTANT * planet.mass * ProjectSolaris.MASS_UNITS;
+        double r = perigee * ProjectSolaris.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
+        double a = (apogee + perigee) / 2 * ProjectSolaris.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
         velocity.x = (float) Math.sqrt(GM * (2/r - 1/a));
         if(clockwise){
             velocity.mult(-1);
@@ -57,7 +54,7 @@ public class Asteroid extends Obstacle{
 
     @Override
     public void run(){
-        if(!MissileGame.isPaused) {
+        if(!ProjectSolaris.isPaused) {
             planet.gravity(this);
             update();
         }
@@ -71,11 +68,11 @@ public class Asteroid extends Obstacle{
 //        renderer.setColor(Color.GRAY);
 //        renderer.circle(position.x, position.y, radius);
 //        renderer.end();
-        MissileGame.batch.begin();
+        ProjectSolaris.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(position.x - radius, position.y - radius);
-        sprite.draw(MissileGame.batch);
-        MissileGame.batch.end();
+        sprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.end();
     }
 
     public void updateTrail(){

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.text.NumberFormat;
@@ -62,12 +61,12 @@ public class Planet extends Obstacle{
 
 
     public Planet(float locX, float locY, float radius, float mass){
-        super(MissileGame.remap(locX, 0, MissileGame.width,
-                MissileGame.defaultOriginX,
-                MissileGame.defaultOriginX + MissileGame.defaultWidth),
-                MissileGame.remap(locY, 0, MissileGame.height,
-                        MissileGame.defaultOriginY,
-                        MissileGame.defaultOriginY + MissileGame.defaultHeight), radius);
+        super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
+                ProjectSolaris.defaultOriginX,
+                ProjectSolaris.defaultOriginX + ProjectSolaris.defaultWidth),
+                ProjectSolaris.remap(locY, 0, ProjectSolaris.height,
+                        ProjectSolaris.defaultOriginY,
+                        ProjectSolaris.defaultOriginY + ProjectSolaris.defaultHeight), radius);
         this.mass = mass;
         randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
         generateVariables();
@@ -75,10 +74,10 @@ public class Planet extends Obstacle{
         gravity = true;
     }
 
-    public Planet(MissileGame.Preset pos, float radius, float mass){
+    public Planet(ProjectSolaris.Preset pos, float radius, float mass){
         // Create a planet at a preset position
         super(0, 0, radius);
-        position = MissileGame.generatePreset(pos);
+        position = ProjectSolaris.generatePreset(pos);
         this.mass = mass;
         randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
         generateVariables();
@@ -87,67 +86,67 @@ public class Planet extends Obstacle{
     }
 
     public void generateSize(){
-        radius = MissileGame.randomInt((int)MissileGame.height / 12, (int)MissileGame.height / 5);
-        mass = MissileGame.randomInt(600, 2000);
+        radius = ProjectSolaris.randomInt((int) ProjectSolaris.height / 12, (int) ProjectSolaris.height / 5);
+        mass = ProjectSolaris.randomInt(600, 2000);
     }
     public void generatePlanetType(){
-        planetType = MissileGame.randomInt(0, 1);
+        planetType = ProjectSolaris.randomInt(0, 1);
     }
     public void generateTempRange(){
-        tempRange = MissileGame.randomInt(0, 4);
+        tempRange = ProjectSolaris.randomInt(0, 4);
     }
     public void generateColourScheme(){
         switch(tempRange) {
             case 0:
-                surfaceTemp = MissileGame.randomInt(-250, -100);
-                colourScheme = new ColourScheme(MissileGame.randomInt(0, 7), MissileGame.randomInt(0, 7), planetType);
+                surfaceTemp = ProjectSolaris.randomInt(-250, -100);
+                colourScheme = new ColourScheme(ProjectSolaris.randomInt(0, 7), ProjectSolaris.randomInt(0, 7), planetType);
                 break;
             case 1:
-                surfaceTemp = MissileGame.randomInt(-99, 0);
-                colourScheme = new ColourScheme(MissileGame.randomInt(8, 15), MissileGame.randomInt(8, 15), planetType);
+                surfaceTemp = ProjectSolaris.randomInt(-99, 0);
+                colourScheme = new ColourScheme(ProjectSolaris.randomInt(8, 15), ProjectSolaris.randomInt(8, 15), planetType);
                 break;
             case 2:
-                surfaceTemp = MissileGame.randomInt(1, 70);
-                colourScheme = new ColourScheme(MissileGame.randomInt(16, 23), MissileGame.randomInt(16, 23), planetType);
+                surfaceTemp = ProjectSolaris.randomInt(1, 70);
+                colourScheme = new ColourScheme(ProjectSolaris.randomInt(16, 23), ProjectSolaris.randomInt(16, 23), planetType);
                 break;
             case 3:
-                surfaceTemp = MissileGame.randomInt(71, 200);
-                colourScheme = new ColourScheme(MissileGame.randomInt(24, 31), MissileGame.randomInt(24, 31), planetType);
+                surfaceTemp = ProjectSolaris.randomInt(71, 200);
+                colourScheme = new ColourScheme(ProjectSolaris.randomInt(24, 31), ProjectSolaris.randomInt(24, 31), planetType);
                 break;
             case 4:
-                surfaceTemp = MissileGame.randomInt(201, 1000);
-                colourScheme = new ColourScheme(MissileGame.randomInt(32, 39), MissileGame.randomInt(32, 39), planetType);
+                surfaceTemp = ProjectSolaris.randomInt(201, 1000);
+                colourScheme = new ColourScheme(ProjectSolaris.randomInt(32, 39), ProjectSolaris.randomInt(32, 39), planetType);
                 break;
         }
     }
     public void generateLayers(){
         if (planetType == 0){ // Rock
-            layer2 =  MissileGame.randomInt(0, 5);
-            if (tempRange == 2 && MissileGame.randomInt(0, 1) == 1){ // 50% chance to have clouds if the planet is in temp range 2
-                layer3 =  MissileGame.randomInt(1, 10);
+            layer2 =  ProjectSolaris.randomInt(0, 5);
+            if (tempRange == 2 && ProjectSolaris.randomInt(0, 1) == 1){ // 50% chance to have clouds if the planet is in temp range 2
+                layer3 =  ProjectSolaris.randomInt(1, 10);
             } else{
                 layer3 = 0;
             }
             reversedColours = false;
         } else{ // Gas
-            layer2 =  MissileGame.randomInt(20, 39);
-            if (MissileGame.randomInt(1, 4) == 1){
-                layer3 = MissileGame.randomInt(30, 32);
+            layer2 =  ProjectSolaris.randomInt(20, 39);
+            if (ProjectSolaris.randomInt(1, 4) == 1){
+                layer3 = ProjectSolaris.randomInt(30, 32);
             } else{
                 layer3 = 0;
             }
-            reversedColours = MissileGame.randomInt(0, 3) == 0; // 25% chance of reversing colours
+            reversedColours = ProjectSolaris.randomInt(0, 3) == 0; // 25% chance of reversing colours
         }
     }
     public void generateRotation(){
-        rotation = MissileGame.randomInt(0, 360);
+        rotation = ProjectSolaris.randomInt(0, 360);
     }
     public void generateName(){
-        name = MissileGame.planetNames[MissileGame.randomInt(0, 23)] + "-" + String.format(Locale.US, "%02d", MissileGame.randomInt(0, 99));
+        name = ProjectSolaris.planetNames[ProjectSolaris.randomInt(0, 23)] + "-" + String.format(Locale.US, "%02d", ProjectSolaris.randomInt(0, 99));
     }
     public void generateAtmosphere(){
-        atmosphere =  MissileGame.planetAtmosphere[MissileGame.randomInt(0, 7)];
-        atmosphereComposition = MissileGame.randomInt(60, 100);
+        atmosphere =  ProjectSolaris.planetAtmosphere[ProjectSolaris.randomInt(0, 7)];
+        atmosphereComposition = ProjectSolaris.randomInt(60, 100);
     }
 
 
@@ -206,18 +205,18 @@ public class Planet extends Obstacle{
 
     @Override
     public void draw(){
-        MissileGame.batch.begin();
+        ProjectSolaris.batch.begin();
         sprite0.setSize(radius * (float)2.8, radius * (float)2.8);
         sprite0.setPosition(position.x - radius * (float)1.4, position.y - radius* (float)1.4);
-        sprite0.draw(MissileGame.batch);
+        sprite0.draw(ProjectSolaris.batch);
 
         sprite1.setSize(radius * 2, radius * 2);
         sprite1.setPosition(position.x - radius, position.y - radius);
-        sprite1.draw(MissileGame.batch);
+        sprite1.draw(ProjectSolaris.batch);
 
         sprite2.setSize(radius * 2, radius * 2);
         sprite2.setPosition(position.x - radius, position.y - radius);
-        sprite2.draw(MissileGame.batch);
+        sprite2.draw(ProjectSolaris.batch);
 
         if (planetType == 1){
             sprite3.setSize(radius * 3, radius * 3);
@@ -226,9 +225,9 @@ public class Planet extends Obstacle{
             sprite3.setSize(radius * 2, radius * 2);
             sprite3.setPosition(position.x - radius, position.y - radius);
         }
-        sprite3.draw(MissileGame.batch);
+        sprite3.draw(ProjectSolaris.batch);
 
-        MissileGame.batch.end();
+        ProjectSolaris.batch.end();
 
         if (displayInfo){
             drawInfo();
@@ -236,44 +235,44 @@ public class Planet extends Obstacle{
     }
 
     public void drawInfo(){
-        int textY = (int)(MissileGame.height / 100.0);
+        int textY = (int)(ProjectSolaris.height / 100.0);
         int lineHeight = 0;
         int lineWidth = 0;
 
-        MissileGame.batch.begin();
-        MissileGame.arial.getData().setScale((float)0.7);
-        MissileGame.glyphLayout.setText(MissileGame.arial, name);
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        textY +=  MissileGame.glyphLayout.height;
-        lineWidth +=  MissileGame.glyphLayout.width;
-        MissileGame.arial.getData().setScale((float)0.3);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg");
-        textY += MissileGame.height / 100.0;
+        ProjectSolaris.batch.begin();
+        ProjectSolaris.arial.getData().setScale((float)0.7);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, name);
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        textY +=  ProjectSolaris.glyphLayout.height;
+        lineWidth +=  ProjectSolaris.glyphLayout.width;
+        ProjectSolaris.arial.getData().setScale((float)0.3);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg");
+        textY += ProjectSolaris.height / 100.0;
         lineHeight += textY;
-        textY +=  MissileGame.glyphLayout.height;
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Radius: " + NumberFormat.getNumberInstance(Locale.US).format((int)(Math.pow(radius, 3) / 700)) + " km");
-        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Surface Temperature: " + this.surfaceTemp + " °C");
-        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Axial Rotation: " + rotation + "°");
-        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        MissileGame.glyphLayout.setText(MissileGame.arial, "Atmospheric Composition: " + atmosphere + "(" + (int)atmosphereComposition + "%)");
-        textY +=  MissileGame.glyphLayout.height +  MissileGame.height / 150.0;
-        MissileGame.arial.draw(MissileGame.batch, MissileGame.glyphLayout, 0, textY);
-        MissileGame.batch.end();
+        textY +=  ProjectSolaris.glyphLayout.height;
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Radius: " + NumberFormat.getNumberInstance(Locale.US).format((int)(Math.pow(radius, 3) / 700)) + " km");
+        textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Surface Temperature: " + this.surfaceTemp + " °C");
+        textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Axial Rotation: " + rotation + "°");
+        textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Atmospheric Composition: " + atmosphere + "(" + (int)atmosphereComposition + "%)");
+        textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
+        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.batch.end();
 
-        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Line);
-        MissileGame.renderer.setColor(255, 255, 255, 1);
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Line);
+        ProjectSolaris.renderer.setColor(255, 255, 255, 1);
         if (nameLine < lineWidth){
-            nameLine +=  MissileGame.width / 40.0;
+            nameLine +=  ProjectSolaris.width / 40.0;
             System.out.println(nameLine);
         }
 
-        MissileGame.renderer.line(0, lineHeight, nameLine, lineHeight);
-        MissileGame.renderer.end();
+        ProjectSolaris.renderer.line(0, lineHeight, nameLine, lineHeight);
+        ProjectSolaris.renderer.end();
     }
 }

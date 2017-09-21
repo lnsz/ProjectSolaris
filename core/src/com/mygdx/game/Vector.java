@@ -134,8 +134,8 @@ public class Vector {
     public Vector scale(){
         Vector vec = new Vector(this.x, this.y);
 
-        vec.mult(MissileGame.timeScale);
-        vec.mult(MissileGame.resolutionMult);
+        vec.mult(ProjectSolaris.timeScale);
+        vec.mult(ProjectSolaris.resolutionMult);
 
         return vec;
     }

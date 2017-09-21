@@ -26,7 +26,7 @@ import java.util.Random;
 /**
  * Created by lucas on 7/22/2016.
  */
-public class MissileGame extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
+public class ProjectSolaris extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
     public static SpriteBatch batch;
     public static ShapeRenderer renderer;
     public static OrthographicCamera camera;
@@ -424,10 +424,10 @@ public class MissileGame extends ApplicationAdapter implements GestureDetector.G
         arial.getData().setScale(height / 3000 * camera.zoom);
         arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = Gdx.graphics.getFramesPerSecond() + "";
-        glyphLayout.setText(MissileGame.arial, text);
+        glyphLayout.setText(ProjectSolaris.arial, text);
         float textX = remap(width, 0, width, cameraOriginX, cameraOriginX + cameraWidth) - glyphLayout.width;
         float textY = remap(0, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
-        arial.draw(MissileGame.batch, MissileGame.glyphLayout, textX, textY);
+        arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
         batch.end();
     }
 

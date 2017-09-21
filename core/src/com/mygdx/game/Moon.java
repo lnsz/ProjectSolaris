@@ -3,8 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Locale;
 
@@ -21,8 +19,8 @@ public class Moon extends Obstacle{
         position.y = -altitude;
         position.rotate((float)angle);
         position.add(planet.position);
-        velocity.x = (float) Math.sqrt((MissileGame.GRAVITY_CONSTANT * planet.mass *
-                MissileGame.MASS_UNITS) / (altitude * MissileGame.DISTANCE_UNITS * 1000000));
+        velocity.x = (float) Math.sqrt((ProjectSolaris.GRAVITY_CONSTANT * planet.mass *
+                ProjectSolaris.MASS_UNITS) / (altitude * ProjectSolaris.DISTANCE_UNITS * 1000000));
         if (clockwise) {
             velocity.mult(-1);
         }
@@ -40,9 +38,9 @@ public class Moon extends Obstacle{
         position.y = -perigee;
         position.rotate((float)angle);
         position.add(planet.position);
-        double GM = MissileGame.GRAVITY_CONSTANT * planet.mass * MissileGame.MASS_UNITS;
-        double r = perigee * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
-        double a = (apogee + perigee) / 2 * MissileGame.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
+        double GM = ProjectSolaris.GRAVITY_CONSTANT * planet.mass * ProjectSolaris.MASS_UNITS;
+        double r = perigee * ProjectSolaris.DISTANCE_UNITS * 1000000; // Radius of the point we want to find the velocity for
+        double a = (apogee + perigee) / 2 * ProjectSolaris.DISTANCE_UNITS * 1000000; // Radius of the semi major axis
         velocity.x = (float) Math.sqrt(GM * (2/r - 1/a));
         if(clockwise){
             velocity.mult(-1);
@@ -55,14 +53,14 @@ public class Moon extends Obstacle{
     }
 
     public void generateSprites(){
-        int spriteNum = MissileGame.randomInt(1, 3);
+        int spriteNum = ProjectSolaris.randomInt(1, 3);
         texture = new Texture(Gdx.files.internal("moon/layer_" + String.format(Locale.US, "%02d", spriteNum) + ".png"));
         sprite = new Sprite(texture);
     }
 
     @Override
     public void run(){
-        if (!MissileGame.isPaused) {
+        if (!ProjectSolaris.isPaused) {
             planet.gravity(this);
             update();
         }
@@ -75,10 +73,10 @@ public class Moon extends Obstacle{
 //        renderer.setColor(255, 255, 255, 1);
 //        renderer.circle(position.x, position.y, radius);
 //        renderer.end();
-        MissileGame.batch.begin();
+        ProjectSolaris.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(position.x - radius, position.y - radius);
-        sprite.draw(MissileGame.batch);
-        MissileGame.batch.end();
+        sprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.end();
     }
 }

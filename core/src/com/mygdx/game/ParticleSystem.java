@@ -1,9 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
@@ -85,9 +82,9 @@ public class ParticleSystem {
         this.position.y = y;
         int index = 0;
         Particle p;
-        MissileGame.batch.begin();
-        MissileGame.renderer.begin(ShapeRenderer.ShapeType.Filled);
-        MissileGame.renderer.setColor(255, 255, 255, 1);
+        ProjectSolaris.batch.begin();
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(255, 255, 255, 1);
         while (index < lastAlive){
             p = particles.get(index);
 
@@ -113,8 +110,8 @@ public class ParticleSystem {
                 }
             }
         }
-        MissileGame.batch.end();
-        MissileGame.renderer.end();
+        ProjectSolaris.batch.end();
+        ProjectSolaris.renderer.end();
     }
 
     public boolean isAlive(){
