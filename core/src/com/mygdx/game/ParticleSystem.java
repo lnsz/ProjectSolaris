@@ -85,7 +85,7 @@ public class ParticleSystem {
         ProjectSolaris.batch.begin();
         ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
         ProjectSolaris.renderer.setColor(255, 255, 255, 1);
-        while (index < lastAlive){
+        while (index <= lastAlive){
             p = particles.get(index);
 
             if (p.alive) {

@@ -6,40 +6,40 @@ package com.mygdx.game;
 public class Levels {
     // Some default values, should make it easier to understand and build new levels
     // Mass
-    static final float MASSIVE_PLANET_MASS = 2000;
-    static final float LARGE_PLANET_MASS = 1600;
-    static final float NORMAL_PLANET_MASS = 1200;
-    static final float SMALL_PLANET_MASS = 800;
-    static final float TINY_PLANET_MASS = 400;
+    static final float MASSIVE_PLANET_MASS = 500;
+    static final float LARGE_PLANET_MASS = 400;
+    static final float NORMAL_PLANET_MASS = 300;
+    static final float SMALL_PLANET_MASS = 200;
+    static final float TINY_PLANET_MASS = 100;
 
-    static final float MASSIVE_MOON_MASS = 1000;
-    static final float LARGE_MOON_MASS = 800;
-    static final float NORMAL_MOON_MASS = 600;
-    static final float SMALL_MOON_MASS = 400;
-    static final float TINY_MOON_MASS = 200;
+    static final float MASSIVE_MOON_MASS = 250;
+    static final float LARGE_MOON_MASS = 200;
+    static final float NORMAL_MOON_MASS = 150;
+    static final float SMALL_MOON_MASS = 100;
+    static final float TINY_MOON_MASS = 50;
 
     // Radius
-    static final float MASSIVE_PLANET_RADIUS = ProjectSolaris.height / 4;
-    static final float LARGE_PLANET_RADIUS = ProjectSolaris.height / 6;
-    static final float NORMAL_PLANET_RADIUS = ProjectSolaris.height / 8;
-    static final float SMALL_PLANET_RADIUS = ProjectSolaris.height / 10;
-    static final float TINY_PLANET_RADIUS = ProjectSolaris.height / 12;
+    static final float MASSIVE_PLANET_RADIUS = ProjectSolaris.height / 12;
+    static final float LARGE_PLANET_RADIUS = ProjectSolaris.height / 16;
+    static final float NORMAL_PLANET_RADIUS = ProjectSolaris.height / 20;
+    static final float SMALL_PLANET_RADIUS = ProjectSolaris.height / 24;
+    static final float TINY_PLANET_RADIUS = ProjectSolaris.height / 28;
 
-    static final float MASSIVE_MOON_RADIUS = ProjectSolaris.height / 10;
-    static final float LARGE_MOON_RADIUS = ProjectSolaris.height / 14;
-    static final float NORMAL_MOON_RADIUS = ProjectSolaris.height / 16;
-    static final float SMALL_MOON_RADIUS = ProjectSolaris.height / 22;
-    static final float TINY_MOON_RADIUS = ProjectSolaris.height / 26;
+    static final float MASSIVE_MOON_RADIUS = ProjectSolaris.height / 30;
+    static final float LARGE_MOON_RADIUS = ProjectSolaris.height / 40;
+    static final float NORMAL_MOON_RADIUS = ProjectSolaris.height / 50;
+    static final float SMALL_MOON_RADIUS = ProjectSolaris.height / 60;
+    static final float TINY_MOON_RADIUS = ProjectSolaris.height / 70;
 
-    static final float MASSIVE_MOON_ALTITUDE = 5 * ProjectSolaris.height / 4;
-    static final float LARGE_MOON_ALTITUDE = ProjectSolaris.height;
-    static final float NORMAL_MOON_ALTITUDE = 3 * ProjectSolaris.height / 4;
-    static final float SMALL_MOON_ALTITUDE = 2 * ProjectSolaris.height / 4;
-    static final float TINY_MOON_ALTITUDE = ProjectSolaris.height / 4;
+    static final float MASSIVE_MOON_ALTITUDE = 5 * ProjectSolaris.height / 8;
+    static final float LARGE_MOON_ALTITUDE = 4 * ProjectSolaris.height / 8;
+    static final float NORMAL_MOON_ALTITUDE = 3 * ProjectSolaris.height / 8;
+    static final float SMALL_MOON_ALTITUDE = 2 * ProjectSolaris.height / 8;
+    static final float TINY_MOON_ALTITUDE = ProjectSolaris.height / 8;
 
-    static final float FAST_COMET_SPEED = 70;
-    static final float NORMAL_COMET_SPEED = 50;
-    static final float SLOW_COMET_SPEED = 30;
+    static final float FAST_COMET_SPEED = 50;
+    static final float NORMAL_COMET_SPEED = 30;
+    static final float SLOW_COMET_SPEED = 10;
 
     private Levels(){
     }
@@ -67,7 +67,7 @@ public class Levels {
                 case 1:
                     // Introduces comets and asteroids
                     player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.TOP_RIGHT);
-                    planet = new Planet(ProjectSolaris.Preset.BOTTOM_LEFT, NORMAL_PLANET_RADIUS, NORMAL_PLANET_MASS);
+                    planet = new Planet(ProjectSolaris.Preset.BOTTOM_LEFT, MASSIVE_PLANET_RADIUS, NORMAL_PLANET_MASS);
                     ProjectSolaris.entities.addEntity(planet);
                     ProjectSolaris.entities.addEntity(new Asteroid(NORMAL_MOON_RADIUS, true,
                             Math.PI, planet, SMALL_MOON_ALTITUDE));

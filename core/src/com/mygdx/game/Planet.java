@@ -62,11 +62,11 @@ public class Planet extends Obstacle{
 
     public Planet(float locX, float locY, float radius, float mass){
         super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
-                ProjectSolaris.defaultOriginX,
-                ProjectSolaris.defaultOriginX + ProjectSolaris.defaultWidth),
+                ProjectSolaris.origin.x,
+                ProjectSolaris.origin.x + ProjectSolaris.width),
                 ProjectSolaris.remap(locY, 0, ProjectSolaris.height,
-                        ProjectSolaris.defaultOriginY,
-                        ProjectSolaris.defaultOriginY + ProjectSolaris.defaultHeight), radius);
+                        ProjectSolaris.origin.y,
+                        ProjectSolaris.origin.y + ProjectSolaris.height), radius);
         this.mass = mass;
         randomSize = radius < 0 && mass < 0; // If radius and mass are less than zero, they are randomized
         generateVariables();

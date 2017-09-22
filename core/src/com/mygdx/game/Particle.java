@@ -16,7 +16,7 @@ public class Particle extends Entity{
         decay = (255 - 30) / duration;
         randomness = 1;
         mass = 0;
-        radius = 3;
+        radius = 2;
         this.sprite = sprite;
 
     }
@@ -27,11 +27,7 @@ public class Particle extends Entity{
         position.add(velocity);
         acceleration.mult(0);
 
-        Vector distance = new Vector(position.x - ProjectSolaris.width / 2,
-                position.y - ProjectSolaris.height / 2); // Distance from current position to center
-        if(distance.mag() > ProjectSolaris.entityBorder){
-            alive = false;
-        }
+        alive = !ProjectSolaris.outsideScreen(position);
     }
 
     @Override

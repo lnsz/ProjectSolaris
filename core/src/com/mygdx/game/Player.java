@@ -14,11 +14,11 @@ public class Player extends Entity{
     private boolean flashing;
     public Player(float locX, float locY){
         super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
-                ProjectSolaris.defaultOriginX,
-                ProjectSolaris.defaultOriginX + ProjectSolaris.defaultWidth),
+                ProjectSolaris.origin.x,
+                ProjectSolaris.origin.x + ProjectSolaris.width),
                 ProjectSolaris.remap(locY, 0, ProjectSolaris.height,
-                        ProjectSolaris.defaultOriginY,
-                        ProjectSolaris.defaultOriginY + ProjectSolaris.defaultHeight));
+                        ProjectSolaris.origin.y,
+                        ProjectSolaris.origin.y + ProjectSolaris.height));
         maxAmmo = 5;
         ammo = maxAmmo;
         radius = 50;
@@ -51,8 +51,8 @@ public class Player extends Entity{
         ProjectSolaris.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = ammo + "";
         ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, text);
-        float textX = ProjectSolaris.remap(0, 0, ProjectSolaris.width, ProjectSolaris.cameraOriginX, ProjectSolaris.cameraOriginX + ProjectSolaris.cameraWidth);
-        float textY = ProjectSolaris.remap(0, 0, ProjectSolaris.height, ProjectSolaris.cameraOriginY, ProjectSolaris.cameraOriginY + ProjectSolaris.cameraHeight);
+        float textX = ProjectSolaris.remap(0, 0, ProjectSolaris.width, ProjectSolaris.origin.x, ProjectSolaris.origin.x + ProjectSolaris.width);
+        float textY = ProjectSolaris.remap(0, 0, ProjectSolaris.height, ProjectSolaris.origin.y, ProjectSolaris.origin.y + ProjectSolaris.height);
         ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
         ProjectSolaris.batch.end();
     }

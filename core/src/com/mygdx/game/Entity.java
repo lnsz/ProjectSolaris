@@ -27,11 +27,6 @@ public class Entity {
         position.add(velocity.scale());
         acceleration.mult(0);
 
-        Vector distance = new Vector(position.x - ProjectSolaris.width / 2,
-                position.y - ProjectSolaris.height / 2); // Distance from current position to center
-        if(distance.mag() > ProjectSolaris.entityBorder){
-            alive = false;
-        }
     }
 
     public void draw(){
