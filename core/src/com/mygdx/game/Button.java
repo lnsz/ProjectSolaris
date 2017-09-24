@@ -69,10 +69,10 @@ public class Button {
 
     public void scale(){
         // Moves button so it's in the same position when zoom is changed
-        position.x = ProjectSolaris.remap(startingposition.x, 0, ProjectSolaris.width, ProjectSolaris.cameraOriginX,
-                ProjectSolaris.cameraOriginX + ProjectSolaris.cameraWidth);
-        position.y = ProjectSolaris.remap(startingposition.y, 0, ProjectSolaris.height, ProjectSolaris.cameraOriginY,
-                ProjectSolaris.cameraOriginY + ProjectSolaris.cameraHeight);
+        position.x = ProjectSolaris.remap(startingposition.x, 0, ProjectSolaris.width, ProjectSolaris.origin.x,
+                ProjectSolaris.origin.x + ProjectSolaris.width);
+        position.y = ProjectSolaris.remap(startingposition.y, 0, ProjectSolaris.height, ProjectSolaris.origin.y,
+                ProjectSolaris.origin.y + ProjectSolaris.height);
         width = startingWidth * ProjectSolaris.camera.zoom;
         height = startingHeight * ProjectSolaris.camera.zoom;
 

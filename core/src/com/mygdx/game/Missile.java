@@ -14,7 +14,7 @@ public class Missile extends Entity{
     ParticleSystem flightParticles, deathParticles;
     Sprite particleSprite, explosionSprite;
     Texture particleTexture, explosionTexture;
-    float startTime, life;
+    float startTime, maxLife, life;
     Trail trail;
 
     public Missile(float locX, float locY, float tarX, float tarY, float str){
@@ -26,7 +26,9 @@ public class Missile extends Entity{
         particleSprite = new Sprite(particleTexture);
         explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
         explosionSprite = new Sprite(explosionTexture);
-        life = 10000; // Missile lasts 10 seconds
+        maxLife = 5000; // Missile lasts 5 seconds
+        life = maxLife;
+        this.radius = 10;
         startTime = TimeUtils.nanosToMillis(TimeUtils.nanoTime());
         // Set initial velocity of missile
         velocity = new Vector(tarX, tarY);
@@ -36,6 +38,18 @@ public class Missile extends Entity{
         trail = new Trail(locX, locY, radius, 20);
 
         this.flightParticles = new ParticleSystem(position.x, position.y, velocity, 300, 20, true, particleSprite);
+    }
+
+    @ Override
+    public void update(){
+        velocity.add(acceleration.scale());
+        position.add(velocity.scale());
+        acceleration.mult(0);
+        life = maxLife - (TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - startTime);
+
+        // Destroy missiles outside entity border
+        Vector distance = new Vector(position.x - ProjectSolaris.width / 2,
+                position.y - ProjectSolaris.height / 2); // Distance from current position to center
     }
 
     @Override
@@ -51,6 +65,8 @@ public class Missile extends Entity{
 
     @Override
     public void run(){
+        ProjectSolaris.camera.position.x += (position.x - ProjectSolaris.camera.position.x) * (maxLife / Math.max(life, 500)) * 0.1;
+        ProjectSolaris.camera.position.y += (position.y - ProjectSolaris.camera.position.y) * (maxLife / Math.max(life, 500)) * 0.1;
         if(visible) {
             if (!ProjectSolaris.isPaused) {
                 update();
@@ -59,7 +75,7 @@ public class Missile extends Entity{
                     // explode!
                     explode();
                 }
-                if (TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - startTime > life){
+                if (life <= 0){
                     explode();
                 }
             }
@@ -68,6 +84,7 @@ public class Missile extends Entity{
         else{
             deathParticles.update(position.x, position.y, velocity);
             if (!deathParticles.isAlive()){
+                ProjectSolaris.resetCamera = true;
                 alive = false;
             }
         }
@@ -85,7 +102,9 @@ public class Missile extends Entity{
     public void explode(){
         ProjectSolaris.missile = false;
         visible = false;
-        deathParticles = new ParticleSystem(position.x, position.y, 500, 100, false, explosionSprite);
+        velocity.add(acceleration.scale());
+        position.add(velocity.scale());
+        deathParticles = new ParticleSystem(position.x, position.y, 150, 75, false, explosionSprite);
         flightParticles.recycle = false;
     }
 

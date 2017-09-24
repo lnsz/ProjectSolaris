@@ -31,21 +31,20 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public static ShapeRenderer renderer;
     public static OrthographicCamera camera;
 
-    // Screen size variables. Height and width are the actual resolution, the others are the
-    // size of the screen after being changed because of the camera zoom
     public static String[] planetNames = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota",
             "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon",
             "Phi", "Chi", "Psi", "Omega"};
     public static String[] planetAtmosphere = {"Hydrogen", "Helium", "Oxygen", "Carbon Dioxide", "Nitrogen", "Methane",
             "Sulfur", "Ammonia"};
-    public static float height, width, cameraHeight, cameraWidth, cameraOriginX, cameraOriginY,
-            maxHeight, maxWidth, maxOriginX, maxOriginY,
-            defaultHeight, defaultWidth, defaultOriginX, defaultOriginY, entityBorder;
+    // Screen size variables
+    public static float height, width, entityBorder;
+    public static Vector center, origin;
     public static double GRAVITY_CONSTANT = 6.67e-11;
     public static double DISTANCE_UNITS = 500; // 1 pixel = 500 km
     public static double MASS_UNITS = 1e22; // 1 mass unit = 1e22 kg
     public static Random generator;
     public static boolean isPaused = false; // True iff game is paused
+    public static boolean resetCamera = false; // When a missile explodes, this is set to true until camera is reset
     public static float timeScale, maxTimeScale, minTimeScale, timeScaleStage,
             resolutionMult; // Used to scale velocity of entities
     public static EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
@@ -74,7 +73,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Gesture detector and index multiplexer handle the touch screen
     GestureDetector gestureDetector;
     FPSLogger fpsLogger;
-    float maxZoom, minZoom, defaultZoom, startZoom; // Zoom values
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
 
     // Fonts
@@ -250,14 +248,35 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         }
     }
 
+    public static boolean outsideScreen(Vector v){
+        return (v.x < camera.position.x - center.x || v.x > camera.position.x + center.x ||
+                v.y < camera.position.y - center.y || v.y > camera.position.y + center.y);
+    }
+
     public void updateCamera(){
-        // Update camera to apply any changes to camera zoom and positions,
+        // Update camera to apply any changes to camera positions,
         // then set the camera variables to their updated value
         camera.update();
-        cameraHeight = camera.viewportHeight * camera.zoom;
-        cameraWidth = camera.viewportWidth * camera.zoom;
-        cameraOriginX = camera.position.x - cameraWidth / 2;
-        cameraOriginY = camera.position.y - cameraHeight / 2;
+        height = camera.viewportHeight;
+        width = camera.viewportWidth;
+        center = new Vector(width / 2, height / 2);
+        origin = new Vector(camera.position.x - center.x, camera.position.x - center.y);
+        origin.x = camera.position.x - width / 2;
+        origin.y = camera.position.y - height / 2;
+    }
+
+    public static void centerCamera() {
+        camera.position.x = center.x;
+        camera.position.y = center.y;
+    }
+
+    public static void resetCamera() {
+        if (camera.position.x != center.x && camera.position.x != center.y){
+            camera.position.x += (center.x - ProjectSolaris.camera.position.x) * 0.05;
+            camera.position.y += (center.y - ProjectSolaris.camera.position.y) * 0.05;
+        } else {
+            resetCamera = false;
+        }
     }
 
     public void setUpCamera(){
@@ -265,21 +284,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
-        // Set zoom  and camera variables
-        maxZoom = 4;
-        minZoom = 4;
-        startZoom = 1;
-        defaultZoom = 4;
-        maxHeight = camera.viewportHeight * maxZoom;
-        maxWidth = camera.viewportWidth * maxZoom;
-        maxOriginX = width / 2 - maxWidth / 2;
-        maxOriginY = height / 2 - maxHeight / 2;
-        entityBorder = (float)Math.sqrt(Math.pow(maxWidth / 2, 2) + Math.pow(maxHeight / 2, 2)); // Maximum distance that entities can be from the center
-        defaultHeight = camera.viewportHeight * defaultZoom;
-        defaultWidth = camera.viewportWidth * defaultZoom;
-        defaultOriginX = width / 2 - defaultWidth / 2;
-        defaultOriginY = height / 2 - defaultHeight / 2;
-        camera.zoom = startZoom;
+        // Set camera variables
+        entityBorder = (float)Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2)); // Maximum distance that entities can be from the center
     }
 
     public void strMeter(){
@@ -323,12 +329,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void background(){
         // Draws background sprite
         if (mode == Mode.PLAY || mode == Mode.PAUSE) {
-            bg.setSize(maxWidth, maxHeight);
-            bg.setPosition(maxOriginX, maxOriginY);
+            bg.setSize(width, height);
+            bg.setPosition(origin.x, origin.y);
         }
         else{
             bg.setSize(width, height);
-            bg.setPosition(cameraOriginX, cameraOriginY);
+            bg.setPosition(origin.x, origin.y);
         }
         bg.draw();
     }
@@ -403,6 +409,9 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void play(){
         // Show strength of shot if the player is currently pressing anywhere on the screen
         isPaused = false;
+        if (resetCamera){
+            resetCamera();
+        }
         if (isPressed){
             strMeter();
         }
@@ -421,12 +430,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public void drawFPS(){
         batch.begin();
-        arial.getData().setScale(height / 3000 * camera.zoom);
+        arial.getData().setScale(height / 3000);
         arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = Gdx.graphics.getFramesPerSecond() + "";
         glyphLayout.setText(ProjectSolaris.arial, text);
-        float textX = remap(width, 0, width, cameraOriginX, cameraOriginX + cameraWidth) - glyphLayout.width;
-        float textY = remap(0, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
+        float textX = remap(width, 0, width, origin.x, origin.x + width) - glyphLayout.width;
+        float textY = remap(0, 0, height, origin.y, origin.y + height);
         arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
         batch.end();
     }
@@ -474,48 +483,48 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         Vector temp = new Vector(0, 0);
         switch(pos){
             case TOP_LEFT:
-                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width / 5, 0,width, origin.x, origin.x + width);
+                temp.y = remap(height / 5, 0, height, origin.y, origin.y + height);
                 break;
 
             case TOP:
-                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width / 2, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height / 5, 0, height, origin.y, origin.y + height);
                 break;
 
             case TOP_RIGHT:
-                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width - width / 5, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height / 5, 0, height, origin.y, origin.y + height);
                 break;
 
             case CENTER_LEFT:
-                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
-                break;
+                temp.x = remap(width / 5, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height / 2, 0, height, origin.y, origin.y + height);
+            break;
 
             case CENTER:
-                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width / 2, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height / 2, 0, height, origin.y, origin.y + height);
                 break;
 
             case CENTER_RIGHT:
-                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height / 2, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width - width / 5, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height / 2, 0, height, origin.y, origin.y + height);
                 break;
 
             case BOTTOM_LEFT:
-                temp.x = remap(width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width / 5, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height - height / 5, 0, height, origin.y, origin.y + height);
                 break;
 
             case BOTTOM:
-                temp.x = remap(width / 2, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width / 2, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height - height / 5, 0, height, origin.y, origin.y + height);
                 break;
 
             case BOTTOM_RIGHT:
-                temp.x = remap(width - width / 5, 0,width, defaultOriginX, defaultOriginX + defaultWidth);
-                temp.y = remap(height - height / 5, 0, height, defaultOriginY, defaultOriginY + defaultHeight);
+                temp.x = remap(width - width / 5, 0, width, origin.x, origin.x + width);
+                temp.y = remap(height - height / 5, 0, height, origin.y, origin.y + height);;
                 break;
 
             default:
@@ -526,25 +535,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public static float getTime(){
         return System.currentTimeMillis();
-    }
-
-    @Override
-    public boolean zoom(float initialDistance, float distance) {
-        // This method is called when a pinching motion is detected
-        // If in a mode where zoom works, change camera zoom
-        switch (mode) {
-            case PLAY:
-                if (initialDistance / distance > 1 && camera.zoom < maxZoom) {
-                    camera.zoom += 0.01; // Increase zoom if pinching in
-                } else if (camera.zoom > minZoom) {
-                    camera.zoom -= 0.01; // Decrease zoom if pinching out
-                }
-                isPressed = false;
-                return true;
-
-            default:  // Does nothing in modes where it's not needed
-                return false;
-        }
     }
 
     @Override
@@ -574,8 +564,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public boolean touchUp(int x, int y, int pointer, int button) {
         // This method is called when the screen is released
         // Most buttons are checked here, and the mode is changed if they are clicked
-        float remapX = remap(x, 0, width, cameraOriginX, cameraOriginX + cameraWidth);
-        float remapY = remap(y, 0, height, cameraOriginY, cameraOriginY + cameraHeight);
+        float remapX = remap(x, 0, width, origin.x, origin.x + width);
+        float remapY = remap(y, 0, height, origin.y, origin.y + height);
         switch(mode){
             case START_SCREEN:
                 if (startButton.isClicked(remapX, remapY)){
@@ -603,10 +593,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 pos.sub(lastTap);
                 if(pos.mag() < width / 20) {
                     if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
-                        // Set zoom to it's default value when the game starts
-                        camera.position.x = width / 2;
-                        camera.position.y = height / 2;
-                        camera.zoom = defaultZoom;
                         Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
                         mode = Mode.PLAY;
                     }
@@ -629,9 +615,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                     mode = Mode.PLAY;
                 }
                 if (menuButton.isClicked(remapX, remapY)){
-                    // Set zoom back to the menu zoom
-                    camera.zoom = startZoom;
                     mode = Mode.MAIN_MENU;
+                    centerCamera();
                 }
                 break;
 
@@ -666,8 +651,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 // Create a missile where the release happened
                 if(isPressed && !missile) {
                     lastDuration = System.currentTimeMillis() - lastDown;
-                    // Min str is 10
-                    player.shootMissile(remapX,remapY,(lastDuration > 500) ? (lastDuration / 50) : 10);
+                    // Min str is 5
+                    player.shootMissile(remapX,remapY,(lastDuration > 500) ? (lastDuration / 50) : 5);
                     isPressed = false;
                     // The missile strength is based on how long the screen was held
                 }
@@ -732,6 +717,9 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     @Override
     public void pinchStop(){}
+
+    @Override
+    public boolean zoom(float initialDistance, float distance) { return false; }
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY){
