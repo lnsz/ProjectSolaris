@@ -170,7 +170,6 @@ public class Planet extends Obstacle{
         String c1 = reversedColours ? colourScheme.c2  : colourScheme.c1;
         String c2 = reversedColours ? colourScheme.c1  : colourScheme.c2;
         String c3 = colourScheme.c3;
-        System.out.println("c1: " + c1 + ", c2: " + c2 + ", c3: " + c3);
         texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format(Locale.US, "%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
         sprite0.setOrigin(radius, radius);
@@ -269,7 +268,6 @@ public class Planet extends Obstacle{
         ProjectSolaris.renderer.setColor(255, 255, 255, 1);
         if (nameLine < lineWidth){
             nameLine +=  ProjectSolaris.width / 40.0;
-            System.out.println(nameLine);
         }
 
         ProjectSolaris.renderer.line(0, lineHeight, nameLine, lineHeight);

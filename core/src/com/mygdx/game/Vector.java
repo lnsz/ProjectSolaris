@@ -126,6 +126,10 @@ public class Vector {
         y = 0;
     }
 
+    public static float distance(Vector v1, Vector v2){
+        return (sub(v2, v1).mag());
+    }
+
     @Override
     public String toString(){
         return("(" + this.x + ", " + this.y + ")");
