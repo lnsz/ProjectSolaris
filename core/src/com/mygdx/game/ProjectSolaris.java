@@ -78,7 +78,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
 
     // Fonts
-    public static BitmapFont dinPro;
+    public static BitmapFont dinPro1;
+    public static BitmapFont dinPro2;
     public static BitmapFont arial;
     public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;  // List of buttons in the level selector screen
@@ -134,11 +135,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         lastTouch = new Vector(0, 0);
         lastTap = new Vector(0, 0);
 
-        // Initialize font variables
-        arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
+        dinPro1 = new BitmapFont(Gdx.files.internal("fonts/DinPro1/DinPro1.fnt"), true);
+        dinPro1.setColor(Color.WHITE);
+        dinPro2 = new BitmapFont(Gdx.files.internal("fonts/DinPro2/DinPro2.fnt"), true);
+        dinPro2.setColor(Color.WHITE);
+        arial = new BitmapFont(Gdx.files.internal("fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
-        //dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
-        //dinPro.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
