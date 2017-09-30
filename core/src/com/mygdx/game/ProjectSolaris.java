@@ -87,7 +87,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Touch variables
     long lastDown, lastDuration;
     Vector lastTouch, lastTap;
-    boolean isPressed = false;
+    public static boolean isPressed = false;
     float xDrag = 0;
     float xDragTotal = 0;
     float xDragVelocity = 0;
@@ -459,6 +459,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         entities.run();
         retryButton.scale();
         retryButton.draw();
+        menuButton.scale();
+        menuButton.draw();
     }
 
     public void pauseGame(){
@@ -647,6 +649,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 if (retryButton.isClicked(remapX, remapY)){
                     Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
                     mode = Mode.PLAY;
+                }
+                if (menuButton.isClicked(remapX, remapY)){
+                    mode = Mode.MAIN_MENU;
+                    centerCamera();
                 }
                 break;
 

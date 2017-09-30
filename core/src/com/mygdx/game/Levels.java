@@ -49,6 +49,8 @@ public class Levels {
         player.resetAmmo();
         ProjectSolaris.missile = false;
         ProjectSolaris.bg = new Background(episodeSelected, levelSelected / 3);
+        ProjectSolaris.missileReady = true;
+        ProjectSolaris.isPressed = false;
         ProjectSolaris.entities.clear();
         if (episodeSelected == 0) {
             switch (levelSelected) {
