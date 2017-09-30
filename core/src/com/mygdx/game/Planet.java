@@ -170,7 +170,6 @@ public class Planet extends Obstacle{
         String c1 = reversedColours ? colourScheme.c2  : colourScheme.c1;
         String c2 = reversedColours ? colourScheme.c1  : colourScheme.c2;
         String c3 = colourScheme.c3;
-        System.out.println("c1: " + c1 + ", c2: " + c2 + ", c3: " + c3);
         texture0 = new Texture(Gdx.files.internal("planet/layer0_" + String.format(Locale.US, "%02d", layer0) + ".png"));
         sprite0 = new Sprite(texture0);
         sprite0.setOrigin(radius, radius);
@@ -238,38 +237,46 @@ public class Planet extends Obstacle{
         int textY = (int)(ProjectSolaris.height / 100.0);
         int lineHeight = 0;
         int lineWidth = 0;
+        String text = "";
 
         ProjectSolaris.batch.begin();
-        ProjectSolaris.arial.getData().setScale((float)0.7);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, name);
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.dinPro1.getData().setScale((float)0.7);
+        ProjectSolaris.dinPro2.getData().setScale((float)0.7);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro2, name.toUpperCase());
+        ProjectSolaris.dinPro2.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
         textY +=  ProjectSolaris.glyphLayout.height;
+        System.out.println(ProjectSolaris.glyphLayout.height);
         lineWidth +=  ProjectSolaris.glyphLayout.width;
-        ProjectSolaris.arial.getData().setScale((float)0.3);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg");
-        textY += ProjectSolaris.height / 100.0;
+        ProjectSolaris.dinPro1.getData().setScale((float)0.3);
+        text = "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg";
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro1, text);
+        System.out.println(ProjectSolaris.glyphLayout.height);
+        textY += ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
         lineHeight += textY;
-        textY +=  ProjectSolaris.glyphLayout.height;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Radius: " + NumberFormat.getNumberInstance(Locale.US).format((int)(Math.pow(radius, 3) / 700)) + " km");
+        textY +=  ProjectSolaris.height / 150.0;
+        ProjectSolaris.dinPro1.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        text = "Radius: " + NumberFormat.getNumberInstance(Locale.US).format((int)(Math.pow(radius, 3) / 700)) + " km";
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro1, text);
         textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Surface Temperature: " + this.surfaceTemp + " °C");
+        ProjectSolaris.dinPro1.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        text = "Surface Temperature: " + this.surfaceTemp + " °C";
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro1, text);
         textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Axial Rotation: " + rotation + "°");
+        ProjectSolaris.dinPro1.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        text = "Axial Rotation: " + rotation + "°";
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro1, text);
         textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, "Atmospheric Composition: " + atmosphere + "(" + (int)atmosphereComposition + "%)");
+        ProjectSolaris.dinPro1.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        text = "Atmospheric Composition: " + atmosphere + " (" + (int)atmosphereComposition + "%)";
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro1, text);
         textY +=  ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
+        ProjectSolaris.dinPro1.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
         ProjectSolaris.batch.end();
 
         ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Line);
         ProjectSolaris.renderer.setColor(255, 255, 255, 1);
         if (nameLine < lineWidth){
             nameLine +=  ProjectSolaris.width / 40.0;
-            System.out.println(nameLine);
         }
 
         ProjectSolaris.renderer.line(0, lineHeight, nameLine, lineHeight);

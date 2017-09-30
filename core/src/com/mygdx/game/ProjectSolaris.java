@@ -49,14 +49,16 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
             resolutionMult; // Used to scale velocity of entities
     public static EntitySystem entities; // Obstacles, missiles and most game objects are stored in this entity system
     public static boolean missile = false; // True iff there is a live missile
-    enum Mode {START_SCREEN,
+    public static boolean missileReady = true;
+    public enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
             PAUSE,
         LEVEL_SELECTOR,
-        TEST
+        TEST,
+        LEVEL_FAILED,
     }
-    enum Preset{TOP_RIGHT,
+    public enum Preset{TOP_RIGHT,
         TOP,
         TOP_LEFT,
         CENTER_LEFT,
@@ -67,8 +69,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         BOTTOM_RIGHT
     }
     Button startButton, playButton, settingsButton, testButton, shopButton, pauseButton, resumeButton,
-            menuButton, levelButton, timeScaleButton, seedButton; // Buttons
-    Mode mode; // Mode enum used for selecting
+            menuButton, levelButton, timeScaleButton, seedButton, retryButton; // Buttons
+    public static Mode mode; // Mode enum used for selecting
 
     // Gesture detector and index multiplexer handle the touch screen
     GestureDetector gestureDetector;
@@ -76,7 +78,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
 
     // Fonts
-    public static BitmapFont dinPro;
+    public static BitmapFont dinPro1;
+    public static BitmapFont dinPro2;
     public static BitmapFont arial;
     public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;  // List of buttons in the level selector screen
@@ -84,9 +87,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Touch variables
     long lastDown, lastDuration;
     Vector lastTouch, lastTap;
-    boolean isPressed = false;
-    boolean dragLeft = false;
-    boolean dragRight = false;
+    public static boolean isPressed = false;
     float xDrag = 0;
     float xDragTotal = 0;
     float xDragVelocity = 0;
@@ -134,11 +135,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         lastTouch = new Vector(0, 0);
         lastTap = new Vector(0, 0);
 
-        // Initialize font variables
-        arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
+        dinPro1 = new BitmapFont(Gdx.files.internal("fonts/DinPro1/DinPro1.fnt"), true);
+        dinPro1.setColor(Color.WHITE);
+        dinPro2 = new BitmapFont(Gdx.files.internal("fonts/DinPro2/DinPro2.fnt"), true);
+        dinPro2.setColor(Color.WHITE);
+        arial = new BitmapFont(Gdx.files.internal("fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
-        //dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
-        //dinPro.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
         // Initialize velocity variables
@@ -178,44 +180,48 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public void createButtons(){
         // Set the texture and sprites for a button, then create the button
-        Texture tempTexture = new Texture(Gdx.files.internal("startButton.png"));
+        Texture tempTexture = new Texture(Gdx.files.internal("button/startButton.png"));
         Sprite tempSprite = new Sprite(tempTexture);
         startButton = new Button(0, 0, width, height, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("playButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/playButton.png"));
         tempSprite = new Sprite(tempTexture);
         playButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
         levelButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("shopButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/shopButton.png"));
         tempSprite = new Sprite(tempTexture);
         shopButton = new Button(width / 6, height / 2, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("settingsButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/settingsButton.png"));
         tempSprite = new Sprite(tempTexture);
         settingsButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("testButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/testButton.png"));
         tempSprite = new Sprite(tempTexture);
         testButton = new Button(width / 6, (float)2.5 * height / 3, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("seedButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/seedButton.png"));
         tempSprite = new Sprite(tempTexture);
         seedButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("pauseButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/pauseButton.png"));
         tempSprite = new Sprite(tempTexture);
         pauseButton = new Button(0, height - height / 20, width / 10, height / 20, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("resumeButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/resumeButton.png"));
         tempSprite = new Sprite(tempTexture);
         resumeButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("menuButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/menuButton.png"));
         tempSprite = new Sprite(tempTexture);
         menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("timeScaleButton1.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/retryButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        retryButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+
+        tempTexture = new Texture(Gdx.files.internal("button/timeScaleButton1.png"));
         tempSprite = new Sprite(tempTexture);
         timeScaleButton = new Button(width - width / 10, height - height / 20, width / 10, height / 20, tempSprite);
 
@@ -223,7 +229,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public void createLevelButtons(){
-        Texture tempTexture = new Texture(Gdx.files.internal("levelButton.png"));
+        Texture tempTexture = new Texture(Gdx.files.internal("button/levelButton.png"));
         Sprite tempSprite = new Sprite(tempTexture);
         // All these numbers are just for figuring out the position of the button on screen
         episodeNumber = 3;
@@ -271,11 +277,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public static void resetCamera() {
-        if (camera.position.x != center.x && camera.position.x != center.y){
+        if (Vector.distance(new Vector(camera.position.x, camera.position.y), center) > 3){
             camera.position.x += (center.x - ProjectSolaris.camera.position.x) * 0.05;
             camera.position.y += (center.y - ProjectSolaris.camera.position.y) * 0.05;
         } else {
             resetCamera = false;
+            missileReady = true;
         }
     }
 
@@ -289,7 +296,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public void strMeter(){
-        if(!missile) {
+        if(missileReady) {
             //don't show strMeter with no ammo
             if (player.ammo <= 0) {
                 return;
@@ -328,14 +335,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public void background(){
         // Draws background sprite
-        if (mode == Mode.PLAY || mode == Mode.PAUSE) {
-            bg.setSize(width, height);
-            bg.setPosition(origin.x, origin.y);
-        }
-        else{
-            bg.setSize(width, height);
-            bg.setPosition(origin.x, origin.y);
-        }
+        bg.setSize(width, height);
+        bg.setPosition(origin.x, origin.y);
         bg.draw();
     }
 
@@ -396,6 +397,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 pauseGame();
                 break;
 
+            case LEVEL_FAILED:
+                levelFailed();
+                break;
+
             case TEST:
                 seedButton.draw();
                 entities.run();
@@ -406,9 +411,17 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         }
     }
 
+    public void levelStatus() {
+        // Checks if level is finished or failed
+        if (missileReady && !player.hasAmmo()){
+            mode = Mode.LEVEL_FAILED;
+        }
+    }
+
     public void play(){
         // Show strength of shot if the player is currently pressing anywhere on the screen
         isPaused = false;
+        levelStatus();
         if (resetCamera){
             resetCamera();
         }
@@ -438,6 +451,16 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         float textY = remap(0, 0, height, origin.y, origin.y + height);
         arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
         batch.end();
+    }
+
+    public void levelFailed(){
+        player.draw();
+        isPaused = true;
+        entities.run();
+        retryButton.scale();
+        retryButton.draw();
+        menuButton.scale();
+        menuButton.draw();
     }
 
     public void pauseGame(){
@@ -548,7 +571,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         lastTap.y = y;
         switch(mode){
             case PLAY:
-                if(!missile) {
+                if(missileReady) {
                     lastDown = System.currentTimeMillis();
                     isPressed = true;
                 }
@@ -593,8 +616,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 pos.sub(lastTap);
                 if(pos.mag() < width / 20) {
                     if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
+                        ProjectSolaris.centerCamera();
                         Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
                         mode = Mode.PLAY;
+                        break;
                     }
                     boolean nullTap = true;
                     for(int i = 0; i < levelNumber; i++){
@@ -620,6 +645,17 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 }
                 break;
 
+            case LEVEL_FAILED:
+                if (retryButton.isClicked(remapX, remapY)){
+                    Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
+                    mode = Mode.PLAY;
+                }
+                if (menuButton.isClicked(remapX, remapY)){
+                    mode = Mode.MAIN_MENU;
+                    centerCamera();
+                }
+                break;
+
             case PLAY:
                 if (pauseButton.isClicked(remapX, remapY)){
                     mode = Mode.PAUSE;
@@ -631,25 +667,26 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                     Sprite tempSprite;
                     if(timeScaleStage == 0){
                         timeScaleStage++;
-                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton1.png"));
+                        tempTexture= new Texture(Gdx.files.internal("button/timeScaleButton1.png"));
                         tempSprite = new Sprite(tempTexture);
                         timeScaleButton.sprite = tempSprite;
                     }
                     else if(timeScaleStage == 1){
                         timeScaleStage++;
-                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton2.png"));
+                        tempTexture= new Texture(Gdx.files.internal("button/timeScaleButton2.png"));
                         tempSprite = new Sprite(tempTexture);
                         timeScaleButton.sprite = tempSprite;
                     }
                     else{
                         timeScaleStage = 0;
-                        tempTexture= new Texture(Gdx.files.internal("timeScaleButton0.png"));
+                        tempTexture= new Texture(Gdx.files.internal("button/timeScaleButton0.png"));
                         tempSprite = new Sprite(tempTexture);
                         timeScaleButton.sprite = tempSprite;
                     }
                 }
                 // Create a missile where the release happened
-                if(isPressed && !missile) {
+                if(isPressed && missileReady) {
+                    missileReady = false;
                     lastDuration = System.currentTimeMillis() - lastDown;
                     // Min str is 5
                     player.shootMissile(remapX,remapY,(lastDuration > 500) ? (lastDuration / 50) : 5);

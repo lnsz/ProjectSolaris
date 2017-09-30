@@ -19,7 +19,7 @@ public class Player extends Entity{
                 ProjectSolaris.remap(locY, 0, ProjectSolaris.height,
                         ProjectSolaris.origin.y,
                         ProjectSolaris.origin.y + ProjectSolaris.height));
-        maxAmmo = 5;
+        maxAmmo = 3;
         ammo = maxAmmo;
         radius = 50;
         counter=0;
@@ -57,15 +57,15 @@ public class Player extends Entity{
         ProjectSolaris.batch.end();
     }
 
+    public boolean hasAmmo(){
+        return (ammo > 0);
+    }
+
     public void shootMissile(float targetX, float targetY, float strength){
-        if(ammo <= 0){
-            //show no ammo animation
-            flashing = true;
-            counter=0;
-            return;
+        if(this.hasAmmo()){
+            ProjectSolaris.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));
+            ammo--;
         }
-        ProjectSolaris.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));
-        ammo--;
     }
 
     public void resetAmmo(){

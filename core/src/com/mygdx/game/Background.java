@@ -31,7 +31,6 @@ public class Background {
     }
 
     public void generateSprite(){
-        System.out.println("background/ep" + colour + "/bg" + pattern + ".png");
         texture = new Texture(Gdx.files.internal("background/ep" + colour + "/bg" + pattern + ".png"));
         sprite = new Sprite(texture);
     }
