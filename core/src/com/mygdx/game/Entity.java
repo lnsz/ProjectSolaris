@@ -1,13 +1,20 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Created by lucas on 7/11/2016.
  */
 public class Entity {
+    ParticleSystem deathParticles;
+    Sprite explosionSprite;
+    Texture explosionTexture;
     Vector position, velocity, acceleration;
+    int explosionDuration, explosionSize;
     float radius, mass;
     boolean alive;
     boolean visible;
@@ -20,6 +27,10 @@ public class Entity {
         this.mass = 0;
         this.alive = true;
         this.visible = true;
+        this.explosionSize = 50;
+        this.explosionDuration = 75;
+        this.explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
+        this.explosionSprite = new Sprite(explosionTexture);
     }
 
     public void update(){
@@ -38,10 +49,18 @@ public class Entity {
 
 
     public void run(){
-        if (!ProjectSolaris.isPaused) {
-            update();
+        if(visible) {
+            if (!ProjectSolaris.isPaused) {
+                update();
+            }
+            draw();
         }
-        draw();
+        else{
+            deathParticles.update(position.x, position.y, velocity);
+            if (!deathParticles.isAlive()){
+                alive = false;
+            }
+        }
     }
 
     public static boolean collision(Entity ent1, Entity ent2){
@@ -67,7 +86,11 @@ public class Entity {
         }
         //ent1.alive=false;
         //ent2.alive=false;
-
         return true;
+    }
+
+    public void explode(){
+        visible = false;
+        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
 }

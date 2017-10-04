@@ -34,10 +34,6 @@ public class Comet extends Obstacle{
 
     @Override
     public void draw(){
-//        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        ProjectSolaris.renderer.setColor(Color.GRAY);
-//        ProjectSolaris.renderer.circle(position.x, position.y, radius);
-//        ProjectSolaris.renderer.end();
         ProjectSolaris.batch.begin();
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(position.x - radius, position.y - radius);

@@ -58,9 +58,9 @@ public class Planet extends Obstacle{
     String atmosphere;
     float atmosphereComposition;
     boolean displayInfo;
+    boolean target;
 
-
-    public Planet(float locX, float locY, float radius, float mass){
+    public Planet(float locX, float locY, float radius, float mass, boolean target){
         super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
                 ProjectSolaris.origin.x,
                 ProjectSolaris.origin.x + ProjectSolaris.width),
@@ -72,9 +72,12 @@ public class Planet extends Obstacle{
         generateVariables();
         generateSprites();
         gravity = true;
+        this.explosionSize = 75;
+        this.explosionDuration = 100;
+        this.target = target;
     }
 
-    public Planet(ProjectSolaris.Preset pos, float radius, float mass){
+    public Planet(ProjectSolaris.Preset pos, float radius, float mass, boolean target){
         // Create a planet at a preset position
         super(0, 0, radius);
         position = ProjectSolaris.generatePreset(pos);
@@ -83,6 +86,28 @@ public class Planet extends Obstacle{
         generateVariables();
         generateSprites();
         gravity = true;
+        this.explosionSize = 75;
+        this.explosionDuration = 100;
+        this.target = target;
+    }
+
+    @Override
+    public void run(){
+        if(visible) {
+            if (!ProjectSolaris.isPaused) {
+                update();
+            }
+            draw();
+        }
+        else{
+            deathParticles.update(position.x, position.y, velocity);
+            if (!deathParticles.isAlive()){
+                if (this.target) {
+                    ProjectSolaris.levelComplete = true;
+                }
+                alive = false;
+            }
+        }
     }
 
     public void generateSize(){
@@ -237,19 +262,17 @@ public class Planet extends Obstacle{
         int textY = (int)(ProjectSolaris.height / 100.0);
         int lineHeight = 0;
         int lineWidth = 0;
-        String text = "";
+        String text;
 
         ProjectSolaris.batch.begin();
         ProjectSolaris.dinPro.getData().setScale((float)0.7);
         ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro, name.toUpperCase());
         ProjectSolaris.dinPro.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, 0, textY);
         textY +=  ProjectSolaris.glyphLayout.height;
-        System.out.println(ProjectSolaris.glyphLayout.height);
         lineWidth +=  ProjectSolaris.glyphLayout.width;
         ProjectSolaris.dinPro.getData().setScale((float)0.3);
         text = "Mass: " + String.format(Locale.US, "%6.3e", Math.pow(mass, 8)) + " kg";
         ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro, text);
-        System.out.println(ProjectSolaris.glyphLayout.height);
         textY += ProjectSolaris.glyphLayout.height +  ProjectSolaris.height / 150.0;
         lineHeight += textY;
         textY +=  ProjectSolaris.height / 150.0;

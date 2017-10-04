@@ -22,9 +22,6 @@ public class ParticleSystem {
         this.recycle = recycle;
         this.size = size;
         particleDuration = duration;
-        if (size < particleDuration){
-            particleDuration = size;
-        }
         maxRecycle = (int)(size / particleDuration);
         // Particle system starts with 1 particle and recycles maxRecycle on every loop, or all particles if it's not recyclable
         Particle p = new Particle(x, y, particleDuration, sprite);
@@ -51,9 +48,6 @@ public class ParticleSystem {
         this.recycle = recycle;
         this.size = size;
         particleDuration = duration;
-        if (size < particleDuration){
-            particleDuration = size;
-        }
         maxRecycle = (int)(size / particleDuration);
         // Particle system starts with 1 particle and recycles maxRecycle on every loop, or all particles if it's not recyclable
         Particle p = new Particle(x, y, particleDuration, sprite);
