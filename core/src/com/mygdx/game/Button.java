@@ -58,12 +58,12 @@ public class Button {
         sprite.setFlip(false, true);
         sprite.draw(ProjectSolaris.batch);
 
-        ProjectSolaris.arial.getData().setScale(height / 300);
-        ProjectSolaris.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, text);
+        ProjectSolaris.dinPro.getData().setScale(height / 400);
+        ProjectSolaris.dinPro.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro, text);
         float textX = position.x + width / 2 - ProjectSolaris.glyphLayout.width / 2;
-        float textY = position.y + height / 2 - ProjectSolaris.glyphLayout.height / 2;
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
+        float textY = position.y + height / 2 - ProjectSolaris.glyphLayout.height;
+        ProjectSolaris.dinPro.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
         ProjectSolaris.batch.end();
     }
 

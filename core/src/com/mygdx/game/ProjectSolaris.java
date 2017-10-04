@@ -78,8 +78,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
 
     // Fonts
-    public static BitmapFont dinPro1;
-    public static BitmapFont dinPro2;
+    public static BitmapFont dinPro;
     public static BitmapFont arial;
     public static GlyphLayout glyphLayout;
     ArrayList<Button> levelList;  // List of buttons in the level selector screen
@@ -135,10 +134,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         lastTouch = new Vector(0, 0);
         lastTap = new Vector(0, 0);
 
-        dinPro1 = new BitmapFont(Gdx.files.internal("fonts/DinPro1/DinPro1.fnt"), true);
-        dinPro1.setColor(Color.WHITE);
-        dinPro2 = new BitmapFont(Gdx.files.internal("fonts/DinPro2/DinPro2.fnt"), true);
-        dinPro2.setColor(Color.WHITE);
+        dinPro = new BitmapFont(Gdx.files.internal("fonts/DinPro/DinPro.fnt"), true);
+        dinPro.setColor(Color.WHITE);
         arial = new BitmapFont(Gdx.files.internal("fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
@@ -184,42 +181,29 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         Sprite tempSprite = new Sprite(tempTexture);
         startButton = new Button(0, 0, width, height, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("button/playButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        playButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
-        levelButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
-
-        tempTexture = new Texture(Gdx.files.internal("button/shopButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        shopButton = new Button(width / 6, height / 2, 2 * width / 3, height / 10, tempSprite);
-
-        tempTexture = new Texture(Gdx.files.internal("button/settingsButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        settingsButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
-
-        tempTexture = new Texture(Gdx.files.internal("button/testButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        testButton = new Button(width / 6, (float)2.5 * height / 3, 2 * width / 3, height / 10, tempSprite);
-
-        tempTexture = new Texture(Gdx.files.internal("button/seedButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        seedButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite);
-
         tempTexture = new Texture(Gdx.files.internal("button/pauseButton.png"));
         tempSprite = new Sprite(tempTexture);
         pauseButton = new Button(0, height - height / 20, width / 10, height / 20, tempSprite);
 
-        tempTexture = new Texture(Gdx.files.internal("button/resumeButton.png"));
+        tempTexture = new Texture(Gdx.files.internal("button/button.png"));
         tempSprite = new Sprite(tempTexture);
-        resumeButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+        playButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite, "PLAY");
 
-        tempTexture = new Texture(Gdx.files.internal("button/menuButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite);
+        levelButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite, "PLAY");
 
-        tempTexture = new Texture(Gdx.files.internal("button/retryButton.png"));
-        tempSprite = new Sprite(tempTexture);
-        retryButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite);
+        shopButton = new Button(width / 6, height / 2, 2 * width / 3, height / 10, tempSprite, "SHOP");
+
+        settingsButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite, "SETTINGS");
+
+        testButton = new Button(width / 6, 5 * height / 6, 2 * width / 3, height / 10, tempSprite, "TEST");
+
+        seedButton = new Button(width / 6, 8 * height / 9, 2 * width / 3, height / 10, tempSprite, "RANDOMIZE SEED");
+
+        resumeButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite, "RESUME");
+
+        menuButton = new Button(width / 6, 2 * height / 3, 2 * width / 3, height / 10, tempSprite, "MENU");
+
+        retryButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite, "RETRY");
 
         tempTexture = new Texture(Gdx.files.internal("button/timeScaleButton1.png"));
         tempSprite = new Sprite(tempTexture);
@@ -446,7 +430,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         arial.getData().setScale(height / 3000);
         arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = Gdx.graphics.getFramesPerSecond() + "";
-        glyphLayout.setText(ProjectSolaris.arial, text);
+        glyphLayout.setText(ProjectSolaris.dinPro, text);
         float textX = remap(width, 0, width, origin.x, origin.x + width) - glyphLayout.width;
         float textY = remap(0, 0, height, origin.y, origin.y + height);
         arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
