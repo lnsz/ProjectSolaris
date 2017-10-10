@@ -11,9 +11,6 @@ import com.badlogic.gdx.utils.TimeUtils;
  * Created by Kiko on 11/07/2016.
  */
 public class Missile extends Entity{
-    ParticleSystem flightParticles, deathParticles;
-    Sprite particleSprite, explosionSprite;
-    Texture particleTexture, explosionTexture;
     float startTime, maxLife, life;
     Trail trail;
 
@@ -22,10 +19,6 @@ public class Missile extends Entity{
         ProjectSolaris.missile = true;
 
         // Load sprites and textures
-        particleTexture = new Texture(Gdx.files.internal("dot.png"));
-        particleSprite = new Sprite(particleTexture);
-        explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
-        explosionSprite = new Sprite(explosionTexture);
         maxLife = 5000; // Missile lasts 5 seconds
         life = maxLife;
         this.radius = 10;
@@ -36,8 +29,6 @@ public class Missile extends Entity{
         velocity.normalize();
         velocity.mult(str);
         trail = new Trail(locX, locY, radius, 20);
-
-        this.flightParticles = new ParticleSystem(position.x, position.y, velocity, 300, 20, true, particleSprite);
     }
 
     @ Override
@@ -50,6 +41,7 @@ public class Missile extends Entity{
         // Destroy missiles outside entity border
         Vector distance = new Vector(position.x - ProjectSolaris.width / 2,
                 position.y - ProjectSolaris.height / 2); // Distance from current position to center
+        updateTrail();
     }
 
     @Override
@@ -71,9 +63,12 @@ public class Missile extends Entity{
             if (!ProjectSolaris.isPaused) {
                 update();
                 ProjectSolaris.entities.gravity(this);
-                if (ProjectSolaris.entities.collision(this)) {
+                Entity entityHit = ProjectSolaris.entities.collision(this);
+                if (entityHit != null) {
                     // explode!
                     explode();
+                    entityHit.explode();
+                    ProjectSolaris.screenFlash = true;
                 }
                 if (life <= 0){
                     explode();
@@ -88,8 +83,6 @@ public class Missile extends Entity{
                 alive = false;
             }
         }
-        updateTrail();
-        //flightParticles.update(position.x, position.y, velocity);
     }
 
     public void updateTrail(){
@@ -104,10 +97,6 @@ public class Missile extends Entity{
         visible = false;
         velocity.add(acceleration.scale());
         position.add(velocity.scale());
-        deathParticles = new ParticleSystem(position.x, position.y, 150, 75, false, explosionSprite);
-        flightParticles.recycle = false;
+        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
-
-
-
 }

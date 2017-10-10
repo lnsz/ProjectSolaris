@@ -54,12 +54,20 @@ public class Asteroid extends Obstacle{
 
     @Override
     public void run(){
-        if(!ProjectSolaris.isPaused) {
-            planet.gravity(this);
-            update();
+        if(visible) {
+            if (!ProjectSolaris.isPaused) {
+                planet.gravity(this);
+                update();
+                updateTrail();
+            }
+            draw();
         }
-        updateTrail();
-        draw();
+        else{
+            deathParticles.update(position.x, position.y, velocity);
+            if (!deathParticles.isAlive()){
+                alive = false;
+            }
+        }
     }
 
     @Override

@@ -26,15 +26,15 @@ public class EntitySystem {
 
     }
 
-    public boolean collision(Entity missile){
+    public Entity collision(Entity missile){
         Iterator<Entity> it = entities.iterator();
         while (it.hasNext()) {
             Entity ent = it.next();
             if(Entity.collision(missile, ent)){
-                return true;
+                return ent;
             }
         }
-        return false;
+        return null;
     }
 
     public void gravity(Entity missile){
