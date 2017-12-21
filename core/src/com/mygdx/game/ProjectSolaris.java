@@ -142,9 +142,9 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         lastTouch = new Vector(0, 0);
         lastTap = new Vector(0, 0);
 
-        dinPro = new BitmapFont(Gdx.files.internal("Fonts/DinPro/DinPro.fnt"), true);
+        dinPro = new BitmapFont(Gdx.files.internal("fonts/DinPro/DinPro.fnt"), true);
         dinPro.setColor(Color.WHITE);
-        arial = new BitmapFont(Gdx.files.internal("Fonts/Arial/arial.fnt"), true);
+        arial = new BitmapFont(Gdx.files.internal("fonts/Arial/arial.fnt"), true);
         arial.setColor(Color.WHITE);
         glyphLayout = new GlyphLayout();
 
