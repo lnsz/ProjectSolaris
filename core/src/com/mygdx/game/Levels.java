@@ -31,6 +31,19 @@ public class Levels {
     static final float SMALL_MOON_RADIUS = ProjectSolaris.height / 60;
     static final float TINY_MOON_RADIUS = ProjectSolaris.height / 70;
 
+    static final float MASSIVE_DEFENSE_RADIUS = ProjectSolaris.height / 2;
+    static final float LARGE_DEFENSE_RADIUS = ProjectSolaris.height / 6;
+    static final float NORMAL_DEFENSE_RADIUS = ProjectSolaris.height / 10;
+    static final float SMALL_DEFENSE_RADIUS = ProjectSolaris.height / 14;
+    static final float TINY_DEFENSE_RADIUS = ProjectSolaris.height / 18;
+
+    static final float VERY_FAST_TTK = 500;
+    static final float FAST_TTK = 1000;
+    static final float NORMAL_TTK = 2000;
+    static final float SLOW_TTK = 3000;
+    static final float VERY_SLOW_TTK = 5000;
+
+
     static final float MASSIVE_MOON_ALTITUDE = 5 * ProjectSolaris.height / 8;
     static final float LARGE_MOON_ALTITUDE = 4 * ProjectSolaris.height / 8;
     static final float NORMAL_MOON_ALTITUDE = 3 * ProjectSolaris.height / 8;
@@ -130,12 +143,33 @@ public class Levels {
                     break;
 
                 case 6:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            Math.PI, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
                     break;
 
                 case 7:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM);
+                    planet = new Planet(ProjectSolaris.Preset.TOP, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            Math.PI, planet, NORMAL_MOON_ALTITUDE, LARGE_DEFENSE_RADIUS, VERY_FAST_TTK));
                     break;
 
                 case 8:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            Math.PI, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            Math.PI / 2, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            0, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            3* Math.PI / 2, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
                     break;
 
                 case 9:
