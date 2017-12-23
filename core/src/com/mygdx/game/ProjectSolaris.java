@@ -423,7 +423,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
         ProjectSolaris.renderer.rect(origin.x, origin.y, width, height);
         ProjectSolaris.renderer.end();
-        System.out.println(flashOpacity);
         flashOpacity -= 0.02f;
         if (flashOpacity <= 0){
             screenFlash = false;
@@ -579,7 +578,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         return temp;
     }
 
-    public static float getTime(){
+    public static double getTime(){
         return System.currentTimeMillis();
     }
 

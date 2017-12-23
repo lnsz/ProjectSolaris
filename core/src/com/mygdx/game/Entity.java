@@ -37,7 +37,6 @@ public class Entity {
         velocity.add(acceleration.scale());
         position.add(velocity.scale());
         acceleration.mult(0);
-
     }
 
     public void draw(){

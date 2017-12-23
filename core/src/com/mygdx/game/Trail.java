@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class Trail extends Entity{
     @Override
     public void draw(){
         ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(Color.WHITE);
         if (trail.size() < 3 && trail.size() > 0){
             ProjectSolaris.renderer.circle(trail.get(0).x, trail.get(0).y, 5);
         }else {

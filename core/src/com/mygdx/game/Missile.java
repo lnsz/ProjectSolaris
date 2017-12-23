@@ -97,6 +97,7 @@ public class Missile extends Entity{
         visible = false;
         velocity.add(acceleration.scale());
         position.add(velocity.scale());
+        ProjectSolaris.entities.missile = null;
         deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
 }

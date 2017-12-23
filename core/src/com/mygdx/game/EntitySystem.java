@@ -15,6 +15,8 @@ public class EntitySystem {
 
     private ArrayList<Entity> buffer;
 
+    Entity missile;
+
     public EntitySystem() {
         entities = new ArrayList<Entity>();
         buffer = new ArrayList<Entity>();
@@ -23,6 +25,9 @@ public class EntitySystem {
 
     public void addEntity(Entity entity) {
         buffer.add(entity);
+        if (entity instanceof Missile){
+            missile = entity;
+        }
 
     }
 
@@ -57,6 +62,9 @@ public class EntitySystem {
             p.run();
             if (!p.alive) {
                 it.remove();
+                if(p instanceof Missile){
+                    missile = null;
+                }
             }
         }
     }
