@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Obstacle extends Entity{
     boolean gravity;
-    Sprite sprite;
-    Texture texture;
+
     public Obstacle(float locX, float locY, float radius){
         super(locX, locY);
         this.radius = radius;

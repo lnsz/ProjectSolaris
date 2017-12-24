@@ -18,6 +18,8 @@ public class Entity {
     float radius, mass;
     boolean alive;
     boolean visible;
+    Sprite sprite;
+    Texture texture;
 
     public Entity (float locX, float locY){
         this.position = new Vector(locX, locY);

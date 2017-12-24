@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -24,14 +26,17 @@ public class Player extends Entity{
         radius = 50;
         counter=0;
         flashing = false;
+        texture = new Texture(Gdx.files.internal("player.png"));
+        sprite = new Sprite(texture);
     }
 
     @Override
     public void draw(){
-        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Line);
-        ProjectSolaris.renderer.setColor(255, 255, 255, 1);
-        ProjectSolaris.renderer.circle(position.x, position.y, radius); // Temp player character
-        ProjectSolaris.renderer.end();
+        ProjectSolaris.batch.begin();
+        sprite.setSize(radius * 2, radius * 2);
+        sprite.setPosition(position.x - radius, position.y - radius);
+        sprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.end();
         if(flashing){
             if(counter % 7 != 0){
                 showAmmo();
