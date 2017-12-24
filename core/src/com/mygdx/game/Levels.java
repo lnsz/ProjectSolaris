@@ -173,12 +173,27 @@ public class Levels {
                     break;
 
                 case 9:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new DefenseSystem(SMALL_MOON_RADIUS,
+                            Math.PI, planet, SMALL_MOON_ALTITUDE, MASSIVE_DEFENSE_RADIUS, SLOW_TTK));
                     break;
 
                 case 10:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new GravityField(SMALL_MOON_RADIUS, MASSIVE_PLANET_MASS,
+                            Math.PI, planet, SMALL_MOON_ALTITUDE));
                     break;
 
                 case 11:
+                    player.position = ProjectSolaris.generatePreset(ProjectSolaris.Preset.BOTTOM_RIGHT);
+                    planet = new Planet(ProjectSolaris.Preset.TOP_LEFT, MASSIVE_PLANET_RADIUS, MASSIVE_PLANET_MASS, TARGET);
+                    ProjectSolaris.entities.addEntity(planet);
+                    ProjectSolaris.entities.addEntity(new GravityField(SMALL_MOON_RADIUS, -MASSIVE_PLANET_MASS,
+                            Math.PI, planet, SMALL_MOON_ALTITUDE));
                     break;
 
                 case 12:
