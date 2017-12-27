@@ -93,7 +93,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     // Touch variables
     public long lastDown, lastDuration;
-    public Vector lastTouch, lastTap;
+    public static Vector lastTouch, lastTap;
     public static boolean isPressed = false;
     public float xDrag = 0;
     public float xDragTotal = 0;
@@ -759,6 +759,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         xDrag = x - lastTouch.x;
         xDragTotal += xDrag;
         lastTouch.x = x;
+        lastTouch.y = y;
         dragDuration++;
         xDragVelocity = xDragTotal / dragDuration;
         switch(mode) {

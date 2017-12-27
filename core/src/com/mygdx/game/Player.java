@@ -14,6 +14,7 @@ public class Player extends Entity{
     public int maxAmmo;
     private int counter;
     private boolean flashing;
+    private double rotation;
     public Player(float locX, float locY){
         super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
                 ProjectSolaris.origin.x,
@@ -24,15 +25,20 @@ public class Player extends Entity{
         maxAmmo = 3;
         ammo = maxAmmo;
         radius = 50;
-        counter=0;
+        counter = 0;
         flashing = false;
         texture = new Texture(Gdx.files.internal("player.png"));
         sprite = new Sprite(texture);
+        sprite.setOrigin(radius, radius);
+        rotation = 0;
     }
 
     @Override
     public void draw(){
+        rotation = Math.toDegrees(Vector.sub(position, ProjectSolaris.lastTouch).angle()) + 90;
+        System.out.println(rotation);
         ProjectSolaris.batch.begin();
+        sprite.setRotation((float)rotation);
         sprite.setSize(radius * 2, radius * 2);
         sprite.setPosition(position.x - radius, position.y - radius);
         sprite.draw(ProjectSolaris.batch);

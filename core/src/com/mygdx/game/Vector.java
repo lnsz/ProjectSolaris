@@ -114,6 +114,10 @@ public class Vector {
         }
     }
 
+    public double angle(){
+        return Math.atan2(this.y, this.x);
+    }
+
 
     public static Vector random(){
         float angle = (float)(Math.random() * Math.PI * 2);
