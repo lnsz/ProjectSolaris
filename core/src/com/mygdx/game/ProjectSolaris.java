@@ -80,7 +80,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Gesture detector and index multiplexer handle the touch screen
     public GestureDetector gestureDetector;
     public FPSLogger fpsLogger;
-    public int levelX, levelY, levelNumber, levelSelected, episodeNumber, episodeSelected; // Level and episode selection variables
+    public int levelX, levelY, levelNumber, levelSelected, episodeSelected; // Level and episode selection variables
     public static int level = 0;
     public static int episode = 0;
     public static int levelsPerEpisode = 15;
@@ -112,6 +112,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public static String fragmentShader;
     public static ShaderProgram shaderProgram;
     public static float shaderTime;
+    public static Vector shaderPosition;
 
 
     @Override
@@ -175,8 +176,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
         fragmentShader = Gdx.files.internal("shaders/fragment.glsl").readString();
         shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
-        System.out.println(shaderProgram.getLog());
-
+        shaderPosition = new Vector();
+        System.out.println(ProjectSolaris.camera.position);
     }
 
     @Override
@@ -353,6 +354,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void render() {
         // This is the main loop of the game, this method will always run
         // Clear screen, draw background, then depending on current mode, do something
+        ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
         clearScreen();
         background();
         checkMode();
@@ -389,7 +391,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                     xDragVelocity /= 1.5;
 
                     if(camera.position.x - xDragVelocity * 5 > width / 2 &&
-                            camera.position.x - xDragVelocity * 5 < width * episodeNumber - width / 2) {
+                            camera.position.x - xDragVelocity * 5 < width * totalEpisodes - width / 2) {
                         camera.translate(-xDragVelocity * 5, 0);
                     }
                 }
@@ -439,10 +441,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
         ProjectSolaris.renderer.rect(origin.x, origin.y, width, height);
         ProjectSolaris.renderer.end();
-        flashOpacity -= 0.02f;
+        flashOpacity -= 0.005f;
         if (flashOpacity <= 0){
             screenFlash = false;
-            flashOpacity = 0.8f;
+            flashOpacity = 0.2f;
         }
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
@@ -520,6 +522,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void levelSelector(){
         // Draws the level buttons in level selector
         for (int i = 0; i < levelNumber; i++){
+
             levelList.get(i).selected = i == levelSelected; // Change the colour of the selected button
 
             if(!isPressed){
@@ -603,7 +606,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         // This method is called when the screen is pressed
         // It's only use currently is to track the location of the last press and start a timer
         // to keep track of how long it's been pressed
-        shaderTime = 0;
         lastTouch.x = x;
         lastTouch.y = y;
         lastTap.x = x;
@@ -776,13 +778,13 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         xDrag = x - lastTouch.x;
         xDragTotal += xDrag;
         lastTouch.x = x;
-        //lastTouch.y = y;
+        lastTouch.y = y;
         dragDuration++;
         xDragVelocity = xDragTotal / dragDuration;
         switch(mode) {
             case LEVEL_SELECTOR:
                 if(camera.position.x - xDrag > width / 2 &&
-                        camera.position.x - xDrag < width * episodeNumber - width / 2) {
+                        camera.position.x - xDrag < width * totalEpisodes - width / 2) {
                     camera.translate(-xDrag, 0);
                 }
                 return true;

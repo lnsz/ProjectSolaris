@@ -50,16 +50,17 @@ public class Background {
         Gdx.gl.glClearColor(0,0,0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ProjectSolaris.shaderProgram.begin();
-        ProjectSolaris.shaderProgram.setUniformf("center", new Vector2(ProjectSolaris.lastTouch.x, ProjectSolaris.lastTouch.x));
+        ProjectSolaris.shaderProgram.setUniformf("center",
+                new Vector2(ProjectSolaris.shaderPosition.x / ProjectSolaris.width,
+                            1 - (ProjectSolaris.shaderPosition.y / ProjectSolaris.height)));
         ProjectSolaris.shaderProgram.setUniformf("time", ProjectSolaris.shaderTime);
         ProjectSolaris.shaderProgram.setUniformf("shockParams", new Vector3(10.0f, 0.8f, 0.1f));
         ProjectSolaris.shaderProgram.end();
         ProjectSolaris.batch.begin();
         ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
         sprite.draw(ProjectSolaris.batch);
-        ProjectSolaris.batch.end();
         ProjectSolaris.batch.setShader(null);
-        ProjectSolaris.shaderTime+= 1;
-        System.out.println(ProjectSolaris.shaderTime);
+        ProjectSolaris.batch.end();
+        ProjectSolaris.shaderTime += 0.02;
     }
 }

@@ -18,8 +18,8 @@ public class Missile extends Entity{
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
         ProjectSolaris.missile = true;
-        this.explosionSize = 50;
-        this.explosionDuration = 75;
+        this.explosionSize = 2;
+        this.explosionDuration = 50;
         // Load sprites and textures
         maxLife = 5000; // Missile lasts 5 seconds
         life = maxLife;
@@ -97,6 +97,10 @@ public class Missile extends Entity{
     public void explode(){
         ProjectSolaris.missile = false;
         visible = false;
+        ProjectSolaris.shaderPosition = Vector.sub(this.position,
+                new Vector(ProjectSolaris.camera.position.x - ProjectSolaris.width / 2,
+                        ProjectSolaris.camera.position.y - ProjectSolaris.height / 2));
+        ProjectSolaris.shaderTime = 0;
         velocity.add(acceleration.scale());
         position.add(velocity.scale());
         ProjectSolaris.entities.missile = null;

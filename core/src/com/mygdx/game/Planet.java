@@ -86,8 +86,8 @@ public class Planet extends Obstacle{
         generateVariables();
         generateSprites();
         gravity = true;
-        this.explosionSize = 75;
-        this.explosionDuration = 100;
+        this.explosionSize = 1;
+        this.explosionDuration = 1;
         this.target = target;
     }
 
