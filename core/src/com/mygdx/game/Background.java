@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by lucas on 5/5/2017.
@@ -45,12 +47,19 @@ public class Background {
     }
 
     public void draw(){
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0,0,0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ProjectSolaris.shaderProgram.begin();
+        ProjectSolaris.shaderProgram.setUniformf("center", new Vector2(ProjectSolaris.lastTouch.x, ProjectSolaris.lastTouch.x));
+        ProjectSolaris.shaderProgram.setUniformf("time", ProjectSolaris.shaderTime);
+        ProjectSolaris.shaderProgram.setUniformf("shockParams", new Vector3(10.0f, 0.8f, 0.1f));
+        ProjectSolaris.shaderProgram.end();
         ProjectSolaris.batch.begin();
         ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
         sprite.draw(ProjectSolaris.batch);
-        ProjectSolaris.batch.setShader(null);
         ProjectSolaris.batch.end();
+        ProjectSolaris.batch.setShader(null);
+        ProjectSolaris.shaderTime+= 1;
+        System.out.println(ProjectSolaris.shaderTime);
     }
 }

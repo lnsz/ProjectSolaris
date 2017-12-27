@@ -107,9 +107,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Background
     public static Background bg;
 
+    // Shaders
     public static String vertexShader;
     public static String fragmentShader;
     public static ShaderProgram shaderProgram;
+    public static float shaderTime;
+
 
     @Override
     public void create(){
@@ -167,9 +170,12 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         bg = new Background(0, 0);
 
         // Initialize shaders
+        shaderTime = 50f;
+        ShaderProgram.pedantic = false;
         vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
         fragmentShader = Gdx.files.internal("shaders/fragment.glsl").readString();
         shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
+        System.out.println(shaderProgram.getLog());
 
     }
 
@@ -597,6 +603,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         // This method is called when the screen is pressed
         // It's only use currently is to track the location of the last press and start a timer
         // to keep track of how long it's been pressed
+        shaderTime = 0;
         lastTouch.x = x;
         lastTouch.y = y;
         lastTap.x = x;
@@ -769,7 +776,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         xDrag = x - lastTouch.x;
         xDragTotal += xDrag;
         lastTouch.x = x;
-        lastTouch.y = y;
+        //lastTouch.y = y;
         dragDuration++;
         xDragVelocity = xDragTotal / dragDuration;
         switch(mode) {

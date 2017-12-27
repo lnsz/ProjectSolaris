@@ -1,16 +1,27 @@
 #ifdef GL_ES
-    precision mediump float;
+precision highp float;
 #endif
+uniform sampler2D sceneTex; // 0
+uniform vec2 center; // Mouse position
+uniform float time; // effect elapsed time
+uniform vec3 shockParams; // 10.0, 0.8, 0.1
 
-varying vec4 v_color;
 varying vec2 v_texCoords;
-uniform sampler2D u_texture;
-uniform mat4 u_projTrans;
 
-void main() {
-        vec3 color = texture2D(u_texture, v_texCoords).rgb;
-        float gray = (color.r + color.g + color.b) / 3.0;
-        vec3 grayscale = vec3(gray);
-
-        gl_FragColor = vec4(grayscale, 1.0);
+void main() 
+{ 
+	// get pixel coordinates
+	vec2 l_texCoords = v_texCoords;
+	
+	//get distance from center
+	float distance = distance(v_texCoords, center);
+	
+	if ( (distance <= (time + shockParams.z)) && (distance >= (time - shockParams.z)) ) {
+    	float diff = (distance - time); 
+    	float powDiff = 1.0 - pow(abs(diff*shockParams.x), shockParams.y); 
+    	float diffTime = diff  * powDiff; 
+    	vec2 diffUV = normalize(v_texCoords-center); 
+    	l_texCoords = v_texCoords + (diffUV * diffTime);
+	}
+	gl_FragColor = texture2D(sceneTex, l_texCoords);
 }
