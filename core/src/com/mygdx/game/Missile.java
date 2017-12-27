@@ -13,11 +13,13 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class Missile extends Entity{
     float startTime, maxLife, life;
     Trail trail;
+    Entity entityHit;
 
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
         ProjectSolaris.missile = true;
-
+        this.explosionSize = 50;
+        this.explosionDuration = 75;
         // Load sprites and textures
         maxLife = 5000; // Missile lasts 5 seconds
         life = maxLife;
@@ -63,7 +65,6 @@ public class Missile extends Entity{
             if (!ProjectSolaris.isPaused) {
                 update();
                 ProjectSolaris.entities.gravity(this);
-                Entity entityHit = ProjectSolaris.entities.collision(this);
                 if (entityHit != null) {
                     // explode!
                     explode();
@@ -73,6 +74,7 @@ public class Missile extends Entity{
                 if (life <= 0){
                     explode();
                 }
+                entityHit = ProjectSolaris.entities.collision(this);
             }
             draw();
         }

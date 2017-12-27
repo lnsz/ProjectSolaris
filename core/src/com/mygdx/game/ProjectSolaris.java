@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -106,6 +107,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Background
     public static Background bg;
 
+    public static String vertexShader;
+    public static String fragmentShader;
+    public static ShaderProgram shaderProgram;
+
     @Override
     public void create(){
         // Set width and height
@@ -160,6 +165,11 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
         // Initialize background
         bg = new Background(0, 0);
+
+        // Initialize shaders
+        vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
+        fragmentShader = Gdx.files.internal("shaders/fragment.glsl").readString();
+        shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
 
     }
 

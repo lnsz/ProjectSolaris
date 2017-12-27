@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -44,8 +45,12 @@ public class Background {
     }
 
     public void draw(){
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ProjectSolaris.batch.begin();
+        ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
         sprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.setShader(null);
         ProjectSolaris.batch.end();
     }
 }

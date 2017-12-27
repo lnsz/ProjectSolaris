@@ -10,12 +10,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 
 public class GravityField extends Obstacle {
-    float targettingRadius;
-    float distanceToMissile;
-    boolean missileInRange;
-    double targettingTime;
-    double timeToKill;
-    Entity missile;
 
     public GravityField(float radius, float mass, double angle, Planet planet, float altitude) {
         super(0, 0, radius);

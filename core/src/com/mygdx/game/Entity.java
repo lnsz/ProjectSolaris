@@ -29,8 +29,10 @@ public class Entity {
         this.mass = 0;
         this.alive = true;
         this.visible = true;
-        this.explosionSize = 50;
-        this.explosionDuration = 75;
+//        this.explosionSize = 50;
+//        this.explosionDuration = 75;
+        this.explosionSize = 1;
+        this.explosionDuration = 1;
         this.explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
         this.explosionSprite = new Sprite(explosionTexture);
     }

@@ -36,7 +36,6 @@ public class Player extends Entity{
     @Override
     public void draw(){
         rotation = Math.toDegrees(Vector.sub(position, ProjectSolaris.lastTouch).angle()) + 90;
-        System.out.println(rotation);
         ProjectSolaris.batch.begin();
         sprite.setRotation((float)rotation);
         sprite.setSize(radius * 2, radius * 2);
