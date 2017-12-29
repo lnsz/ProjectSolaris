@@ -57,7 +57,6 @@ public class Button {
         sprite.setPosition(position.x, position.y);
         sprite.setFlip(false, true);
         sprite.draw(ProjectSolaris.batchUI);
-
         ProjectSolaris.dinPro.getData().setScale(height / 400);
         ProjectSolaris.dinPro.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro, text);

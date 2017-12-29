@@ -71,7 +71,9 @@ public class Missile extends Entity{
                     entityHit.explode();
                     ProjectSolaris.screenFlash = true;
                 }
-                if (life <= 0){
+                float distanceToCenter = Vector.distance(this.position, new Vector(0, 0));
+                System.out.println(distanceToCenter);
+                if (life <= 0 || distanceToCenter > ProjectSolaris.entityBorder){
                     explode();
                 }
                 entityHit = ProjectSolaris.entities.collision(this);
@@ -98,7 +100,7 @@ public class Missile extends Entity{
     public void explode(){
         ProjectSolaris.missile = false;
         visible = false;
-        ProjectSolaris.camera.zoom += 0.9;
+        ProjectSolaris.camera.zoom += 0.5;
         System.out.println(ProjectSolaris.camera.zoom);
 //        ProjectSolaris.shaderPosition = Vector.sub(this.position,
 //                new Vector(ProjectSolaris.camera.position.x - ProjectSolaris.width / 4,
@@ -106,6 +108,11 @@ public class Missile extends Entity{
         ProjectSolaris.shaderPosition = this.position;
         ProjectSolaris.shaderTime = 0;
         velocity.add(acceleration.scale());
+        System.out.println(velocity.x + "  " + velocity.y);
+        Vector normalizedVelocity = velocity;
+        normalizedVelocity.normalize();
+        ProjectSolaris.camera.position.x -= normalizedVelocity.x * 100;
+        ProjectSolaris.camera.position.y -= normalizedVelocity.y * 100;
         position.add(velocity.scale());
         ProjectSolaris.entities.missile = null;
         ProjectSolaris.resetCamera = true;

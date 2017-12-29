@@ -170,9 +170,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         player = new Player(0, 0);
 
         // Initialize background
-        bgMultiplier = 16;
+        bgMultiplier = 8;
         bg = new Background(0, 0);
-
+        // Set camera variables
+        entityBorder = (bgMultiplier - 2) * width  / 2; // Maximum distance that entities can be from the center
 
         // Initialize shaders
         shaderTime = 50f;
@@ -181,7 +182,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         fragmentShader = Gdx.files.internal("shaders/fragment.glsl").readString();
         shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
         shaderPosition = new Vector();
-        System.out.println(ProjectSolaris.camera.position);
     }
 
     @Override
@@ -294,7 +294,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public static void resetCamera() {
         if (camera.zoom > 1.01){
-            camera.zoom -= (camera.zoom - 1) / 30;
+            camera.zoom -= (camera.zoom - 1) / 40;
         }
         else if (Vector.distance(new Vector(camera.position.x, camera.position.y), center) > 3){
             camera.position.x += (center.x - ProjectSolaris.camera.position.x) * 0.05;
@@ -312,8 +312,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         cameraUI.setToOrtho(true, width, height);
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
-        // Set camera variables
-        entityBorder = (float)Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2)); // Maximum distance that entities can be from the center
     }
 
     public void strMeter(){
@@ -446,17 +444,17 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public void screenFlash(){
-//        Gdx.gl.glEnable(GL20.GL_BLEND);
-//        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
-//        ProjectSolaris.renderer.rect(origin.x, origin.y, width * camera.zoom, height * camera.zoom);
-//        ProjectSolaris.renderer.end();
-//        flashOpacity -= 0.005f;
-//        if (flashOpacity <= 0){
-//            screenFlash = false;
-//            flashOpacity = 0.2f;
-//        }
-//        Gdx.gl.glDisable(GL20.GL_BLEND);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
+        ProjectSolaris.renderer.rect(origin.x, origin.y, width * camera.zoom, height * camera.zoom);
+        ProjectSolaris.renderer.end();
+        flashOpacity -= 0.005f;
+        if (flashOpacity <= 0){
+            screenFlash = false;
+            flashOpacity = 0.2f;
+        }
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public void play(){
