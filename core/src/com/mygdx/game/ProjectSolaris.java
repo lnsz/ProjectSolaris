@@ -28,9 +28,9 @@ import java.util.Random;
  * Created by lucas on 7/22/2016.
  */
 public class ProjectSolaris extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
-    public static SpriteBatch batch;
+    public static SpriteBatch batch, batchUI;
     public static ShapeRenderer renderer;
-    public static OrthographicCamera camera;
+    public static OrthographicCamera camera, cameraUI;
 
     public static String[] planetNames = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota",
             "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon",
@@ -106,6 +106,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     // Background
     public static Background bg;
+    public static int bgMultiplier;
 
     // Shaders
     public static String vertexShader;
@@ -124,6 +125,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         // Create the camera, SpriteBatch, ShapeRenderer and initialize camera variables
         setUpCamera();
         batch = new SpriteBatch(); // Use to draw sprites
+        batchUI = new SpriteBatch();
         renderer = new ShapeRenderer(); // Use to draw shapes
 
         // Create fps logger
@@ -168,7 +170,9 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         player = new Player(0, 0);
 
         // Initialize background
+        bgMultiplier = 16;
         bg = new Background(0, 0);
+
 
         // Initialize shaders
         shaderTime = 50f;
@@ -184,6 +188,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void dispose(){
         // Clear the batch and renderer
         batch.dispose();
+        batchUI.dispose();
         renderer.dispose();
     }
 
@@ -198,6 +203,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         // Tell the SpriteBatch to render in the camera
         renderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
+        batchUI.setProjectionMatrix(cameraUI.combined);
     }
 
     public void createButtons(){
@@ -277,8 +283,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         width = camera.viewportWidth;
         center = new Vector(width / 2, height / 2);
         origin = new Vector(camera.position.x - center.x, camera.position.x - center.y);
-        origin.x = camera.position.x - width / 2;
-        origin.y = camera.position.y - height / 2;
+        origin.x = camera.position.x - width  * camera.zoom / 2;
+        origin.y = camera.position.y - height * camera.zoom / 2;
     }
 
     public static void centerCamera() {
@@ -287,7 +293,10 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public static void resetCamera() {
-        if (Vector.distance(new Vector(camera.position.x, camera.position.y), center) > 3){
+        if (camera.zoom > 1.01){
+            camera.zoom -= (camera.zoom - 1) / 30;
+        }
+        else if (Vector.distance(new Vector(camera.position.x, camera.position.y), center) > 3){
             camera.position.x += (center.x - ProjectSolaris.camera.position.x) * 0.05;
             camera.position.y += (center.y - ProjectSolaris.camera.position.y) * 0.05;
         } else {
@@ -298,7 +307,9 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
     public void setUpCamera(){
         camera = new OrthographicCamera();
+        cameraUI = new OrthographicCamera();
         camera.setToOrtho(true, width, height); // By default libgdx has 0, 0 be the bottom left
+        cameraUI.setToOrtho(true, width, height);
         // corner, this should make it normal, 0, 0 top right corner
         updateCamera();
         // Set camera variables
@@ -346,7 +357,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void background(){
         // Draws background sprite
         bg.setSize(width, height);
-        bg.setPosition(origin.x, origin.y);
+        bg.setPosition(- width * bgMultiplier / 2, - height * bgMultiplier / 2);
         bg.draw();
     }
 
@@ -354,7 +365,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void render() {
         // This is the main loop of the game, this method will always run
         // Clear screen, draw background, then depending on current mode, do something
-        ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
         clearScreen();
         background();
         checkMode();
@@ -436,17 +446,17 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public void screenFlash(){
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
-        ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
-        ProjectSolaris.renderer.rect(origin.x, origin.y, width, height);
-        ProjectSolaris.renderer.end();
-        flashOpacity -= 0.005f;
-        if (flashOpacity <= 0){
-            screenFlash = false;
-            flashOpacity = 0.2f;
-        }
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        ProjectSolaris.renderer.setColor(255, 255, 255, flashOpacity);
+//        ProjectSolaris.renderer.rect(origin.x, origin.y, width * camera.zoom, height * camera.zoom);
+//        ProjectSolaris.renderer.end();
+//        flashOpacity -= 0.005f;
+//        if (flashOpacity <= 0){
+//            screenFlash = false;
+//            flashOpacity = 0.2f;
+//        }
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public void play(){
@@ -475,7 +485,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     }
 
     public void drawFPS(){
-        batch.begin();
+        batchUI.begin();
         arial.getData().setScale(height / 3000);
         arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         String text = Gdx.graphics.getFramesPerSecond() + "";
@@ -483,7 +493,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         float textX = remap(width, 0, width, origin.x, origin.x + width) - glyphLayout.width;
         float textY = remap(0, 0, height, origin.y, origin.y + height);
         arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
-        batch.end();
+        batchUI.end();
     }
 
     public void levelComplete(){

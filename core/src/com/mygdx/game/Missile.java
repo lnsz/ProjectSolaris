@@ -79,9 +79,10 @@ public class Missile extends Entity{
             draw();
         }
         else{
-            deathParticles.update(position.x, position.y, velocity);
-            if (!deathParticles.isAlive()){
-                ProjectSolaris.resetCamera = true;
+            //deathParticles.update(position.x, position.y, velocity);
+            //if (!deathParticles.isAlive()){
+            if(ProjectSolaris.resetCamera){
+                //ProjectSolaris.resetCamera = true;
                 alive = false;
             }
         }
@@ -97,13 +98,17 @@ public class Missile extends Entity{
     public void explode(){
         ProjectSolaris.missile = false;
         visible = false;
-        ProjectSolaris.shaderPosition = Vector.sub(this.position,
-                new Vector(ProjectSolaris.camera.position.x - ProjectSolaris.width / 2,
-                        ProjectSolaris.camera.position.y - ProjectSolaris.height / 2));
+        ProjectSolaris.camera.zoom += 0.9;
+        System.out.println(ProjectSolaris.camera.zoom);
+//        ProjectSolaris.shaderPosition = Vector.sub(this.position,
+//                new Vector(ProjectSolaris.camera.position.x - ProjectSolaris.width / 4,
+//                        ProjectSolaris.camera.position.y - ProjectSolaris.height / 4));
+        ProjectSolaris.shaderPosition = this.position;
         ProjectSolaris.shaderTime = 0;
         velocity.add(acceleration.scale());
         position.add(velocity.scale());
         ProjectSolaris.entities.missile = null;
-        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
+        ProjectSolaris.resetCamera = true;
+        //deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
 }

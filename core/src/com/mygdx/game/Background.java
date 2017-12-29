@@ -4,8 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+
+import java.util.ArrayList;
+
+import static com.badlogic.gdx.graphics.Texture.TextureWrap.Repeat;
 
 /**
  * Created by lucas on 5/5/2017.
@@ -19,27 +25,32 @@ public class Background {
     int colour, pattern;
     Texture texture;
     Sprite sprite;
+    TiledDrawable tile;
+    int multiplier;
 
     public Background(){
         // Sprites
         colour = ProjectSolaris.randomInt(0, 2);
         pattern = ProjectSolaris.randomInt(0, 4);
+        multiplier = ProjectSolaris.bgMultiplier;
         generateSprite();
     }
 
     public Background(int colour, int pattern){
         this.colour = colour;
         this.pattern = pattern;
+        multiplier = ProjectSolaris.bgMultiplier;
         generateSprite();
     }
 
     public void generateSprite(){
         texture = new Texture(Gdx.files.internal("background/ep" + colour + "/bg" + pattern + ".png"));
+        texture.setWrap(Repeat, Repeat);
         sprite = new Sprite(texture);
     }
 
     public void setSize(float width, float height){
-        sprite.setSize(width, height);
+        sprite.setSize(width * multiplier, height * multiplier);
     }
 
     public void setPosition(float x, float y){
@@ -51,10 +62,11 @@ public class Background {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ProjectSolaris.shaderProgram.begin();
         ProjectSolaris.shaderProgram.setUniformf("center",
-                new Vector2(ProjectSolaris.shaderPosition.x / ProjectSolaris.width,
-                            1 - (ProjectSolaris.shaderPosition.y / ProjectSolaris.height)));
+                new Vector2(ProjectSolaris.remap(ProjectSolaris.shaderPosition.x, -ProjectSolaris.width * multiplier / 2, ProjectSolaris.width * multiplier / 2, 0, 1),
+                        1 - ProjectSolaris.remap(ProjectSolaris.shaderPosition.y, -ProjectSolaris.height * multiplier / 2, ProjectSolaris.height * multiplier / 2, 0, 1)));
         ProjectSolaris.shaderProgram.setUniformf("time", ProjectSolaris.shaderTime);
         ProjectSolaris.shaderProgram.setUniformf("shockParams", new Vector3(10.0f, 0.8f, 0.1f));
+        ProjectSolaris.shaderProgram.setUniformf("sizeMultiplier",12f);
         ProjectSolaris.shaderProgram.end();
         ProjectSolaris.batch.begin();
         ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);

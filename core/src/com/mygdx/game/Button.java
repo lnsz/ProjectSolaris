@@ -46,7 +46,7 @@ public class Button {
     }
 
     public void draw(){
-        ProjectSolaris.batch.begin();
+        ProjectSolaris.batchUI.begin();
         sprite.setSize(width, height);
         if (selected) {
             sprite.setColor(Color.YELLOW);
@@ -56,25 +56,25 @@ public class Button {
         }
         sprite.setPosition(position.x, position.y);
         sprite.setFlip(false, true);
-        sprite.draw(ProjectSolaris.batch);
+        sprite.draw(ProjectSolaris.batchUI);
 
         ProjectSolaris.dinPro.getData().setScale(height / 400);
         ProjectSolaris.dinPro.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         ProjectSolaris.glyphLayout.setText(ProjectSolaris.dinPro, text);
         float textX = position.x + width / 2 - ProjectSolaris.glyphLayout.width / 2;
         float textY = position.y + height / 2 - ProjectSolaris.glyphLayout.height;
-        ProjectSolaris.dinPro.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
-        ProjectSolaris.batch.end();
+        ProjectSolaris.dinPro.draw(ProjectSolaris.batchUI, ProjectSolaris.glyphLayout, textX, textY);
+        ProjectSolaris.batchUI.end();
     }
 
     public void scale(){
-        // Moves button so it's in the same position when zoom is changed
-        position.x = ProjectSolaris.remap(startingposition.x, 0, ProjectSolaris.width, ProjectSolaris.origin.x,
-                ProjectSolaris.origin.x + ProjectSolaris.width);
-        position.y = ProjectSolaris.remap(startingposition.y, 0, ProjectSolaris.height, ProjectSolaris.origin.y,
-                ProjectSolaris.origin.y + ProjectSolaris.height);
-        width = startingWidth * ProjectSolaris.camera.zoom;
-        height = startingHeight * ProjectSolaris.camera.zoom;
+////        // Moves button so it's in the same position when zoom is changed
+//        position.x = ProjectSolaris.remap(startingposition.x, 0, ProjectSolaris.width, ProjectSolaris.origin.x,
+//                ProjectSolaris.origin.x + ProjectSolaris.width * ProjectSolaris.camera.zoom);
+//        position.y = ProjectSolaris.remap(startingposition.y, 0, ProjectSolaris.height, ProjectSolaris.origin.y,
+//                ProjectSolaris.origin.y + ProjectSolaris.height * ProjectSolaris.camera.zoom);
+//        width = startingWidth * ProjectSolaris.camera.zoom;
+//        height = startingHeight * ProjectSolaris.camera.zoom;
 
     }
 }
