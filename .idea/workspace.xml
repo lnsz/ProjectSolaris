@@ -2,13 +2,15 @@
 <project version="4">
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Firebase" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d1ebac8-ba01-437f-bc25-25a275d5f784" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/assets/background/ep0/bg0.png" afterPath="$PROJECT_DIR$/android/assets/background/ep0/bg0.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/assets/background/ep0/bg1.png" afterPath="$PROJECT_DIR$/android/assets/background/ep0/bg1.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/assets/planet/layer0_00.png" afterPath="$PROJECT_DIR$/android/assets/planet/layer0_00.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/mygdx/game/Button.java" afterPath="$PROJECT_DIR$/core/src/com/mygdx/game/Button.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/mygdx/game/Background.java" afterPath="$PROJECT_DIR$/core/src/com/mygdx/game/Background.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/mygdx/game/Missile.java" afterPath="$PROJECT_DIR$/core/src/com/mygdx/game/Missile.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java" afterPath="$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java" />
     </list>
@@ -65,7 +67,7 @@
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="157">
-              <caret line="444" column="0" lean-forward="false" selection-start-line="444" selection-start-column="0" selection-end-line="444" selection-end-column="0" />
+              <caret line="174" column="25" lean-forward="false" selection-start-line="174" selection-start-column="25" selection-end-line="174" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -76,7 +78,7 @@
       <file leaf-file-name="Button.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Button.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="75">
               <caret line="57" column="36" lean-forward="false" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
               <folding />
             </state>
@@ -86,8 +88,8 @@
       <file leaf-file-name="Missile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Missile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="110" column="59" lean-forward="true" selection-start-line="110" selection-start-column="59" selection-end-line="110" selection-end-column="59" />
+            <state relative-caret-position="415">
+              <caret line="80" column="19" lean-forward="false" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -96,9 +98,22 @@
       <file leaf-file-name="Vector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Vector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="653">
+            <state relative-caret-position="1156">
               <caret line="74" column="26" lean-forward="false" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
-              <folding />
+              <folding>
+                <element signature="e#717#718#0" expanded="false" />
+                <element signature="e#791#792#0" expanded="false" />
+                <element signature="e#818#819#0" expanded="false" />
+                <element signature="e#874#875#0" expanded="false" />
+                <element signature="e#1017#1018#0" expanded="false" />
+                <element signature="e#1073#1074#0" expanded="false" />
+                <element signature="e#2925#2926#0" expanded="false" />
+                <element signature="e#2974#2975#0" expanded="false" />
+                <element signature="e#3273#3274#0" expanded="false" />
+                <element signature="e#3315#3316#0" expanded="false" />
+                <element signature="e#3360#3361#0" expanded="false" />
+                <element signature="e#3418#3419#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -106,12 +121,10 @@
       <file leaf-file-name="Background.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Background.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="45" />
+            <state relative-caret-position="279">
+              <caret line="65" column="175" lean-forward="false" selection-start-line="65" selection-start-column="175" selection-end-line="65" selection-end-column="175" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1521#1522#0" expanded="true" />
-                <element signature="e#1561#1562#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,9 +133,15 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
+            <state relative-caret-position="952">
               <caret line="59" column="105" lean-forward="false" selection-start-line="59" selection-start-column="101" selection-end-line="59" selection-end-column="105" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2639#2640#0" expanded="false" />
+                <element signature="e#2672#2673#0" expanded="false" />
+                <element signature="e#2965#2966#0" expanded="false" />
+                <element signature="e#2995#2996#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -130,7 +149,7 @@
       <file leaf-file-name="Particle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Particle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-10">
+            <state relative-caret-position="238">
               <caret line="14" column="22" lean-forward="false" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding />
             </state>
@@ -140,9 +159,17 @@
       <file leaf-file-name="Planet.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Planet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
+            <state relative-caret-position="1224">
               <caret line="79" column="87" lean-forward="false" selection-start-line="79" selection-start-column="87" selection-end-line="79" selection-end-column="87" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#3747#3748#0" expanded="false" />
+                <element signature="e#3806#3807#0" expanded="false" />
+                <element signature="e#3843#3844#0" expanded="false" />
+                <element signature="e#3901#3902#0" expanded="false" />
+                <element signature="e#5992#5993#0" expanded="false" />
+                <element signature="e#6051#6052#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -158,9 +185,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>selected</find>
-      <find>render(</find>
-      <find>resetcame</find>
       <find>screenfl</find>
       <find>height</find>
       <find>deathp</find>
@@ -184,10 +208,13 @@
       <find>zoom</find>
       <find>UI</find>
       <find>multiplier</find>
-      <find>background</find>
       <find>border</find>
       <find>flash</find>
       <find>shaderpo</find>
+      <find>flashopa</find>
+      <find>flashop</find>
+      <find>bgMul</find>
+      <find>background</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -3560,11 +3587,11 @@
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/GravityField.java" />
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Player.java" />
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Entity.java" />
-        <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Background.java" />
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Planet.java" />
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Button.java" />
-        <option value="$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java" />
         <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Missile.java" />
+        <option value="$PROJECT_DIR$/core/src/com/mygdx/game/Background.java" />
+        <option value="$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java" />
       </list>
     </option>
   </component>
@@ -3692,7 +3719,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -3729,19 +3756,21 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="device.picker.selection" value="192.168.2.29:5555" />
+    <property name="device.picker.selection" value="192.168.1.13:5555" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/lucas/Documents/GitHub/ProjectSolaris/core/src/com/mygdx/game/Button.java" />
     <property name="sync.plugin.last.upgrade.timestamp" value="1513841205498" />
     <property name="show.do.not.ask.upgrade.gradle.plugin" value="2.3.3" />
     <property name="android.profiler.active" value="true" />
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -3826,7 +3855,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514524930645" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1516093659743" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -3874,7 +3903,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514524930645" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1516093659743" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -4057,7 +4086,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514524930645" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1516093659744" />
       </method>
     </configuration>
     <list size="1">
@@ -4109,28 +4138,27 @@
     <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14285715" sideWeight="0.5044543" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5021322" order="17" side_tool="true" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="20" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.4978678" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850778" sideWeight="0.49573562" order="24" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14285715" sideWeight="0.5044543" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.4978678" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5021322" order="17" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32962137" sideWeight="0.4978678" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850778" sideWeight="0.4936034" order="21" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850778" sideWeight="0.4936034" order="22" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="20" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5021322" order="23" side_tool="true" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14765458" sideWeight="0.49554566" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Android WiFi ADB" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14285715" sideWeight="0.50664455" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -4141,6 +4169,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -4181,7 +4210,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1394">
           <caret line="89" column="35" lean-forward="false" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4255,7 +4292,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1394">
           <caret line="89" column="35" lean-forward="false" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4329,7 +4374,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1394">
           <caret line="89" column="35" lean-forward="false" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4361,7 +4414,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4148">
           <caret line="257" column="60" lean-forward="false" selection-start-line="257" selection-start-column="60" selection-end-line="257" selection-end-column="60" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4387,7 +4448,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4405,7 +4474,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4498,9 +4575,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
+        <state relative-caret-position="952">
           <caret line="59" column="105" lean-forward="false" selection-start-line="59" selection-start-column="101" selection-end-line="59" selection-end-column="105" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2639#2640#0" expanded="false" />
+            <element signature="e#2672#2673#0" expanded="false" />
+            <element signature="e#2965#2966#0" expanded="false" />
+            <element signature="e#2995#2996#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4514,68 +4597,87 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Particle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
+        <state relative-caret-position="238">
           <caret line="14" column="22" lean-forward="false" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="26" column="41" lean-forward="false" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Planet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
+        <state relative-caret-position="1224">
           <caret line="79" column="87" lean-forward="false" selection-start-line="79" selection-start-column="87" selection-end-line="79" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Button.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="57" column="36" lean-forward="false" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Background.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="45" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1521#1522#0" expanded="true" />
-            <element signature="e#1561#1562#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#3747#3748#0" expanded="false" />
+            <element signature="e#3806#3807#0" expanded="false" />
+            <element signature="e#3843#3844#0" expanded="false" />
+            <element signature="e#3901#3902#0" expanded="false" />
+            <element signature="e#5992#5993#0" expanded="false" />
+            <element signature="e#6051#6052#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Vector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="653">
+        <state relative-caret-position="1156">
           <caret line="74" column="26" lean-forward="false" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
+          <folding>
+            <element signature="e#717#718#0" expanded="false" />
+            <element signature="e#791#792#0" expanded="false" />
+            <element signature="e#818#819#0" expanded="false" />
+            <element signature="e#874#875#0" expanded="false" />
+            <element signature="e#1017#1018#0" expanded="false" />
+            <element signature="e#1073#1074#0" expanded="false" />
+            <element signature="e#2925#2926#0" expanded="false" />
+            <element signature="e#2974#2975#0" expanded="false" />
+            <element signature="e#3273#3274#0" expanded="false" />
+            <element signature="e#3315#3316#0" expanded="false" />
+            <element signature="e#3360#3361#0" expanded="false" />
+            <element signature="e#3418#3419#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="47" column="51" lean-forward="true" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Button.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="57" column="36" lean-forward="false" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Missile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="110" column="59" lean-forward="true" selection-start-line="110" selection-start-column="59" selection-end-line="110" selection-end-column="59" />
+        <state relative-caret-position="415">
+          <caret line="80" column="19" lean-forward="false" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/Background.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="65" column="175" lean-forward="false" selection-start-line="65" selection-start-column="175" selection-end-line="65" selection-end-column="175" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/mygdx/game/ProjectSolaris.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
-          <caret line="444" column="0" lean-forward="false" selection-start-line="444" selection-start-column="0" selection-end-line="444" selection-end-column="0" />
+          <caret line="174" column="25" lean-forward="false" selection-start-line="174" selection-start-column="25" selection-end-line="174" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

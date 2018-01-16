@@ -62,8 +62,8 @@ public class Background {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ProjectSolaris.shaderProgram.begin();
         ProjectSolaris.shaderProgram.setUniformf("center",
-                new Vector2(ProjectSolaris.remap(ProjectSolaris.shaderPosition.x, -ProjectSolaris.width * multiplier / 2, ProjectSolaris.width * multiplier / 2, 0, 1),
-                        1 - ProjectSolaris.remap(ProjectSolaris.shaderPosition.y, -ProjectSolaris.height * multiplier / 2, ProjectSolaris.height * multiplier / 2, 0, 1)));
+                new Vector2(ProjectSolaris.remap(ProjectSolaris.shaderPosition.x, ProjectSolaris.bgOrigin.x, ProjectSolaris.width * multiplier / 2 + ProjectSolaris.width / 2, 0, 1),
+                        1 - ProjectSolaris.remap(ProjectSolaris.shaderPosition.y, ProjectSolaris.bgOrigin.y, ProjectSolaris.height * multiplier / 2 + ProjectSolaris.height / 2, 0, 1)));
         ProjectSolaris.shaderProgram.setUniformf("time", ProjectSolaris.shaderTime);
         ProjectSolaris.shaderProgram.setUniformf("shockParams", new Vector3(10.0f, 0.8f, 0.1f));
         ProjectSolaris.shaderProgram.setUniformf("sizeMultiplier",12f);

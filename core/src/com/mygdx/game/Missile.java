@@ -71,7 +71,7 @@ public class Missile extends Entity{
                     entityHit.explode();
                     ProjectSolaris.screenFlash = true;
                 }
-                float distanceToCenter = Vector.distance(this.position, new Vector(0, 0));
+                float distanceToCenter = Vector.distance(this.position, new Vector(ProjectSolaris.width / 2, ProjectSolaris.height / 2));
                 System.out.println(distanceToCenter);
                 if (life <= 0 || distanceToCenter > ProjectSolaris.entityBorder){
                     explode();

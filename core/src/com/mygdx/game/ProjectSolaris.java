@@ -53,7 +53,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public static boolean missileReady = true;
     public static boolean levelComplete = false;
     public static boolean screenFlash = false;
-    public static float flashOpacity = 0.8f;
+    public static float startingOpacity = 0.2f;
+    public static float flashOpacity = startingOpacity;
     public enum Mode {START_SCREEN,
             MAIN_MENU,
             PLAY,
@@ -107,6 +108,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     // Background
     public static Background bg;
     public static int bgMultiplier;
+    public static Vector bgOrigin;
 
     // Shaders
     public static String vertexShader;
@@ -170,10 +172,11 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         player = new Player(0, 0);
 
         // Initialize background
-        bgMultiplier = 8;
+        bgMultiplier =  8;
         bg = new Background(0, 0);
         // Set camera variables
         entityBorder = (bgMultiplier - 2) * width  / 2; // Maximum distance that entities can be from the center
+        bgOrigin = new Vector(- width * bgMultiplier / 2 + width / 2, - height * bgMultiplier / 2 + height / 2);
 
         // Initialize shaders
         shaderTime = 50f;
@@ -355,7 +358,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void background(){
         // Draws background sprite
         bg.setSize(width, height);
-        bg.setPosition(- width * bgMultiplier / 2, - height * bgMultiplier / 2);
+        bg.setPosition(bgOrigin.x, bgOrigin.y);
         bg.draw();
     }
 
@@ -452,7 +455,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         flashOpacity -= 0.005f;
         if (flashOpacity <= 0){
             screenFlash = false;
-            flashOpacity = 0.2f;
+            flashOpacity = startingOpacity;
         }
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
