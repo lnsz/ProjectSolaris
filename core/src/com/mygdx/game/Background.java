@@ -66,7 +66,7 @@ public class Background {
                         1 - ProjectSolaris.remap(ProjectSolaris.shaderPosition.y, ProjectSolaris.bgOrigin.y, ProjectSolaris.height * multiplier / 2 + ProjectSolaris.height / 2, 0, 1)));
         ProjectSolaris.shaderProgram.setUniformf("time", ProjectSolaris.shaderTime);
         ProjectSolaris.shaderProgram.setUniformf("shockParams", new Vector3(10.0f, 0.8f, 0.1f));
-        ProjectSolaris.shaderProgram.setUniformf("sizeMultiplier",12f);
+        ProjectSolaris.shaderProgram.setUniformf("sizeMultiplier",8f);
         ProjectSolaris.shaderProgram.end();
         ProjectSolaris.batch.begin();
         ProjectSolaris.batch.setShader(ProjectSolaris.shaderProgram);
