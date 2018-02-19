@@ -75,7 +75,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         BOTTOM_RIGHT
     }
     public Button startButton, playButton, settingsButton, testButton, shopButton, pauseButton, resumeButton,
-            menuButton, levelButton, timeScaleButton, seedButton, retryButton, nextLevelButton; // Buttons
+            menuButton, levelButton, timeScaleButton, seedButton, retryButton, nextLevelButton, rightButton, leftButton, episodeName; // Buttons
     public static Mode mode; // Mode enum used for selecting
 
     // Gesture detector and index multiplexer handle the touch screen
@@ -241,6 +241,18 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
         nextLevelButton = new Button(width / 6, height / 3, 2 * width / 3, height / 10, tempSprite, "NEXT LEVEL");
 
+        tempTexture = new Texture(Gdx.files.internal("button/text.png"));
+        tempSprite = new Sprite(tempTexture);
+        episodeName = new Button(width / 6, (height / 7 - height / 8) / 2, 2 * width / 3, height / 8, tempSprite, "Episode 1");
+
+        tempTexture = new Texture(Gdx.files.internal("button/rightButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        rightButton = new Button(4 * width / 5 + (width / 5 - width / 6) / 2 - width / 6, (height / 7 - height / 8) / 2, width / 3, height / 8, tempSprite, "");
+
+        tempTexture = new Texture(Gdx.files.internal("button/leftButton.png"));
+        tempSprite = new Sprite(tempTexture);
+        leftButton = new Button((width / 5 - width / 6) / 2, (height / 7 - height / 8) / 2, width / 3, height / 8, tempSprite, "");
+
         tempTexture = new Texture(Gdx.files.internal("button/timeScaleButton1.png"));
         tempSprite = new Sprite(tempTexture);
         timeScaleButton = new Button(width - width / 10, height - height / 20, width / 10, height / 20, tempSprite);
@@ -255,20 +267,18 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         levelX = 3;
         levelY = 5;
         levelSelected = -1;
-        episodeSelected = -1;
-        levelNumber = levelX * levelY * totalEpisodes;
+        episodeSelected = 1;
+        levelNumber = levelX * levelY;
         levelList = new ArrayList<Button>();
         // For loop that creates the buttons at the correct position
-        for (int i = 0; i < totalEpisodes; i++){
-            int count = 0;
-            for (int y = 0; y < levelY; y++) {
-                for (int x = 0; x < levelX; x++){
-                    count++;
-                    float levelButtonX = width / 5 + x * width / 5 + width * i + (width / 5 - width / 6) / 2;
-                    float levelButtonY = height / 7 + y * height / 7 + (height / 7 - height / 8) / 2;
-                    Button b = new Button(levelButtonX, levelButtonY, width / 6, height / 8, tempSprite, Integer.toString(count));
-                    levelList.add(b);
-                }
+        int count = 0;
+        for (int y = 0; y < levelY; y++) {
+            for (int x = 0; x < levelX; x++){
+                count++;
+                float levelButtonX = width / 5 + x * width / 5 + (width / 5 - width / 6) / 2;
+                float levelButtonY = height / 7 + y * height / 7 + (height / 7 - height / 8) / 2;
+                Button b = new Button(levelButtonX, levelButtonY, width / 6, height / 8, tempSprite, Integer.toString(count));
+                levelList.add(b);
             }
         }
     }
@@ -392,19 +402,14 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
             // Level selector is what the player sees when the play button is pressed in the main menu
             case LEVEL_SELECTOR:
                 if (levelSelected >= 0) { // Draws a button to start a level if a level is selected
-                    levelButton.position.x = camera.position.x - levelButton.width / 2;
                     levelButton.draw();
                 }
-                if (!isPressed){
-                    xDragTotal = 0;
-                    xDrag = 0;
-                    dragDuration = 0;
-                    xDragVelocity /= 1.5;
-
-                    if(camera.position.x - xDragVelocity * 5 > width / 2 &&
-                            camera.position.x - xDragVelocity * 5 < width * totalEpisodes - width / 2) {
-                        camera.translate(-xDragVelocity * 5, 0);
-                    }
+                episodeName.draw();
+                if (episodeSelected > 1){
+                    leftButton.draw();
+                }
+                if (episodeSelected < totalEpisodes) {
+                    rightButton.draw();
                 }
                 levelSelector();
                 break;
@@ -533,25 +538,11 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public void levelSelector(){
         // Draws the level buttons in level selector
         for (int i = 0; i < levelNumber; i++){
-
             levelList.get(i).selected = i == levelSelected; // Change the colour of the selected button
-
-            if(!isPressed){
-                episodeSelector(); // Scroll the screen to a centered position if player is not pressing
-            }
             levelList.get(i).draw();
         }
     }
 
-    public void episodeSelector(){
-        // WIP
-        // Automatically center the level selector screen, locking it to an episode
-        episodeSelected = (int)(camera.position.x / width);
-
-        if(!isPressed && Math.abs(xDragVelocity) < 15) {
-            camera.position.x -= (camera.position.x - (episodeSelected * width + width / 2)) / 100;
-        }
-    }
 
     public static Vector generatePreset(Preset pos){
         // return a preset position somewhere on the screen
@@ -650,9 +641,8 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
             case MAIN_MENU:
                 if (playButton.isClicked(remapX, remapY)){
-                    // Set level and episode to an unused value
+                    // Set level to an unused value
                     levelSelected = -1;
-                    episodeSelected = -1;
                     mode = Mode.LEVEL_SELECTOR;
                 }
                 if (testButton.isClicked(remapX, remapY)){
@@ -666,10 +656,20 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 // Go through all the level selector buttons to determine if any of them were clicked
                 Vector pos = new Vector(x, y);
                 pos.sub(lastTap);
+                if (rightButton.isClicked(remapX, remapY) && episodeSelected < totalEpisodes){
+                    episodeSelected++;
+                    episodeName.text = "Episode " + episodeSelected;
+                    bg = new Background(episodeSelected - 1, 0);
+                }
+                if (leftButton.isClicked(remapX, remapY) && episodeSelected > 1){
+                    episodeSelected--;
+                    episodeName.text = "Episode " + episodeSelected;
+                    bg = new Background(episodeSelected - 1, 0);
+                }
                 if(pos.mag() < width / 20) {
                     if (levelSelected >= 0 && levelButton.isClicked(remapX, remapY)){
                         ProjectSolaris.centerCamera();
-                        Levels.createLevel(episodeSelected, levelSelected - 15 * episodeSelected);
+                        Levels.createLevel(episodeSelected- 1, levelSelected);
                         mode = Mode.PLAY;
                         break;
                     }
@@ -793,12 +793,6 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         dragDuration++;
         xDragVelocity = xDragTotal / dragDuration;
         switch(mode) {
-            case LEVEL_SELECTOR:
-                if(camera.position.x - xDrag > width / 2 &&
-                        camera.position.x - xDrag < width * totalEpisodes - width / 2) {
-                    camera.translate(-xDrag, 0);
-                }
-                return true;
             default: // Does nothing in modes where it's not needed
                 return false;
         }
