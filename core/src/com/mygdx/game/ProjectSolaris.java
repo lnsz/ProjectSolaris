@@ -85,7 +85,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
     public static int level = 0;
     public static int episode = 0;
     public static int levelsPerEpisode = 15;
-    public static int totalEpisodes = 3;
+    public static int totalEpisodes = 4;
 
     // Fonts
     public static BitmapFont dinPro;
