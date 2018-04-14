@@ -340,6 +340,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
                 lastDown = System.currentTimeMillis();
             }
             double timeRatio = (System.currentTimeMillis() - lastDown) / maxStr;
+            player.drawCharge(timeRatio);
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(255, 255, 255, 1);
             renderer.circle(player.position.x, player.position.y, (float) (500 * timeRatio));
@@ -472,10 +473,11 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         if (resetCamera){
             resetCamera();
         }
+        player.draw(); // Draw player ship
         if (isPressed){
             strMeter();
         }
-        player.draw(); // Draw player ship
+
         entities.run(); //  Run all the movement, collisions and drawing of entities
 
         pauseButton.scale();

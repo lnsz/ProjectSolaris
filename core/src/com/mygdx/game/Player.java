@@ -15,6 +15,10 @@ public class Player extends Entity{
     private int counter;
     private boolean flashing;
     private double rotation;
+    private Sprite chargingSprite;
+    private Texture chargingTexture;
+    float chargeRadius;
+    private Vector missileOrigin;
     public Player(float locX, float locY){
         super(ProjectSolaris.remap(locX, 0, ProjectSolaris.width,
                 ProjectSolaris.origin.x,
@@ -31,6 +35,11 @@ public class Player extends Entity{
         sprite = new Sprite(texture);
         sprite.setOrigin(radius, radius);
         rotation = 0;
+        // Initialize charging animation
+        chargingTexture = new Texture(Gdx.files.internal("charge.png"));
+        chargingSprite = new Sprite(chargingTexture);
+        missileOrigin = position;
+        chargeRadius = 0;
     }
 
     @Override
@@ -73,12 +82,25 @@ public class Player extends Entity{
 
     public void shootMissile(float targetX, float targetY, float strength){
         if(this.hasAmmo()){
-            ProjectSolaris.entities.addEntity(new Missile(this.position.x, this.position.y, targetX, targetY, strength));
+            ProjectSolaris.entities.addEntity(new Missile(this.missileOrigin.x, this.missileOrigin.y, targetX, targetY, strength));
             ammo--;
         }
     }
 
     public void resetAmmo(){
         ammo = maxAmmo;
+    }
+
+    public void drawCharge(double timeRatio){
+        System.out.println(timeRatio);
+        Vector disp = new Vector(0, 1);
+        disp = Vector.rotate(disp, (float)Math.toRadians(rotation));
+        ProjectSolaris.batch.begin();
+        chargeRadius = radius * (float)timeRatio;
+        missileOrigin = new Vector(position.x + disp.x * radius, position.y + disp.y * radius);
+        chargingSprite.setSize(chargeRadius, chargeRadius);
+        chargingSprite.setPosition(missileOrigin.x - chargeRadius / 2, missileOrigin.y - chargeRadius / 2);
+        chargingSprite.draw(ProjectSolaris.batch);
+        ProjectSolaris.batch.end();
     }
 }
