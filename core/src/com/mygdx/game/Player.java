@@ -96,7 +96,7 @@ public class Player extends Entity{
         Vector disp = new Vector(0, 1);
         disp = Vector.rotate(disp, (float)Math.toRadians(rotation));
         ProjectSolaris.batch.begin();
-        chargeRadius = radius * (float)timeRatio;
+        chargeRadius = radius * 3 * (float)timeRatio;
         missileOrigin = new Vector(position.x + disp.x * radius, position.y + disp.y * radius);
         chargingSprite.setSize(chargeRadius, chargeRadius);
         chargingSprite.setPosition(missileOrigin.x - chargeRadius / 2, missileOrigin.y - chargeRadius / 2);
