@@ -29,7 +29,7 @@ import java.util.Random;
  */
 public class ProjectSolaris extends ApplicationAdapter implements GestureDetector.GestureListener, InputProcessor {
     public static SpriteBatch batch, batchUI;
-    public static ShapeRenderer renderer;
+    public static ShapeRenderer renderer, rendererUI;
     public static OrthographicCamera camera, cameraUI;
 
     public static String[] planetNames = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota",
@@ -129,6 +129,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         batch = new SpriteBatch(); // Use to draw sprites
         batchUI = new SpriteBatch();
         renderer = new ShapeRenderer(); // Use to draw shapes
+        rendererUI = new ShapeRenderer();
 
         // Create fps logger
         fpsLogger = new FPSLogger();
@@ -193,6 +194,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         batch.dispose();
         batchUI.dispose();
         renderer.dispose();
+        rendererUI.dispose();
     }
 
     public void clearScreen(){
@@ -205,6 +207,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
 
         // Tell the SpriteBatch to render in the camera
         renderer.setProjectionMatrix(camera.combined);
+        rendererUI.setProjectionMatrix(cameraUI.combined);
         batch.setProjectionMatrix(camera.combined);
         batchUI.setProjectionMatrix(cameraUI.combined);
     }

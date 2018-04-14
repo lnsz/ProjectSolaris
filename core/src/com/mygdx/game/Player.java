@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -65,15 +66,25 @@ public class Player extends Entity{
     }
 
     public void showAmmo(){
-        ProjectSolaris.batch.begin();
-        ProjectSolaris.arial.getData().setScale(ProjectSolaris.height / 3000 * ProjectSolaris.camera.zoom);
-        ProjectSolaris.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        String text = ammo + "";
-        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, text);
-        float textX = ProjectSolaris.remap(0, 0, ProjectSolaris.width, ProjectSolaris.origin.x, ProjectSolaris.origin.x + ProjectSolaris.width);
-        float textY = ProjectSolaris.remap(0, 0, ProjectSolaris.height, ProjectSolaris.origin.y, ProjectSolaris.origin.y + ProjectSolaris.height);
-        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
-        ProjectSolaris.batch.end();
+        ProjectSolaris.batchUI.begin();
+        for (int i = 0; i < maxAmmo; i++) {
+            ShapeRenderer.ShapeType shapeType = ShapeRenderer.ShapeType.Filled;
+            if (i >= ammo){
+                System.out.println(ammo);
+                shapeType = ShapeRenderer.ShapeType.Line;
+            }
+            ProjectSolaris.rendererUI.begin(shapeType);
+            ProjectSolaris.rendererUI.setColor(Color.WHITE);
+            ProjectSolaris.rendererUI.circle(30 + i * 60, 30, 25);
+            ProjectSolaris.rendererUI.end();
+        }
+//        ProjectSolaris.arial.getData().setScale(ProjectSolaris.height / 3000 * ProjectSolaris.camera.zoom);
+//        ProjectSolaris.arial.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//        String text = ammo + "";
+//        ProjectSolaris.glyphLayout.setText(ProjectSolaris.arial, text);
+
+//        ProjectSolaris.arial.draw(ProjectSolaris.batch, ProjectSolaris.glyphLayout, textX, textY);
+        ProjectSolaris.batchUI.end();
     }
 
     public boolean hasAmmo(){
