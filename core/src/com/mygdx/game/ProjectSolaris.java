@@ -383,7 +383,7 @@ public class ProjectSolaris extends ApplicationAdapter implements GestureDetecto
         clearScreen();
         background();
         checkMode();
-        // drawFPS();
+        //drawFPS();
     }
 
     public void checkMode(){

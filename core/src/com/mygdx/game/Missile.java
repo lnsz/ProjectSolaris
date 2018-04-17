@@ -18,8 +18,8 @@ public class Missile extends Entity{
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
         ProjectSolaris.missile = true;
-        this.explosionSize = 2;
-        this.explosionDuration = 50;
+        this.explosionSize = 10;
+        this.explosionDuration = 150;
         // Load sprites and textures
         maxLife = 5000; // Missile lasts 5 seconds
         life = maxLife;
@@ -72,7 +72,6 @@ public class Missile extends Entity{
                     ProjectSolaris.screenFlash = true;
                 }
                 float distanceToCenter = Vector.distance(this.position, new Vector(ProjectSolaris.width / 2, ProjectSolaris.height / 2));
-                System.out.println(distanceToCenter);
                 if (life <= 0 || distanceToCenter > ProjectSolaris.entityBorder){
                     explode();
                 }
@@ -81,9 +80,9 @@ public class Missile extends Entity{
             draw();
         }
         else{
-            //deathParticles.update(position.x, position.y, velocity);
+            deathParticles.update(position.x, position.y, velocity);
             //if (!deathParticles.isAlive()){
-            if(ProjectSolaris.resetCamera){
+            if(ProjectSolaris.resetCamera && deathParticles!= null && !deathParticles.isAlive()){
                 //ProjectSolaris.resetCamera = true;
                 alive = false;
             }
@@ -91,9 +90,12 @@ public class Missile extends Entity{
     }
 
     public void updateTrail(){
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(Color.WHITE);
         trail.update(position.x, position.y);
         trail.compute();
         trail.draw();
+        ProjectSolaris.renderer.end();
     }
 
 
@@ -101,7 +103,6 @@ public class Missile extends Entity{
         ProjectSolaris.missile = false;
         visible = false;
         ProjectSolaris.camera.zoom += 0.5;
-        System.out.println(ProjectSolaris.camera.zoom);
 //        ProjectSolaris.shaderPosition = Vector.sub(this.position,
 //                new Vector(ProjectSolaris.camera.position.x - ProjectSolaris.width / 4,
 //                        ProjectSolaris.camera.position.y - ProjectSolaris.height / 4));
@@ -116,6 +117,6 @@ public class Missile extends Entity{
         position.add(velocity.scale());
         ProjectSolaris.entities.missile = null;
         ProjectSolaris.resetCamera = true;
-        //deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
+        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
 }

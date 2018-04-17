@@ -1,8 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Created by lucas on 8/5/2016.
@@ -84,8 +86,12 @@ public class Asteroid extends Obstacle{
     }
 
     public void updateTrail(){
+        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ProjectSolaris.renderer.setColor(Color.WHITE);
         trail.update(position.x, position.y);
         trail.compute();
         trail.draw();
+        ProjectSolaris.renderer.end();
     }
+
 }

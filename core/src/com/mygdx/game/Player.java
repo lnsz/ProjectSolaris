@@ -70,7 +70,6 @@ public class Player extends Entity{
         for (int i = 0; i < maxAmmo; i++) {
             ShapeRenderer.ShapeType shapeType = ShapeRenderer.ShapeType.Filled;
             if (i >= ammo){
-                System.out.println(ammo);
                 shapeType = ShapeRenderer.ShapeType.Line;
             }
             ProjectSolaris.rendererUI.begin(shapeType);
@@ -103,7 +102,6 @@ public class Player extends Entity{
     }
 
     public void drawCharge(double timeRatio){
-        System.out.println(timeRatio);
         Vector disp = new Vector(0, 1);
         disp = Vector.rotate(disp, (float)Math.toRadians(rotation));
         ProjectSolaris.batch.begin();

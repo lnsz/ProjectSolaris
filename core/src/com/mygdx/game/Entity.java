@@ -31,8 +31,8 @@ public class Entity {
         this.visible = true;
 //        this.explosionSize = 50;
 //        this.explosionDuration = 75;
-        this.explosionSize = 1;
-        this.explosionDuration = 1;
+        this.explosionSize = 50;
+        this.explosionDuration = 75;
         this.explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
         this.explosionSprite = new Sprite(explosionTexture);
     }
@@ -96,4 +96,5 @@ public class Entity {
         visible = false;
         deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
     }
+
 }

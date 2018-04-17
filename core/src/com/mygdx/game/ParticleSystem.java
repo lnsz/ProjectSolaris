@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -78,7 +79,7 @@ public class ParticleSystem {
         Particle p;
         ProjectSolaris.batch.begin();
         ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
-        ProjectSolaris.renderer.setColor(255, 255, 255, 1);
+        ProjectSolaris.renderer.setColor(Color.WHITE);
         while (index <= lastAlive){
             p = particles.get(index);
 
@@ -104,8 +105,8 @@ public class ParticleSystem {
                 }
             }
         }
-        ProjectSolaris.batch.end();
         ProjectSolaris.renderer.end();
+        ProjectSolaris.batch.end();
     }
 
     public boolean isAlive(){

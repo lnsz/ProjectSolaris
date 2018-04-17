@@ -66,8 +66,7 @@ public class Trail extends Entity{
 
     @Override
     public void draw(){
-        ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
-        ProjectSolaris.renderer.setColor(Color.WHITE);
+
         if (trail.size() < 3 && trail.size() > 0){
             ProjectSolaris.renderer.circle(trail.get(0).x, trail.get(0).y, 5);
         }else {
@@ -75,7 +74,7 @@ public class Trail extends Entity{
                 ProjectSolaris.renderer.triangle(trail.get(i).x, trail.get(i).y, trail.get(i + 1).x, trail.get(i + 1).y, trail.get(i + 2).x, trail.get(i + 2).y);
             }
         }
-        ProjectSolaris.renderer.end();
+
         trail.clear();
     }
 
