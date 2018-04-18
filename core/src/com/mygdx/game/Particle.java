@@ -12,29 +12,35 @@ public class Particle extends Entity{
     Trail trail;
     boolean movesStraight, hasTrail;
     Vector direction;
-    int counter;
 
     public Particle(float locX, float locY, float duration, Sprite sprite){
         super(locX, locY);
         life = 255;
         maxLife = 255;
-        decay = (255 - 30) / duration;
-        movesStraight = ProjectSolaris.generator.nextInt(100) >= 100;
-        hasTrail = ProjectSolaris.generator.nextInt(100) >= 0;
-        randomness = 1;
+        decay = 255 / duration;
+        movesStraight = ProjectSolaris.generator.nextInt(100) >= 70;
+        randomness = 0.5f;
         mass = 0;
-        direction = new Vector((float)ProjectSolaris.generator.nextGaussian() * 2 + 1, (float)ProjectSolaris.generator.nextGaussian() * 2 + 1);
+        direction = new Vector(1, 0);
         boolean neg = ProjectSolaris.generator.nextFloat() >= 50;
         if (neg){
             direction.x *= -1;
         }
         neg = ProjectSolaris.generator.nextFloat() >= 50;
         if (neg){
-            direction.y *= -1;
+            direction.mult(-1);
         }
-        counter = 1;
-        radius = ProjectSolaris.generator.nextInt(10) + 6;
-        trail = new Trail(locX, locY, radius, (int) (radius / 2));
+        direction.mult(ProjectSolaris.generator.nextInt(10) + 5);
+        direction.rotate((float) (ProjectSolaris.generator.nextFloat() * Math.PI * 2));
+        if (movesStraight){
+            velocity = direction;
+        }
+        velocity = direction;
+        radius = ProjectSolaris.generator.nextInt(8) + 6;
+        hasTrail = radius < 10;
+        if (hasTrail){
+            trail = new Trail(locX, locY, radius, (int) (radius * 0.75));
+        }
         this.sprite = sprite;
 
     }
@@ -73,10 +79,13 @@ public class Particle extends Entity{
                 alive = false;
                 return;
             }
+
             if (movesStraight) {
-                acceleration.x += direction.x * 1 / counter;
-                acceleration.y += direction.y * 1 / counter;
-                counter++;
+//                float slowRatio = 1 / (float) Math.pow(Math.max(0, (maxLife - life)), 4);
+//                acceleration.x += direction.x * slowRatio;
+//                acceleration.y += direction.y * slowRatio;
+                acceleration.x = -direction.x * decay / maxLife;
+                acceleration.y = -direction.y * decay / maxLife;
             } else {
                 acceleration.x += randomness * (float) ProjectSolaris.generator.nextGaussian();
                 acceleration.y += randomness * (float) ProjectSolaris.generator.nextGaussian();

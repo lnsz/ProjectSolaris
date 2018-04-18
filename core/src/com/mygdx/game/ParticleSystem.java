@@ -109,7 +109,14 @@ public class ParticleSystem {
         ProjectSolaris.batch.end();
     }
 
+    void setPosition(Vector position){
+        for (int i = 0; i < size; i++){
+            particles.get(i).position.x = position.x;
+            particles.get(i).position.y = position.y;
+        }
+    }
+
     public boolean isAlive(){
-        return lastAlive > 0;
+        return lastAlive >= 0;
     }
 }

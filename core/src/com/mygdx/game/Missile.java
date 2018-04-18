@@ -14,11 +14,13 @@ public class Missile extends Entity{
     float startTime, maxLife, life;
     Trail trail;
     Entity entityHit;
+    Vector explosionPosition;
+    int explosionCounter;
 
     public Missile(float locX, float locY, float tarX, float tarY, float str){
         super(locX, locY);
         ProjectSolaris.missile = true;
-        this.explosionSize = 10;
+        this.explosionSize = 30;
         this.explosionDuration = 150;
         // Load sprites and textures
         maxLife = 5000; // Missile lasts 5 seconds
@@ -31,6 +33,9 @@ public class Missile extends Entity{
         velocity.normalize();
         velocity.mult(str);
         trail = new Trail(locX, locY, radius, 20);
+        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
+        explosionCounter = 0;
+
     }
 
     @ Override
@@ -61,7 +66,7 @@ public class Missile extends Entity{
     public void run(){
         ProjectSolaris.camera.position.x += (position.x - ProjectSolaris.camera.position.x) * (maxLife / Math.max(life, 500)) * 0.1;
         ProjectSolaris.camera.position.y += (position.y - ProjectSolaris.camera.position.y) * (maxLife / Math.max(life, 500)) * 0.1;
-        if(visible) {
+        if (visible) {
             if (!ProjectSolaris.isPaused) {
                 update();
                 ProjectSolaris.entities.gravity(this);
@@ -72,19 +77,26 @@ public class Missile extends Entity{
                     ProjectSolaris.screenFlash = true;
                 }
                 float distanceToCenter = Vector.distance(this.position, new Vector(ProjectSolaris.width / 2, ProjectSolaris.height / 2));
-                if (life <= 0 || distanceToCenter > ProjectSolaris.entityBorder){
+                if (life <= 0 || distanceToCenter > ProjectSolaris.entityBorder) {
                     explode();
                 }
                 entityHit = ProjectSolaris.entities.collision(this);
             }
             draw();
-        }
-        else{
-            deathParticles.update(position.x, position.y, velocity);
+        } else {
             //if (!deathParticles.isAlive()){
-            if(ProjectSolaris.resetCamera && deathParticles!= null && !deathParticles.isAlive()){
+            if (ProjectSolaris.resetCamera && ((deathParticles != null && !deathParticles.isAlive()) || deathParticles == null)) {
                 //ProjectSolaris.resetCamera = true;
                 alive = false;
+            }
+            deathParticles.update(position.x, position.y, velocity);
+            // Explosion sprite / animation
+            if (explosionPosition != null && explosionCounter < 5){
+                ProjectSolaris.renderer.begin(ShapeRenderer.ShapeType.Filled);
+                ProjectSolaris.renderer.setColor(Color.WHITE);
+                ProjectSolaris.renderer.circle(explosionPosition.x, explosionPosition.y, radius * 15);
+                ProjectSolaris.renderer.end();
+                explosionCounter++;
             }
         }
     }
@@ -100,6 +112,7 @@ public class Missile extends Entity{
 
 
     public void explode(){
+        deathParticles.setPosition(position);
         ProjectSolaris.missile = false;
         visible = false;
         ProjectSolaris.camera.zoom += 0.5;
@@ -109,7 +122,6 @@ public class Missile extends Entity{
         ProjectSolaris.shaderPosition = this.position;
         ProjectSolaris.shaderTime = 0;
         velocity.add(acceleration.scale());
-        System.out.println(velocity.x + "  " + velocity.y);
         Vector normalizedVelocity = velocity;
         normalizedVelocity.normalize();
         ProjectSolaris.camera.position.x -= normalizedVelocity.x * 100;
@@ -117,6 +129,7 @@ public class Missile extends Entity{
         position.add(velocity.scale());
         ProjectSolaris.entities.missile = null;
         ProjectSolaris.resetCamera = true;
-        deathParticles = new ParticleSystem(position.x, position.y, explosionSize, explosionDuration, false, explosionSprite);
+        explosionPosition = new Vector(position.x, position.y);
+
     }
 }
